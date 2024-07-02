@@ -1,0 +1,487 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+ul {
+  text-align: left;
+  display: inline;
+  margin: 0;
+  padding: 15px 4px 17px 0;
+  list-style: none;
+  -webkit-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  -moz-box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.15);
+}
+ul li {
+  font: bold 12px/18px sans-serif;
+  display: inline-block;
+  margin-right: -4px;
+  position: relative;
+  padding: 15px 20px;
+  background: #fff;
+  cursor: pointer;
+  -webkit-transition: all 0.2s;
+  -moz-transition: all 0.2s;
+  -ms-transition: all 0.2s;
+  -o-transition: all 0.2s;
+  transition: all 0.2s;
+}
+ul li:hover {
+  background: #555;
+  color: #fff;
+}
+ul li ul {
+  padding: 0;
+  position: absolute;
+  top: 48px;
+  left: 0;
+  width: 150px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transiton: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  -transition: opacity 0.2s;
+}
+
+ul li ul li ul{
+  padding: 0;
+  position: absolute;
+  top: 0px;
+  left: 154px;
+  width: 150px;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  display: none;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transiton: opacity 0.2s;
+  -moz-transition: opacity 0.2s;
+  -ms-transition: opacity 0.2s;
+  -o-transition: opacity 0.2s;
+  -transition: opacity 0.2s;
+}
+
+ul li ul li { 
+  background: #555; 
+  display: block; 
+  color: #fff;
+  text-shadow: 0 -1px 0 #000;
+}
+
+ul li ul li:hover { background: #666; }
+
+ul li:hover > ul {
+  display: block;
+  opacity: 1;
+  visibility: visible;
+}
+
+.menu_li{position:relative;top:0}
+.menu_li:hover{top:-1px;box-shadow:0 4px 4px #999;
+   transition: all .2s ease-in-out}
+
+ /**Forms*/
+   #wrapper {
+        width:450px;
+        margin:0 auto;
+        font-family:Verdana, sans-serif;
+    }
+
+    fieldset {
+        border-radius:4px;
+        background-color: linen;
+        padding:20px;
+        border-color:#3b5998;
+        text-align: center;
+        width: 400px;
+        margin-top: 20%;
+        margin-bottom: 20%;
+    }
+
+    fieldset label{
+      color: gray;
+    }
+
+    fieldset h2{
+      text-align: center;
+      color: #3b5998;
+      font-family:Helvetica, sans-serif;
+      font-size:20px;
+    }
+
+    #form_operador tr td{
+        text-align: center; 
+    }
+
+       #form_operador tr td input,select{
+        width: 290px; 
+    }
+
+    input{
+        color: black;
+        background: #fff;
+        border: 1px solid #CCCCCC;
+        font-size: 14px;
+        line-height: 1.2em;
+        margin-bottom:15px;
+        -moz-border-radius:4px;
+        -webkit-border-radius:4px;
+        border-radius:4px;
+        /**box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset, 0 1px 0 rgba(255, 255, 255, 0.2);*/
+        height: 23px;
+        width: 73%;
+        margin: 2px;
+    }
+  
+  
+
+
+/*font do body*/
+body,select{
+font:13px Verdana;
+}
+body{
+    background-image: url(../../fixa/css/imagem/Logo_Empreza.jpg);
+    background-repeat: repeat;
+}
+/*div controle conteudo da página*/
+.divctl
+{
+height: 90%;
+position: absolute;
+top: 0;
+left: 0;
+right:0;
+z-index: 0;
+border: transparent;
+}
+
+
+/*div controle textos form servico*/
+.divformservico{
+ margin-top:2px;  
+ margin-left:50px;
+ margin-bottom: auto;
+ width: 600px;
+ height:0 auto;
+ 
+     
+}
+
+/*controle login */
+#login{
+  width:300px;
+  margin:0 auto;
+  position:relative;
+  top:200px;
+  border:1px solid #3b5998;
+  padding:15px;
+  background-color:white;
+}
+
+.login_input{
+  height: 10px;
+  width:284px;
+  background-color: #d3d3d3;
+}
+
+/*controle logo*/
+.logo{
+  width:200px;
+  height:58px;
+  margin:0 auto;
+  padding:7px;
+  position:relative;
+  top:5px;
+}
+
+/*centralizar */
+.acomodar{
+  margin:0 auto;
+  width:250px;
+}
+
+/*controle do form login*/
+.form  label{
+  display:block;
+  padding-top:5px;
+}
+
+
+/* classe para textos*/
+.txt{
+  border:none;
+  height:25px;
+  width:250px;
+  border:thin solid #f1f1f1;
+}
+.txt:focus{
+  border:thin solid #678b97;
+  box-shadow:0 2px 10px #678b97;
+  -webkit-box-shadow:0 2px 10px #678b97;
+  -moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos para as form*/
+
+/*tratamanro para campo numero*/
+.txt2num{
+  border:none;
+  height:25px;
+  width:40px;
+  border:thin solid #f1f1f1;
+}
+.txt2num:focus{
+  border:thin solid #678b97;
+  box-shadow:0 2px 10px #678b97;
+  -webkit-box-shadow:0 2px 10px #678b97;
+  -moz-box-shadow:0 2px 10px #678b97;
+
+}
+
+
+/* classe para textos combobox pequeno para as form*/
+.txt2comboboxpequeno{
+  border:none;
+  height:25px;
+  width:100px;
+  border:thin solid #f1f1f1;
+    
+  }
+
+.txt2comboboxpequeno:focus{
+  border:thin solid #678b97;
+  box-shadow:0 2px 10px #678b97;
+  -webkit-box-shadow:0 2px 10px #678b97;
+  -moz-box-shadow:0 2px 10px #678b97;
+}
+
+
+
+/* classe para textos combobox padrao para as form*/
+.txt2comboboxpadrao{
+  border:none;
+  height:25px;
+  width:300px;
+  border:thin solid #f1f1f1;
+}
+
+.txt2comboboxpadrao:focus{
+  border:thin solid #678b97;
+  box-shadow:0 2px 10px #678b97;
+  -webkit-box-shadow:0 2px 10px #678b97;
+  -moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos combobox grande para as form*/
+.txt2comboboxgrande{
+  border:none;
+  height:25px;
+  width:500px;
+  border:thin solid #f1f1f1;
+}
+
+.txt2comboboxgrande:focus{
+  border:thin solid #678b97;
+  box-shadow:0 2px 10px #678b97;
+  -webkit-box-shadow:0 2px 10px #678b97;
+  -moz-box-shadow:0 2px 10px #678b97;
+}
+
+
+/* classe para textos textarea grande para as form*/
+.txt2textarea{
+  border:none;
+  height:80px;
+  width:500px;
+  border:thin solid #f1f1f1;
+}
+
+.txt2textarea:focus{
+  border:thin solid #678b97;
+  box-shadow:0 2px 10px #678b97;
+  -webkit-box-shadow:0 2px 10px #678b97;
+  -moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos data para as form*/
+.txt2data{
+  border:none;
+  height:25px;
+  width:150px;
+  border:thin solid #f1f1f1;
+    margin:0 auto;
+}
+
+.txt2data:focus{
+  border:thin solid #678b97;
+  box-shadow:0 2px 10px #678b97;
+  -webkit-box-shadow:0 2px 10px #678b97;
+  -moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos para as form*/
+
+/*classe para formatção do botão login*/
+.sb{
+  display:block;
+  border:none;
+  width:250px;
+  height:40px;
+  margin-top:10px;
+  cursor:pointer;
+  font:400 18px Oswald;
+  color:#fff;
+    background:#808080;
+}
+.sb:hover{
+  background:#678b97;
+  color:#fff;
+}
+
+/*classe para formatção do botão form*/
+.sb2{
+  /*display:block;*/
+  border:none;
+  width:112px;
+  height:35px;
+  margin-top:1px;
+  cursor:pointer;
+  font:600 13px Oswald;
+  color:#fff;
+    background:#3b5998;
+}
+
+/* classe para textos*/
+
+/*Classes de herança*/
+.bradius{
+  border-radius:6px;
+  -webkit-border-radius:6px;
+  -moz-border-radius:6px;
+}
+
+.fleft{
+  float:left;
+}
+.fright{
+  float:right;
+}
+/*Múltiplos Estilos*/
+.txt,.txt:focus,.sb,.sb:hover,#cadastrar:hover,#cadastrar{
+  transition:all 0.5s linear;
+  -webkit-transition:all 0.5s linear;
+  -moz-transition:all 0.5s linear;
+}
+
+/*configurações de campo*/
+.visivel { 
+    display:inline; 
+    } 
+.invisivel {
+    display:none;
+     }
+
+/*tratamento imagen da home*/
+
+#imghome{
+ margin-top: 180px;   
+ width: 50%;   
+ height: auto;
+}
+
+.divrel{
+  margin-top: 20px; 
+   margin-left:300px;
+   margin-bottom: auto;
+   width: 600px;
+   height:0 auto;    
+   background: #EBE8E8;
+   padding-left: 70px;    
+}
+
+.valido {
+  border: 1px solid green;
+}
+.invalido {
+  border: 1px solid red;
+}
+
+.colunas-centralizados {
+  text-align: center;
+}
+
+.dataTables_filter label{
+  /*display:block;*/
+  border:none;
+  width:112px;
+  height:35px;
+  margin-top:1px;
+  font:600 15px Oswald;
+}
+
+#tabela3_filter input{
+  width: 220px;
+} 
+
+#file{
+    margin-top: 10px;
+    width: 70%;
+}
+
+.div_forms{
+    margin-bottom: 3px;
+    width: 100%;
+}
+
+.div_forms input,select{
+  color: #3b5998;
+  text-align: center;
+}
+
+#tabela3_length select{
+  width: 43px;
+}
+
+.table_tramitacao{
+    font:9px Verdana;
+}
+
+.submenu{
+  a:hover {text-decoration: underline;  
+  color:white; 
+  font-size:150%; 
+  }
+}
+
+.titulo_table_result{
+  background-color: #3b5998;
+  color: white; 
+  width:15%; 
+  text-align: center;
+}
+
+.odd td{
+  text-align: center;
+}
+
+.even td{
+  text-align: center;
+}
+
+#loader {
+    display: block; 
+    margin: 5px; 
+    visibility: hidden;
+}
+
+.colunaPreTramitacao{
+    font-size: smaller;
+}

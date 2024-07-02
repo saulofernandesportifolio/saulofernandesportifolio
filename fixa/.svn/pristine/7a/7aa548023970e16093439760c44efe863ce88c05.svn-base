@@ -1,0 +1,208 @@
+<?php
+require_once '../fixa/site/classes/cripto.php';
+?>
+
+<?php
+$cripto = new cripto();
+?>
+<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_page.css" />
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_table.css" />
+<script type="text/javascript">
+
+$(document).ready(function(){
+    
+   $("#t_distribuir_solicitacoes_postramitacao").dataTable({  
+        
+  "oLanguage": {
+    
+    "sProcessing": "Aguarde enquanto os dados s&atilde;o carregados ...",
+    "sLengthMenu": "Mostrar _MENU_",
+    "sZeroRecords": "Nenhum registro encontrado",
+    "sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",
+    "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+    "sInfoFiltered": "",
+    "sSearch": "Procurar",
+    "oPaginate": {
+       "sFirst":    "Primeiro",
+       "sPrevious": "Anterior",
+       "sNext":     "Pr&oacute;ximo",
+       "sLast":     "&uacute;ltimo"
+    }
+ }                              
+}); 
+});
+
+</script>
+
+<script type="text/javascript">
+var oTable;
+ 
+$(document).ready(function() {
+
+    /* Add a click handler to the rows - this could be used as a callback */
+    $("#t_distribuir_solicitacoes_postramitacao tbody tr").click( function( e ) {
+        if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+    });
+     
+    /* Add a click handler for the delete row */
+    $('#delete').click( function() {
+        var anSelected = fnGetSelected( oTable );
+        if ( anSelected.length !== 0 ) {
+            oTable.fnDeleteRow( anSelected[0] );
+        }
+    } );
+     
+    /* Init the table */
+    oTable = $('#t_distribuir_solicitacoes_postramitacao').dataTable( );
+
+    $("#bto_limpar").on('click', function(){
+   		$('.checkboxSiscom').prop('checked', false);
+   });
+} );
+ 
+ 
+/* Get the rows which are currently selected */
+function fnGetSelected( oTableLocal )
+{
+    return oTableLocal.$('tr.row_selected');
+}
+
+</script>
+
+<div id="distribuir_table_postramitacao" style="display: none;">
+	<table border="0" id="t_distribuir_solicitacoes_postramitacao" class="tabelas_dashboard" style="width: 112%;" class="display">
+	<caption class="textoParagrafo"><h2>Distribuir Solicitações - Pós Tramitação</h2></caption>
+		<thead>
+            <tr>
+            	<th class="textoParagrafo"></th>
+                <th class="textoParagrafo">Solicitação</th>
+                <th class="textoParagrafo">Nº GS</th>
+                <th class="textoParagrafo">Data Finalizado - Tramitação</th>
+                <th class="textoParagrafo">Revisão</th>
+            </tr>
+        </thead>
+        <tbody>
+       	 <?php 
+ 
+		      include("../fixa/bd.php");
+		       
+		     	$buscarsolicitacao=mysql_query("SELECT
+													sf.id_solicitacao,
+													sf.id_gestao_servicos,
+													sf.tramitacao,
+													date_format(sf.data_ultima_acao,'%d/%m/%Y %H:%i:%s') AS reg_dt_entrada,
+													sf.revisao
+												FROM solicitacao_fases sf
+												WHERE 
+													sf.tramitacao = 'Concluído'
+													AND sf.pos_tramitacao IS NULL
+													AND sf.id_usuario_resp IN
+													(
+														SELECT id_usuario FROM usuario 
+														WHERE id_supervisor IN (
+															SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario
+														)
+													)  
+												ORDER BY 
+													sf.data_ultima_acao
+		     								");
+			if(mysql_affected_rows() > 0){
+					while($linhas=mysql_fetch_array($buscarsolicitacao)){                   
+		        ?>          
+		         <tr>
+		         	<td>
+		         		<input type="checkbox" style="width: 12px;" class="checkboxSiscom" name="cod_siscom_pos[]" value="<?php echo $linhas['id_solicitacao'] . '&' . $linhas['revisao']; ?>">
+		         	</td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['id_solicitacao']; ?>
+		              </a>
+		            </td>
+		             <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['id_gestao_servicos']; ?>
+		              </a>
+		            </td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['reg_dt_entrada']; ?>
+		              </a>
+		            </td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['revisao']; ?>
+		              </a>
+		            </td>
+		          </tr>
+		     <?php 
+		          }
+	          }
+		     ?>
+       </tbody>
+	</table>
+	<br/>
+	<br/>
+		<div class="div_forms">
+			<label class="textoParagrafo">Escolha o operador:</label>
+			<select name="operadorDistribuirPosTramitacao" id="operadorDistribuirPosTramitacao" class="txt2comboboxpadraoOld bradius" required>
+					<?php 
+					$buscarOperador=mysql_query(
+			            "SELECT  
+								u.id_usuario, 
+								u.nome,
+								IFNULL(solicitacao.n_pedidos,0) AS n_pedidos
+							FROM usuario u
+								LEFT JOIN solicitacao_fases sf
+									ON u.id_usuario = sf.id_usuario_resp
+								LEFT JOIN(
+									SELECT 
+										COUNT(id_solicitacao) n_pedidos,
+										id_usuario_resp
+									FROM solicitacao_fases 
+									WHERE pos_tramitacao = 'Concluído'
+									GROUP BY id_usuario_resp
+									UNION
+									SELECT 
+										COUNT(id_solicitacao) n_pedidos,
+										id_usuario_resp
+									FROM solicitacao_fases 
+									WHERE pos_tramitacao != 'Concluído'
+									GROUP BY id_usuario_resp
+								)AS solicitacao
+									ON solicitacao.id_usuario_resp = u.id_usuario
+							WHERE
+								u.id_supervisor in  (
+									SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario
+									UNION 
+									-- allow analista lider and operador pre-tramitacao to do the redistribution 
+									SELECT id_supervisor FROM usuario WHERE id_usuario = $id_usuario AND id_perfil in(4,5) 
+								) 
+							AND u.id_perfil = 7
+							GROUP BY u.id_usuario
+						" 
+		            );  
+
+					while($linha=mysql_fetch_array($buscarOperador)){ 
+					?>  
+				   		<option value="<?php echo $cripto->codificar($linha['id_usuario']); ?>">
+				   			<?php echo $linha['nome'] . ' - ' . $linha['n_pedidos'] . ' (Pedidos)'; ?>
+			   			</option>
+		   			<?php 
+		          		}
+		     		?>
+		  	</select>
+		</div>
+		<br/>
+		<input name="bt_enviar" onclick="enviarSolicitacao(this, '<?php echo  $cripto->codificar($id_usuario)?>', 'dist', 'pos_tramitacao');" id="bto_enviar" type="button" value="Salvar" class="sb2 bradius" />
+		<input type="button" id="bto_limpar" value="Limpar" class="sb2 bradius"/>
+		<input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" onClick="history.back();"/>
+</div>

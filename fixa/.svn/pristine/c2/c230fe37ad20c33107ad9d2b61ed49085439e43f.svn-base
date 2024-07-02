@@ -1,0 +1,215 @@
+<?php
+
+include("../fixa/bd.php");
+
+ini_set ( 'mysql.connect_timeout' ,  '350' ); 
+ini_set ( 'default_socket_timeout' ,  '350' );
+ini_set('memory_limit', '-1'); 
+
+function f_inserir_dados($dados=array(), $info, $id, $existente)
+{	  
+
+	  $data_cadastro=date("Y-m-d H:i:s");
+
+
+		if($info == 2)
+		{
+
+			//atualiza revisao
+		  	if($existente == 'S')
+		  	{
+			  	//busca revisao atual
+			  	$buscaRevisao=mysql_query("SELECT MAX(revisao) AS revisao FROM siscom_vendas WHERE pacote = '$dados[0]'");
+
+				while($rowBr=mysql_fetch_array($buscaRevisao))
+				{
+					$revisao = $rowBr['revisao'];
+				}
+
+				//adiciona + 1
+				$revisao = $revisao + 1;
+		  	}
+		  	else
+		  	{
+			  	$revisao = 1;
+		  	}	
+
+
+				//popula tabela siscom_vendas
+				$sql_insere =
+					"INSERT INTO siscom_vendas(
+						`pacote`,
+						`data`,
+						`hora`,
+						`cnpj_cpf_cliente`,
+						`razao_social`,
+						`segmento`,
+						`gerente_vendas`,
+						`servico`,
+						`status`,
+						`produto`,
+						`qtd`,
+						`importacao_usuario`,
+						`importacao_data`,
+						`revisao`     
+				    )VALUES(
+						'$dados[0]',
+						'$dados[1]',
+						'$dados[2]',
+						'$dados[3]',
+						'$dados[4]',
+						'$dados[5]',
+						'$dados[6]',
+						'$dados[7]',
+						'$dados[8]',
+						'$dados[9]',
+						'$dados[10]',
+						'$id',
+						 NOW(),
+						 $revisao 
+				    )";
+
+		}
+		elseif ($info == 3) 
+		{
+
+			//atualiza revisao
+		  	if($existente == 'S')
+		  	{
+			  	//busca revisao atual
+			  	$buscaRevisao=mysql_query("SELECT MAX(revisao) as revisao FROM siscom_servico WHERE nro_solicitacao = '$dados[11]'");
+
+				while($rowBr=mysql_fetch_array($buscaRevisao))
+				{
+					$revisao = $rowBr['revisao'];
+				}
+
+				//adiciona + 1
+				$revisao = $revisao + 1;
+		  	}
+		  	else
+		  	{
+			  	$revisao = 1;
+		  	}	
+
+
+				//popula tabela siscom_servicos
+				$sql_insere =
+					"INSERT INTO siscom_servico(
+						`cliente_especial`,
+						`data`,
+						`hora`,
+						`cnpj_cpf_cliente`,
+						`codigo_cliente`,
+						`razao_social_cliente`,
+						`servico`,
+						`evento`,
+						`gerente_negocio`,
+						`escritorio_gn`,
+						`gn_responsavel_canal`,
+						`nro_solicitacao`,
+						`status`,
+						`acessos`,
+						`importacao_usuario`,
+						`importacao_data`,
+						`revisao`     
+				    )VALUES(
+						'$dados[0]',
+						'$dados[1]',
+						'$dados[2]',
+						'$dados[3]',
+						'$dados[4]',
+				        '$dados[5]',
+				        '$dados[6]',
+				        '$dados[7]',
+				        '$dados[8]',
+				        '$dados[9]',
+				        '$dados[10]',
+						'$dados[11]',
+						'$dados[12]',
+						'$dados[13]',
+						'$id',
+						 NOW(),
+						 $revisao
+					 )";
+		
+		}elseif ($info == 1) 
+		{
+
+				//popula tabela gs
+				$sql_insere =
+					"INSERT INTO gestao_servicos(
+						`cod_solicitacao`,            
+						`cod_sistema_origem`,     
+						`cod_canal_entrada`,      
+						`canal_entrada`,          
+						`entrada`,               
+						`saida`,                  
+						`cod_status`,             
+						`status`,                 
+						`cliente`,               
+						`responsavel`,            
+						`apelido`,               
+						`cod_produtos`,           
+						`produto`,                
+						`cod_servicos`,          
+						`servico`,                
+						`complemento`,            
+						`qtd`,                    
+						`dias_corridos`,          
+						`dias_uteis`,             
+						`cod_segmentos`,          
+						`segmento`,               
+						`categoria`,              
+						`dt_entrada`,             
+						`importacao_usuario`,    
+						`importacao_data`     
+				    )VALUES(
+						'$dados[0]',
+						'$dados[1]',
+						'$dados[2]',
+						'$dados[3]',
+						'$dados[4]',
+				        '$dados[5]',
+				        '$dados[6]',
+				        '$dados[7]',
+				        '$dados[8]',
+				        '$dados[9]',
+				        '$dados[10]',
+						'$dados[11]',
+						'$dados[12]',
+						'$dados[13]',
+						'$dados[14]',
+						'$dados[15]',
+				        '$dados[16]',
+				        '$dados[17]',
+				        '$dados[18]',
+				        '$dados[19]',
+				        '$dados[20]',
+				        '$dados[21]',
+						'$dados[22]',
+						'$id',
+						 NOW()
+					 )";
+			
+		}elseif ($info == 4) 
+		{
+				//popula tabela gs
+				$sql_insere = '&' . str_replace("'","", $dados[0]) 
+					        . '&' . str_replace("'","", $dados[1])
+					        . '&' . str_replace("'","", $dados[2]) 
+					        . '&' . str_replace("'","", $dados[3]) 
+					        . '&' . str_replace("'","", $dados[4]) 
+					        . '&' . str_replace("'","", $dados[5]) 
+							. '&' . str_replace("'","", $dados[6]) 
+							. '&' . $id 
+							. '&' . $data_cadastro;
+			
+			$sql_insere="CALL import_data('$sql_insere', '4');";
+		}
+
+
+		$acao_insere= mysql_query($sql_insere) or die (mysql_error());
+}
+		
+?>

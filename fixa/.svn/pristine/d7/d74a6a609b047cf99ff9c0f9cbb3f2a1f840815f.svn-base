@@ -1,0 +1,97 @@
+<div id="distribuir_table" style="display: none">
+	<table class="tabelas_dashboard">
+	<caption><h2>Distribuir Solicitações</h2></caption>
+		<thead>
+            <tr>
+            	<th></th>
+                <th>Data</th>
+                <th>Fase</th>
+                <th>Solicitação</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+       	 <?php 
+ 
+		      include("../fixa/bd.php");
+		       
+		     	$buscarsolicitacao=mysql_query("SELECT  
+													vpt.data_hora, 
+													vpt.siscom,
+													sf.tramitacao,
+													tr.id_usuario_tramitacao
+		     									FROM v_geral_pre_tramitacao vpt
+		     										INNER JOIN solicitacao_fases sf 
+	     												ON sf.id_solicitacao = vpt.siscom
+     												INNER JOIN tramitacao tr
+     													ON vpt.siscom = tr.siscom
+	     													WHERE vpt.id_supervisor = (
+		     													SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario
+     														) AND sf.pre_tramitacao = 'Conclúido' AND sf.tramitacao = 'Não preenchido'
+		     									ORDER BY vpt.data_hora DESC 
+		     								");
+			if(mysql_affected_rows() > 0){
+					while($linhaspt=mysql_fetch_array($buscarsolicitacao)){                   
+		        ?>          
+		         <tr>
+		         	<td>
+		         		<input type="checkbox" style="width: 12px;" class="checkboxSiscom" name="cod_siscom[]" value="<?php echo $linhaspt['siscom']; ?>">
+		         	</td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhaspt['data_hora']; ?>
+		              </a>
+		            </td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                Tramitação
+		              </a>
+		            </td>
+		            <td class="colunas-centralizados">
+		              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($linhaspt['siscom'])?>&form=t&t=views/v_form_dados.php">
+		                <?php echo $linhaspt['siscom'];  ?>
+		              </a>
+		            </td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhaspt['tramitacao']; ?>
+		              </a>
+		            </td>
+		          </tr>
+		     <?php 
+		          }
+	          }
+		     ?>
+       </tbody>
+	</table>
+	<br/>
+		<div class="div_forms">
+			<label>Escolha o operador:</label>
+			<select name="operador" id="operador" class="txt2comboboxpadrao bradius" required>
+					<?php 
+					$buscarOperador=mysql_query(
+			            "SELECT distinct 
+			                id_usuario, 
+			                nome
+			            FROM usuario 
+			           where
+			            id_supervisor = (SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario)
+			            AND id_perfil = 6 
+			            " 
+		            );  
+
+					while($linha=mysql_fetch_array($buscarOperador)){ 
+					?>  
+				   		<option value="<?php echo $linha['id_usuario']; ?>">
+				   			<?php echo $linha['nome']; ?>
+			   			</option>
+		   			<?php 
+		          		}
+		     		?>
+		  	</select>
+		</div>
+		<br/>
+		<input name="bt_enviar" onclick="enviarSolicitacao(this, <?php echo  $id_usuario?>, 'dist');" id="bto_enviar" type="button" value="Salvar" class="sb2 bradius" />
+		<input type="button" id="bto_limpar" value="Limpar" class="sb2 bradius"/>
+		<input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" onClick="document.location.href='principal.php?id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_area_supervisor.php'"/>
+</div>

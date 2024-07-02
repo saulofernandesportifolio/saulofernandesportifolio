@@ -1,0 +1,24 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../fixa/site/funcoes/f_geral.php");
+
+
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+
+
+if(empty($_POST['nome']) || empty($_POST['cpf']) || empty($_POST['perfil']) || empty($_POST['supervisor']) || empty($_POST['turno']))
+{
+  echo" <script> 
+          alert('Por favor preencher todos os campos obrigatórios !');
+          history.back();
+        </script>
+        "; 
+        exit();   
+}

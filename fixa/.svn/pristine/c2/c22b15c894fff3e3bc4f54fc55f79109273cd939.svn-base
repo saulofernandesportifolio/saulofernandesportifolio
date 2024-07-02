@@ -1,0 +1,165 @@
+﻿<?php
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+?>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_page.css" />
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_table.css" />
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    
+   $("#tabela3").dataTable({  
+        
+  "oLanguage": {
+    
+    "sProcessing": "Aguarde enquanto os dados s&atilde;o carregados ...",
+    "sLengthMenu": "Mostrar _MENU_ registros por pagina",
+    "sZeroRecords": "Nenhum registro encontrado",
+    "sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",
+    "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+    "sInfoFiltered": "",
+    "sSearch": "Procurar",
+    "oPaginate": {
+       "sFirst":    "Primeiro",
+       "sPrevious": "Anterior",
+       "sNext":     "Pr&oacute;ximo",
+       "sLast":     "&uacute;ltimo"
+    }
+ }                              
+}); 
+});
+
+</script>
+
+<script type="text/javascript">
+var oTable;
+ 
+$(document).ready(function() {
+
+    /* Add a click handler to the rows - this could be used as a callback */
+    $("#tabela3 tbody tr").click( function( e ) {
+        if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+    });
+     
+    /* Add a click handler for the delete row */
+    $('#delete').click( function() {
+        var anSelected = fnGetSelected( oTable );
+        if ( anSelected.length !== 0 ) {
+            oTable.fnDeleteRow( anSelected[0] );
+        }
+    } );
+     
+    /* Init the table */
+    oTable = $('#tabela3').dataTable( );
+} );
+ 
+ 
+/* Get the rows which are currently selected */
+function fnGetSelected( oTableLocal )
+{
+    return oTableLocal.$('tr.row_selected');
+}
+
+</script>
+
+<br />
+<p>
+  <input 
+      name="novousuario" 
+      type="button" 
+      value="Novo Usuário" 
+      class="sb2 bradius" 
+      onClick="window.location='principal.php?id=<?php echo $cripto->codificar($id_usuario)?>&t=forms/formusuarios.php'"
+  />
+
+</p>
+
+   <table border="0" id="tabela3"  width="auto" class="display">
+     <thead>
+       <tr>
+         <th width="18%">Nome:</th>
+         <th width="10%">CPF:</th>
+         <th width="20%">Perfil:</th>
+         <th width="10%">Turno:</th>
+         <th width="10%">Supervisor:</th>
+         <th width="12%">Data Cadastro:</th>
+         <th width="20%">Operação:</th>
+       </tr>
+     </thead>
+     <tbody>
+     
+     <?php 
+     
+      include("../fixa/bd.php");
+       
+     	$buscarusuario=mysql_query("SELECT * FROM v_geral_usuario_info WHERE id_perfil not in(1,2,10) ORDER BY data_cadastro DESC");
+
+			while($linha=mysql_fetch_array($buscarusuario)){
+          $data_cadastro  =$linha['data_cadastro'];
+          $id_usuario  =$linha['id_usuario'];                    
+        ?>          
+         <tr>
+            <td class="colunas-centralizados">
+              <a id="td">
+                <?php echo $linha['nome']; ?>
+              </a>
+            </td>
+            <td class="colunas-centralizados">
+              <a id="td">
+                <?php echo $linha['cpf']; ?>
+              </a>
+            </td>
+            <td class="colunas-centralizados">
+              <a id="td">
+                <?php echo $linha['perfil']; ?>
+              </a>
+            </td>
+            <td class="colunas-centralizados">
+              <a id="td">
+                <?php echo $linha['turno']; ?>
+              </a>
+            </td>
+             <td class="colunas-centralizados">
+              <a id="td">
+                <?php echo $linha['supervisor']; ?>
+              </a>
+            </td>
+           <td class="colunas-centralizados">
+              <a id="td">
+                <?php echo $data_tratamento2 =substr($data_cadastro,8,2).substr($data_cadastro,4,4).substr($data_cadastro,0,4); ?>
+              </a>
+            </td>
+            <td class="colunas-centralizados">
+              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($id_usuario)?>&t=forms/formusuariosedita.php">
+                <?php echo "Editar"; ?>
+              </a>&nbsp;
+              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($id_usuario) ?>&t=controles/sql_formusuariosreset.php">
+                <?php echo "Resetar"; ?>
+              </a>&nbsp;
+              <!-- check status-->
+              <?php if ($linha['id_status'] == 2) {?>
+                  <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($id_usuario) ?>&t=controles/sql_formusuariosdesativar.php"><?php echo "Desativar"; ?></a>&nbsp; 
+              <?php } else {?>
+                  <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($id_usuario) ?>&t=controles/sql_formusuariosativar.php"><?php echo "Ativar"; ?></a>
+              <?php } ?>
+            </td>
+          </tr>
+     <?php 
+          }
+     ?>
+     </tbody>
+   </table>
+

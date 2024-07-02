@@ -1,0 +1,163 @@
+<?php
+
+class SolicitacaoTramitacao {
+	   public $id_usuario_tramitacao;           
+     public $siscom;                          
+     public $cat_produto;                     
+     public $id_canal_entrada;                
+     public $data_entrada_siscom;             
+     public $id_produto;                      
+     public $tipo_solicitacao;       
+     public $id_servicos;                     
+     public $cnpj;                            
+     public $razao_social;                    
+     public $qtd_acessos;                     
+     public $n_gestao_servicos;               
+     public $data_encerramento;               
+     public $id_status_solic_tramitacao ;     
+     public $data_abertura_gestao;            
+     public $obs;                             
+     public $data_devolucao;                  
+     public $devolucao;                       
+     public $aprovado;                        
+     public $reg_dt_entrada;                 
+     public $n_oportunidade_propostas;
+     public $chamado_remedy;
+     public $revisao;
+     public $complemento_tipo_solicitacao;
+
+     function constroiSolicitacaoTramitacao(SolicitacaoTramitacao $solicitacao, $id_usuario_tramitacao, $siscom, $devolucao, $status_solicitacao_tramitacao, $aprovacao, $data_encerramento, $n_oport_proposta, $obs, $reg_dt_entrada)
+     {
+          $solicitacao->id_usuario_tramitacao          = $id_usuario_tramitacao;
+          $solicitacao->siscom                         = $siscom;
+          $solicitacao->devolucao                      = $devolucao;
+          $solicitacao->id_status_solic_tramitacao     = $status_solicitacao_tramitacao;
+          $solicitacao->aprovado                       = $aprovacao;
+          $solicitacao->data_encerramento              = $data_encerramento;
+          $solicitacao->n_oportunidade_propostas       = $n_oport_proposta;
+          $solicitacao->reg_dt_entrada                 = $reg_dt_entrada;
+          $solicitacao->obs                            = $obs;
+
+          return $solicitacao;
+     }
+
+     function validaCamposObrigatorios(SolicitacaoTramitacao $solicitacao)
+     {
+          if(empty($solicitacao->id_status_solic_tramitacao) || empty($solicitacao->aprovado) || empty($solicitacao->n_oportunidade_propostas))
+          {
+               return true;
+          }
+     }
+
+     function buscaObjetoByIdsolicitacao(SolicitacaoTramitacao $solicitacao, $ids, $revisao)
+     {
+          $buscarsolicitacao=mysql_query("SELECT * FROM pre_tramitacao WHERE siscom = $ids AND revisao = $revisao");
+                
+           if(mysql_affected_rows() > 0)
+           {
+                 while($linha=mysql_fetch_array($buscarsolicitacao))
+                 {      
+                    $solicitacao->cat_produto                   =  $linha['cat_produto'];
+                    $solicitacao->id_canal_entrada              =  $linha['id_canal_entrada'];
+                    $solicitacao->id_produto                    =  $linha['id_produto'];
+                    $solicitacao->tipo_solicitacao              =  $linha['tipo_solicitacao'];
+                    $solicitacao->complemento_tipo_solicitacao  =  $linha['complemento_tipo_solicitacao'];
+                    $solicitacao->cnpj                          =  $linha['cnpj'];
+                    $solicitacao->razao_social                  =  $linha['razao_social'];
+                    $solicitacao->qtd_acessos                   =  $linha['qtd_acessos'];
+                    $solicitacao->n_gestao_servicos             =  $linha['n_gestao_servicos'];
+                    $solicitacao->data_abertura_gestao          =  $linha['data_abert_gestao'];
+                    $solicitacao->data_entrada_siscom           =  $linha['data_entrada_siscom'];
+                 }
+           }
+
+           return $solicitacao;
+     }
+
+     function buscaObjetoCompletoByIdSolicitacao(SolicitacaoTramitacao $solicitacao, $ids, $revisao)
+     {
+          $buscarsolicitacao=mysql_query("SELECT 
+                                              t.siscom,
+                                              t.cat_produto,
+                                              t.id_canal_entrada,
+                                              t.data_entrada_siscom,
+                                              t.id_produto,
+                                              t.tipo_solicitacao,
+                                              t.id_servicos,
+                                              t.cnpj,
+                                              t.razao_social,
+                                              t.qtd_acessos,
+                                              t.n_gestao_servicos,
+                                              t.data_encerramento,
+                                              t.id_status_solic_tramitacao,
+                                              t.data_abertura_gestao,
+                                              t.obs,
+                                              t.data_devolucao,
+                                              t.devolucao,
+                                              t.aprovado,
+                                              t.reg_dt_entrada,
+                                              t.n_oportunidade_propostas,
+                                              spc.chamado_remedy 
+                                          FROM tramitacao t
+                                            LEFT JOIN solicitacoes_pendentes_chamados spc
+                                              ON  t.siscom = spc.nro_solicitacao
+                                              AND t.revisao = spc.revisao
+                                          WHERE t.siscom = $ids AND t.revisao = $revisao");
+                
+           if(mysql_affected_rows() > 0)
+           {
+                 while($linha=mysql_fetch_array($buscarsolicitacao))
+                 {  
+                    $solicitacao->siscom                      = $linha['siscom'];
+                    $solicitacao->cat_produto                 = $linha['cat_produto'];
+                    $solicitacao->id_canal_entrada            = $linha['id_canal_entrada'];
+                    $solicitacao->data_entrada_siscom         = $linha['data_entrada_siscom'];
+                    $solicitacao->id_produto                  = $linha['id_produto'];
+                    $solicitacao->tipo_solicitacao            = $linha['tipo_solicitacao'];
+                    $solicitacao->id_servicos                 = $linha['id_servicos'];
+                    $solicitacao->cnpj                        = $linha['cnpj'];
+                    $solicitacao->razao_social                = $linha['razao_social'];
+                    $solicitacao->qtd_acessos                 = $linha['qtd_acessos'];
+                    $solicitacao->n_gestao_servicos           = $linha['n_gestao_servicos'];
+                    $solicitacao->data_encerramento           = $linha['data_encerramento'];
+                    $solicitacao->id_status_solic_tramitacao  = $linha['id_status_solic_tramitacao'];
+                    $solicitacao->data_abertura_gestao        = $linha['data_abertura_gestao'];
+                    $solicitacao->obs                         = $linha['obs'];
+                    $solicitacao->data_devolucao              = $linha['data_devolucao'];
+                    $solicitacao->devolucao                   = $linha['devolucao'];
+                    $solicitacao->aprovado                    = $linha['aprovado'];
+                    $solicitacao->reg_dt_entrada              = $linha['reg_dt_entrada'];
+                    $solicitacao->n_oportunidade_propostas    = $linha['n_oportunidade_propostas'];
+                    $solicitacao->chamado_remedy              = $linha['chamado_remedy'];
+                 }
+           }
+
+           return $solicitacao;
+     }
+
+      function buscaRevisaoByIdSolicitacaoRevisao($ids)
+      {
+          //busca revisao atual
+          $buscaRevisao=mysql_query("SELECT revisao FROM tramitacao WHERE siscom = $ids");
+
+           if(mysql_affected_rows() > 0)
+           {
+              while($rowBr=mysql_fetch_array($buscaRevisao))
+              {
+                $revisao = $rowBr['revisao'];
+              }
+
+              //adiciona + 1
+              $revisao = $revisao + 1;
+           }
+           else
+           {
+              $revisao = 1;
+           }
+
+           return $revisao;
+       
+      }
+}
+
+?>

@@ -1,0 +1,59 @@
+
+
+<div id="t_i_t" style="display: none;">
+		<table class="tabelas_dashboard">
+		<caption><h2 style="color: #7b682e;">Tramitação</h2></caption>
+			<thead>
+                <tr>
+                    <th>Fase</th>
+                    <th>Status</th>
+                    <th>Solicitação</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query("SELECT 
+												p.id_solicitacao AS solicitacao,
+												'Pré-Tramitacão' AS fase,
+												sf.tramitacao
+											FROM 
+												pre_tramitacao p
+												INNER JOIN solicitacao_fases sf
+													ON p.id_solicitacao = sf.id_solicitacao 
+											WHERE 
+												p.aprovado = 'Sim' AND 
+												p.id_usuario_pre = $id_usuario AND
+												sf.pre_tramitacao = 'Concluído' AND 
+												sf.tramitacao = 'Em edição'
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){                   
+				        ?>          
+				         <tr>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				               <?php echo $linha['fase']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linha['status']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td" <?php if($linha['solicitacao'] > 0) { ?>href=""<?php } ?> >
+				               <?php echo $linha['solicitacao']; ?>
+				              </a>
+				            </td>
+				          </tr>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>

@@ -1,0 +1,31 @@
+<?php
+
+class Solicitacao {
+    public $siscom; 
+    public $cnpj; 
+    public $razaoSocial; 
+    public $gerenteNegocio; 
+    public $escritorioGn;
+    public $gnResponsavel;
+    public $status;
+    public $revisao;
+    public $importacaoData;
+    public $importacaoUsuario;
+    public $origem;
+
+    function __construct($siscom, $cnpj, $razaoSocial, $gerenteNegocio, $escritorioGn, $gnResponsavel, $status, $revisao, $importacaoData, $importacaoUsuario, $origem)
+    {
+          $this->siscom =  $siscom; 
+          $this->cnpj = $cnpj; 
+          $this->razaoSocial = $razaoSocial; 
+          $this->gerenteNegocio = $gerenteNegocio; 
+          $this->escritorioGn = $escritorioGn;
+          $this->gnResponsavel = $gnResponsavel;
+          $this->status = $status;
+          $this->revisao = $revisao;
+          $this->importacaoData = $importacaoData;
+          $this->importacaoUsuario = $importacaoUsuario;
+          $this->origem = $origem;
+    }
+}
+?>

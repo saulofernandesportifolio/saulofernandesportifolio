@@ -1,0 +1,221 @@
+<?php
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+?>
+
+<script type="text/javascript">
+ 
+$(document).ready(function() {
+
+   $("#redistribuir").on('click', function() {
+   		$( "#redistribuir_table" ).css({"display": ""});
+   		$( "#t_s_o" ).css({"display": "none"});
+   		$( "#distribuir_table" ).css({"display": "none"});
+   		$( "#t_tram" ).css({"display": "none"});
+    });
+
+   $("#distribuir").on('click', function() {
+   		$( "#distribuir_table" ).css({"display": ""});
+   		$( "#t_s_o" ).css({"display": "none"});
+   		$( "#redistribuir_table" ).css({"display": "none"});
+   		$( "#t_tram" ).css({"display": "none"});
+    });
+
+   $("#bto_limpar").on('click', function(){
+   		$('.checkboxSiscom').prop('checked', false);
+   });
+ 
+});
+
+</script>
+
+<div class="tela_principal_dasbboard">
+	<div id="menu_vertical_f">
+		<ul class="menu_vertical">
+	    	<li class="menu_vertical">
+	    		<a id="distribuir">Distribuir</a></li>
+	    	<li class="menu_vertical">
+	    		<a id="redistribuir">Redistribuir</a>
+    		</li>
+		</ul>
+	</div>
+	<div id="t_s_o">
+		<table class="tabelas_dashboard">
+		<caption><h2>Formulários Preenchidos Pré-Tramitação</h2></caption>
+			<thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Operador</th>
+                    <th>Fase</th>
+                    <th>Solicitação</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarsolicitacao=mysql_query("SELECT v.data_hora, v.analista_pre, v.siscom, sf.pre_tramitacao
+			     									FROM v_geral_pre_tramitacao v
+			     										INNER JOIN solicitacao_fases sf
+			     											ON v.siscom = sf.id_solicitacao
+			     										WHERE v.id_supervisor = (
+			     											SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario)
+			     											ORDER BY data_hora DESC");
+
+			     	if(mysql_affected_rows() > 0){
+						while($linhaspt=mysql_fetch_array($buscarsolicitacao)){                   
+			        ?>          
+			         <tr>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['data_hora']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['analista_pre']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo "Pré-Tramitação"; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($linhaspt['siscom'])?>&t=views/v_form_dados.php">
+			                <?php echo $linhaspt['siscom'];  ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['pre_tramitacao']; ?>
+			              </a>
+			            </td>
+			          </tr>
+			     <?php 
+		     			}
+		          }
+			     ?>
+           </tbody>
+		</table>
+	</div>
+
+		<div id="t_tram">
+		<table class="tabelas_dashboard">
+		<caption><h2>Formulários Preenchidos Tramitação</h2></caption>
+			<thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Operador</th>
+                    <th>Fase</th>
+                    <th>Solicitação</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarsolicitacao=mysql_query("SELECT v.data_hora, v.analista_pre, v.siscom, sf.tramitacao
+			     									FROM v_geral_tramitacao v
+			     										INNER JOIN solicitacao_fases sf
+			     											ON v.siscom = sf.id_solicitacao
+			     										WHERE v.id_supervisor = (
+			     											SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario)
+			     											ORDER BY data_hora DESC");
+
+			     	if(mysql_affected_rows() > 0){
+						while($linhaspt=mysql_fetch_array($buscarsolicitacao)){                   
+			        ?>          
+			         <tr>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['data_hora']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['analista_pre']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo "Tramitação"; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($linhaspt['siscom'])?>&t=views/v_form_dados.php">
+			                <?php echo $linhaspt['siscom'];  ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['pre_tramitacao']; ?>
+			              </a>
+			            </td>
+			          </tr>
+			     <?php 
+		     			}
+		          }
+			     ?>
+           </tbody>
+		</table>
+	</div>
+	<?php include("v_distribuir_solicitacoes.php");?>
+
+	<?php include("v_redistribuir_solicitacoes.php");?>
+
+	<div id="t_m_e">
+		<table class="tabelas_dashboard">
+		<caption><h2>Minha Equipe</h2></caption>
+			<thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Turno</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarEquipe=mysql_query("SELECT * FROM v_geral_usuario_info WHERE id_supervisor IN (SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario)");
+
+			     	if(mysql_affected_rows() > 0){
+
+						while($linhasbe=mysql_fetch_array($buscarEquipe)){                   
+			  ?>          
+				        <tr>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhasbe['nome']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhasbe['cpf']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhasbe['turno']; ?>
+				              </a>
+				            </td>
+				        </tr>
+			     <?php 
+			          }
+		          }
+			     ?>
+           </tbody>
+		</table>
+	</div>
+</div>

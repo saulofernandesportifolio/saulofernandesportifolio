@@ -1,0 +1,69 @@
+<?php
+$page="Fixa - Tela Login";
+setcookie("salva","");
+setcookie("id_usuario","");
+?>
+<!DOCTYPE html> 
+<html lang="pt-br"> 
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<link rel="stylesheet" type="text/css" href="../fixa/css/padrao.css" />
+<!--<link rel="stylesheet" type="text/css" href="css/bootstrap-3.3.6-dist">-->
+
+<title><?php echo $page;?></title>
+
+<!-- Linkando a biblioteca javascript jQuery -->
+<script type="text/javascript" src="js/lib/jquery-1.4.2.js" ></script>
+
+<!-- Linkando o arquivo que terá as funções javascript - functions.js -->
+<script type="text/javascript" src="js/functions.js"></script>
+<script type="text/javascript" src="js/funcoesJs.js"></script>
+ 
+ <!-- Funções para validação de CPF e CNPJ -->
+<script type="text/javascript" src="js/valida_cpf_cnpj.js"></script>
+
+<script>
+    function resizePage() {
+        document.getElementById("resolucao").style.height = (document.body.clientHeight - 100) * 0.9;
+        document.getElementById("resolucao").style.width = (document.body.clientWidth - 100) * 0.9;
+    }
+</script>
+</head>
+<body class="divctl">
+    <div id="resolucao">
+    	<div id="login" class="form bradius">
+            <div class="logo">
+                <img src="css/imagem/Logo_Empreza_12.jpg" alt="<?php echo $title;?>" width="150" height="60" style="padding-left:26px" />
+            </div>
+            <h3 align="center"><strong>Sistema - Fixa</strong></h3>
+            <div class="acomodar">
+            	<form action="valida_usuario.php" method="POST">
+                    <label for="cpf">CPF: </label>
+                        <input 
+                            id="cpf" 
+                            type="text" 
+                            class="txt bradius" 
+                            name="cpf"
+                            onblur="validaCpf(this);" 
+                        />
+                    <label for="senha">Senha: </label>
+                        <input  
+                            id="senha" 
+                            type="password" 
+                            class="txt bradius" 
+                            name="senha" 
+                        />
+                        <input 
+                            type="submit" 
+                            class="sb bradius" 
+                            name="entrar" 
+                            id="entrar" 
+                            value="Entrar" 
+                        />
+                </form>
+            </div>       
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,986 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+/*font do body*/
+body,input,select,p{
+/*font:11px Verdana;*/
+font: 14px Gotham Light;
+font-weight: bold;
+
+
+}
+
+body{
+   
+background-image:url(../../gala/css/imagem/Logo_Empreza2.jpg);
+background-repeat: repeat;    
+
+    
+}
+
+
+.trcabecalho{
+width:800px;
+height:auto;
+z-index: 0;
+border: solid 0px;
+background:#a0873c;
+color:#FFFFFF;
+text-align: center; 
+font-weight: bold;
+border: 1px solid #FFFFFF;
+position: relative;
+
+}
+
+
+.tdconteudo{
+width:800px;
+height: auto;
+z-index: 0;
+background:#f5f5f5;
+color:#000000;
+text-align: center; 
+padding: 2px;
+font-weight: bold;
+border: 1px solid #FFFFFF;
+position: relative;
+}
+
+.trcabecalho2{
+position: relative;    
+width:350px;
+height: 25px;
+z-index: 0;
+color:#000000;
+text-align: center; 
+font-weight: bold;
+border: 2px solid #735D25;
+border-radius:6px;
+-webkit-border-radius:6px;
+-moz-border-radius:6px;
+}
+
+
+/*div controle conteudo da pgina*/
+.divctl
+{
+width:99.96%;
+height: auto;
+position: relative;
+top: 0;
+left: 1px;
+right:0;
+z-index: 0;
+border: transparent;
+}
+
+
+/*Definicao fieldset*/
+#fieldset{
+margin-top: 2px;
+margin-left:2px;
+margin-bottom:10px;
+padding-bottom: 10px;
+background: transparent; 
+height:92px;
+width:99.4%;
+border:1px solid silver;
+z-index: 0;
+position: relative;
+}
+
+/*div controle textos form servico*/
+.divformservico{
+width:700px;
+height: auto;
+position: absolute;
+top: 220px;
+left: 22%;
+right:0;
+z-index: 0;
+border: 0px solid; 
+background: #E7E4D1; 
+/*padding: 20px 40px 20px 20px;*/
+padding-top: 10px;
+padding-left: 10px;
+padding-right: 10px;
+padding-bottom: 10px;
+}
+
+/*div controle textos form servico*/
+.divformservicojava{
+width:700px;
+height: auto;
+position: absolute;
+top: 90px;
+left: 2%;
+right:0;
+z-index: 0;
+border: 0px solid; 
+background: #E7E4D1; 
+/*padding: 20px 40px 20px 20px;*/
+padding-top: 10px;
+padding-left: 10px;
+padding-right: 10px;
+padding-bottom: 10px;
+}
+
+/*div controle textos form servico*/
+.divgraficos{
+width:auto;
+height: auto;
+position: absolute;
+top: 220px;
+left: 0;
+right:0;
+z-index: 0;
+border: 0px solid; 
+background:transparent #E7E4D1; 
+/*padding: 20px 40px 20px 20px;*/
+padding-top: 10px;
+padding-left: 10px;
+padding-right: 10px;
+padding-bottom: 10px;
+
+}
+
+
+.tituloform{
+
+padding: 3px 3px 3px 3px; 
+width:713px;
+height: auto;
+position: absolute; 
+color: #ffffff;
+left: 22%;
+right:0;
+z-index: 0;
+border: 1px solid black; 
+background:#A0873C;    
+    
+}
+
+
+.tituloformjava{
+
+padding: 3px 3px 3px 3px; 
+width:713px;
+height: auto;
+position: absolute; 
+color: #ffffff;
+left: 2%;
+right:0;
+z-index: 0;
+border: 1px solid black; 
+background:#A0873C;    
+    
+}
+
+
+/*div controle textos form districuição servico*/
+.divformdistribuicaoservico{
+width:94%;
+height: auto;
+position: relative;
+top: 1px;
+left: 1px;
+right:0;
+z-index: 0;
+border: transparent ;   
+}
+
+/*controle filtro servico*/
+#filtroservico2{
+	width:98.8%;
+    height: 100%;
+	margin: 2px;
+    position: relative;
+	top:20px;
+	border:1px solid silver;
+	padding:1px 5px 5px 1px;
+    background:#ffffff;
+    z-index: 0;
+ 
+}
+
+
+/*controle filtro servico*/
+#filtroservicojava{
+	width:98.8%;
+    height: 100%;
+	margin: 2px;
+    position: relative;
+	top:20px;
+	border:1px solid silver;
+	padding:1px 5px 5px 1px;
+    background:#ffffff;
+    z-index: 0;
+ 
+}
+
+
+/*div controle textos form carrega*/
+.divformcarrega{
+width:50%;
+height: auto;
+position: relative;
+top: 220px;
+left:25%;
+right:0;
+z-index: 0;
+border: transparent; 
+padding: 5px 5px 5px 5px;
+
+ 
+}
+/*controle filtro carrega*/
+#filtroservico{
+	width:98%;
+	margin: auto;
+	position:relative;
+	top: 20px;
+	border:1px solid silver;
+	padding:15px;
+    background:#ffffff;
+    z-index: 0;
+    left: 2px;
+}
+
+/*controle login */
+#login{
+	width:300px;
+	margin:0 auto;
+	position:relative;
+	top:200px;
+	border:1px solid silver;
+	padding:15px;
+    background:#ffffff;
+    z-index: 0;
+}
+
+/*controle filtro */
+#filtro{
+	width:300px;
+    height: auto;
+	margin:0 auto;
+	position:relative;
+	top:35px;
+	border:1px solid silver;
+	padding:15px;
+    background:#ffffff;
+    z-index: 0;
+}
+
+
+/*controle logo*/
+.logo{
+	width:200px;
+	height:58px;
+	margin:0 auto;
+	padding:7px;
+	position:relative;
+	top:10px;
+}
+
+
+/*controle logo*/
+.logo2{
+	width:20px;
+	height:10%;
+	margin:0 auto;
+	padding:0px;
+	position: relative;
+	top:18px;
+    right:0px;
+    left: 0px;
+    padding-left: 0px;
+   
+}
+
+/*controle logo*/
+.barratopo{
+	width:100%;
+	height:auto;
+	margin:0 auto;
+	padding:7px;
+    left: 0px;
+	position:relative;
+	top:0px;
+   
+}
+
+/*controle relogio*/
+.spanhora{
+   	width:10%;
+	height:auto;
+	padding:10px;
+    font-weight: bold;
+   	position: relative;
+
+}
+
+/*controle nome*/
+.spannome{
+  	width:80%;
+	height:auto;
+	padding:10px;
+    font-weight: bold;
+  	position: relative;
+  
+    
+}
+/*controle nome*/
+.tablenomehora{
+  	width:95%;
+	height:12px;
+    top: 10px;
+    left:0px;
+	padding:10px;
+    font-weight: bold;
+  	position: relative;
+    background:#E7E4D1;
+
+}
+
+/*controle label*/
+.label{
+  background: #735D25;
+  font-weight: bold;
+}
+
+
+/*centralizar */
+.acomodar{
+	margin:0 auto;
+	width:250px;
+}
+
+/*centralizar */
+.acomodar2{
+	margin:0 auto;
+	width:300px;
+}
+
+/*centralizar */
+.acomodar3{
+	margin:0 auto;
+	width:280px;
+}
+
+
+/*controle do form login*/
+.form  label{
+	display:block;
+	padding-top:5px;
+}
+
+
+/* classe para textos*/
+.txt{
+	border:none;
+	height:25px;
+	width:250px;
+	border:thin solid #f1f1f1;
+}
+.txt:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos*/
+.txtgrande{
+	border:none;
+	height:25px;
+	width:400px;
+	border:thin solid #f1f1f1;
+}
+.txtgrande:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+
+
+/* classe para textos para as form*/
+
+/*tratamanro para campo numero*/
+.txt2num{
+	border:none;
+	height:25px;
+	width:40px;
+	border:thin solid #f1f1f1;
+}
+.txt2num:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+
+}
+
+/* classe para textos combobox pequeno para as form*/
+.txt2comboboxpequeno{
+	border:none;
+	height:25px;
+	width:115px;
+	border:thin solid #f1f1f1;
+    
+  }
+
+/* classe para textos combobox pequeno para as form*/
+.txt2comboboxmenor{
+	border:none;
+	height:25px;
+	width:165px;
+	border:thin solid #f1f1f1;
+    
+  }
+  
+  
+/* classe para textos combobox pequeno para as form*/
+.txt2comboboxmedio{
+	border:none;
+	height:25px;
+	width:200px;
+	border:thin solid #f1f1f1;
+    
+  }  
+  
+
+.txt2comboboxpequeno:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+
+
+/* classe para textos combobox padrao para as form*/
+.txt2comboboxpadrao{
+	border:none;
+	height:25px;
+	width:300px;
+	border:thin solid #f1f1f1;
+}
+
+.txt2comboboxpadrao:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos combobox grande para as form*/
+.txt2comboboxgrande{
+	border:none;
+	height:25px;
+	width:500px;
+	border:thin solid #f1f1f1;
+}
+
+.txt2comboboxgrande:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+
+/* classe para textos textarea grande para as form*/
+.txt2textarea{
+	border:none;
+	height:80px;
+	width:680px;
+	border:thin solid #f1f1f1;
+    padding-right:0px;
+    font: 14px Gotham Light;
+    font-weight: bold;
+   
+}
+
+.txt2textarea:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+
+
+
+/* classe para textos data para as form*/
+.txt2data{
+	border:none;
+	height:25px;
+	width:150px;
+	border:thin solid #f1f1f1;
+    margin:0 auto;
+}
+
+.txt2data:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos para as form*/
+
+/*classe para formato do boto login*/
+.sb{
+	display:block;
+	border:none;
+	width:250px;
+	height:40px;
+	margin-top:10px;
+	cursor:pointer;
+	font:400 18px Oswald;
+	color:#fff;
+    background:#735D25;
+}
+.sb:hover{
+	background:#678b97;
+	color:#fff;
+}
+
+/*classe para formato do boto form*/
+.sb2{
+	/*display:block;*/
+	border:none;
+	width:100px;
+	height:25px;
+	margin-top:1px;
+	cursor:pointer;
+	font:600 13px Oswald;
+	color:#fff;
+    background:#735D25;
+}
+.sb2:hover{
+	background:#678b97;
+	color:#fff;
+}
+
+/* classe para textos*/
+
+/*Classes de herana*/
+.bradius{
+	border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+    behavior: url(../../../gala/css/PIE.htc); /* Bahavior adicionado para renderização das propriedades acima no IE6, 7 e 8 */
+
+    
+}
+
+/*Classes de herana - desativado
+.bradius{
+     border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+    behavior:url(css/ie-css3.htc);
+}*/
+
+
+.fleft{
+	float:left;
+}
+.fright{
+	float:right;
+}
+/*Mltiplos Estilos*/
+.txt,.txt:focus,.sb,.sb:hover,#cadastrar:hover,#cadastrar{
+	transition:all 0.5s linear;
+	-webkit-transition:all 0.5s linear;
+	-moz-transition:all 0.5s linear;
+}
+
+/*configuraes de campo*/
+.visivel { 
+    display:inline; 
+    } 
+.invisivel {
+    display:none;
+     }
+
+/*tratamento imagen da home*/
+
+#imghome{
+ margin-top: 180px;   
+ width: 50%;   
+ height: auto;
+  
+}
+
+
+.divrel{
+margin-top: 20px; 
+ margin-left:300px;
+ margin-bottom: auto;
+ width: 600px;
+ height:0 auto;    
+ background: #E7E4D1;
+ padding-left:20px;   
+    
+    
+}
+
+
+/*controle nome*/
+.tablepadrao{
+  	width:99%;
+	height:100%;
+    top: 10px;
+    left:0px;
+	padding:1px;
+    font-weight: bold;
+  	position: relative;
+    z-index: 0;
+    background: transparent;
+
+}
+
+
+/* > Para o input de pesquisa*/
+	.input-search{
+		border:1px solid #CCC;
+		padding:5px 5px;
+		font-size:12px;
+		margin:0px;
+		float:left;
+        z-index: 0;
+        color: silver;
+		
+		-webkit-border-radius:15px;
+		   -moz-border-radius:15px;
+		    -ms-border-radius:15px;
+		     -o-border-radius:15px;
+		        border-radius:15px;
+                
+ 
+         
+	}
+		.input-search::-webkit-input-placeholder{ font-style:italic }
+		.input-search:-moz-placeholder			{ font-style:italic }
+		.input-search:-ms-input-placeholder		{ font-style:italic }
+  
+
+
+       table.lista-clientes{
+	    border-collapse:collapse;
+		font-size:10.44px;
+		font-family: Gotham Light;
+        font-weight: bold;
+        text-align: center;
+        z-index: 0;
+  
+            
+  	   }
+		table.lista-clientes th{
+			padding:1px;
+			background: #a0873c;
+			border:1px solid #fff;
+            color: white;
+            height: auto;
+            width:auto;
+            font-weight: bold;
+            text-align: center;
+            z-index: 0;
+                  
+		}
+		table.lista-clientes td{
+			padding:1px;
+			border:1px solid #fff;
+            background: #f5f5f5;
+            height: auto;
+            width: auto;
+            font-weight: bold;
+            text-align: center;
+            z-index: 0;
+		}
+	
+	.cont{
+		width:0%;
+		margin:0px;
+		overflow:hidden;
+	}
+/*div controle textos form districuição servico*/
+.divformdistribuicaoservico2{
+width:90%;
+height: auto;
+position: relative;
+top: 1px;
+left: 2px;
+right:0;
+z-index: 0;
+border: transparent ; 
+
+}
+   
+/* > Para o input de pesquisa*/
+	.input-search2{
+		border:1px solid #CCC;
+		padding:5px 5px;
+		font-size:12px;
+		margin:0px;
+		float:left;
+        z-index: 0;
+		
+		-webkit-border-radius:15px;
+		   -moz-border-radius:15px;
+		    -ms-border-radius:15px;
+		     -o-border-radius:15px;
+		        border-radius:15px;
+	}
+		.input-search::-webkit-input-placeholder{ font-style:italic }
+		.input-search:-moz-placeholder			{ font-style:italic }
+		.input-search:-ms-input-placeholder		{ font-style:italic }
+
+       table.lista-clientes2{
+	    border-collapse:collapse;
+		font-size:13px;
+		font-family: Gotham Light;
+        font-weight: bold;
+        text-align: center;
+        z-index: 0;
+            
+  	   }
+		table.lista-clientes2 th{
+			padding:5px;
+			background: #a0873c;
+			border:1px solid #fff;
+            color: white;
+            height: auto;
+            width:auto;
+            font-weight: bold;
+            text-align: center;
+            z-index: 0;
+		}
+		table.lista-clientes2 td{
+			padding:3px;
+			border:1px solid #fff;
+            background: #f5f5f5;
+            height: auto;
+            width: auto;
+            font-weight: bold;
+            text-align: center;
+            z-index: 0;
+		}
+	
+	.cont2{
+		width:100%;
+		margin:0px;
+		overflow:hidden;
+	}   
+   
+  
+ /*div controle textos form districuição servico*/
+.divformusuario{
+width:95%;
+height: auto;
+position: relative;
+top: 1px;
+left: 10px;
+right:0;
+z-index: 0;
+border: transparent ; 
+padding: 0px 0px 0px 0px; 
+background: #E7E4D1; 
+}
+
+/*controle filtro servico*/
+#filtroservicousuario{
+	width:40%;
+    height: 100%;
+	margin: 2px;
+    position: relative;
+	top:20px;
+	border:1px solid silver;
+	padding:1px 5px 5px 5px;
+    background:#ffffff;
+    z-index: 0;
+     margin-left:300px;
+ 
+} 
+ 
+.divformeditausuario{
+width:95%;
+height: auto;
+position: relative;
+top: 1px;
+left: 10px;
+right:0;
+z-index: 0;
+border: transparent ; 
+padding: 0px 0px 0px 0px;  
+}
+
+/*controle filtro servico*/
+#filtroeditausuario{
+	width:65%;
+    height: 100%;
+	margin: 2px;
+    position: relative;
+	top:20px;
+	border:1px solid silver;
+	padding:1px 5px 5px 5px;
+    background:#ffffff;
+    z-index: 0;
+     margin-left:200px;
+ 
+}  
+ 
+ 
+  
+/*div msg*/
+.divmsg{
+width:80%;
+height: auto;
+position: relative;
+top: 0px;
+left:10%;
+right:0;
+padding: 5px 5px 5px 5px;
+z-index: 0;
+border: transparent; 
+
+} 
+
+table.lista-clientespivot{
+	    border-collapse:collapse;
+		font-size:14px;
+		font-family: Gotham Light;
+        font-weight: bold;
+        text-align: center;
+        z-index: 0;
+            
+  	   }
+		table.lista-clientespivot th{
+			padding:5px;
+			background: #a0873c;
+			border:1px solid #fff;
+            color: white;
+            height: auto;
+            width:auto;
+            font-weight: bold;
+            text-align: center;
+            z-index: 0;
+		}
+		table.lista-clientespivot td{
+			padding:3px;
+			border:1px solid #fff;
+            background: #f5f5f5;
+            height: auto;
+            width: auto;
+            font-weight: bold;
+            text-align: center;
+            z-index: 0;
+		}
+	
+	.contpivot{
+		width:100%;
+		margin:0px;
+		overflow:hidden;
+	}   
+
+ /*controle filtro servico*/
+#filtropivot{
+	width:95%;
+    height: 100%;
+	margin: 2px;
+    position: relative;
+	top:20px;
+	border:1px solid silver;
+	padding:1px 5px 5px 5px;
+    background:#ffffff;
+    z-index: 0;
+    margin-left:3px;
+ 
+} 
+ 
+.divformpivot{
+width:95%;
+height: auto;
+position: relative;
+top: 1px;
+left: 10px;
+right:0;
+z-index: 0;
+border: transparent ; 
+padding: 0px 0px 0px 0px;  
+} 
+
+
+
+
+table.lista-clientesvisaoanalise{
+	    border-collapse:collapse;
+		font-size:11px;
+		font-family: Gotham Light;
+        font-weight: bold;
+        text-align: center;
+        z-index: 0;
+            
+  	   }
+		table.lista-clientesvisaoanalise th{
+			padding:1px;
+			background: #a0873c;
+			border:1px solid #fff;
+            color: white;
+            height: auto;
+            width:auto;
+            font-weight: bold;
+            text-align: center;
+            z-index: 0;
+		}
+		table.lista-clientesvisaoanalise td{
+			padding:1px;
+			border:1px solid #fff;
+            background: #f5f5f5;
+            height: auto;
+            width: auto;
+            font-weight: bold;
+            text-align: center;
+            z-index: 0;
+		}
+	
+	.contvisaoanalise{
+		width:50%;
+		margin:0px;
+		overflow:hidden;
+	}   
+
+ /*controle filtro servico*/
+#filtrovisaoanalise{
+	width:95%;
+    height: 100%;
+	margin: 2px;
+    position: relative;
+	top:20px;
+	border:1px solid silver;
+	padding:1px 5px 5px 5px;
+    background:#ffffff;
+    z-index: 0;
+    margin-left:3px;
+ 
+} 
+ 
+.divformvisaoanalise{
+width:95%;
+height: auto;
+position: relative;
+top: 1px;
+left: 10px;
+right:0;
+z-index: 0;
+border: transparent ; 
+padding: 0px 0px 0px 0px;  
+} 
+

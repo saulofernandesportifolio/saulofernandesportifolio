@@ -1,0 +1,106 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+    //setup default
+    include("../fixa/bd.php");
+
+    $tempo = 0;
+
+    set_time_limit($tempo);
+    date_default_timezone_set("Brazil/East");
+
+    $data_cadastro=date("Y-m-d H:i:s");
+
+    include("../fixa/site/funcoes/f_geral.php");
+    require_once '../fixa/site/classes/cripto.php';
+
+    $cripto = new cripto();
+
+    $id_usuario= $_GET['id'];
+
+    $id_usuario = $cripto->decodificar($id_usuario);
+
+
+    //valida campos obrigatórios
+    if(
+        empty($_POST['data_recebimento_doc'])   ||
+        empty($_POST['tipo_entrada'])           ||
+        empty($_POST['contrato_mae'])           ||
+        empty($_POST['data_assinatura_doc'])    ||
+        empty($_POST['n_documento'])            ||
+        empty($_POST['sistema_validacao'])      ||
+        ($_POST['n_vantive'] == "")             ||       
+        empty($_POST['produto'])                ||
+        empty($_POST['data_tratativa'])         ||
+        empty($_POST['nome_solicitante'])       ||
+        ($_POST['n_gs'] == "")                  || 
+        empty($_POST['numero_wcd'])             ||
+        empty($_POST['razao_social'])           ||
+        empty($_POST['cnpj'])                   ||
+        ($_POST['plano_solicitado'] == "")      || 
+        ($_POST['qtde_acesso'] == "")           || 
+        empty($_POST['data_finalizacao'])    
+    ) 
+    {
+      echo" <script> 
+              alert('Por favor preencher todos os campos obrigatórios !');
+              history.back();
+            </script>
+            "; 
+            exit();   
+    }
+
+
+      //valida gestao servicos
+      $query_valida_gs = mysql_query("SELECT n_gestao_servicos FROM gcom WHERE n_gestao_servicos != 0 and n_gestao_servicos = '{$_POST['n_gs']}'");
+
+      //passar nsiscom como parametro para validar se usuario alterou nsiscom, se for igual nao passa pela validação abaixo 
+      if(mysql_affected_rows() > 0){
+        echo" <script> 
+                alert('Número do GS já cadastrado na base!');
+                history.back();
+              </script>
+              "; 
+            exit();   
+      }
+
+     //formata campos data
+     $data_recebimento_doc = formataDataBD($_POST['data_recebimento_doc']);
+     $data_assinatura_doc = formataDataBD($_POST['data_assinatura_doc']);
+     $data_tratativa = formataDataBD($_POST['data_tratativa']); 
+     $data_finalizacao = formataDataBD($_POST['data_finalizacao']);    
+
+
+    //insere dados em variavel para proc
+    $dadosProc = '&'. $id_usuario 
+               . '&'. $data_recebimento_doc
+               . '&'. $_POST['tipo_entrada']
+               . '&'. $_POST['contrato_mae']
+               . '&'. $data_assinatura_doc 
+               . '&'. $_POST['n_documento']          
+               . '&'. $_POST['sistema_validacao']    
+               . '&'. $_POST['n_vantive']         
+               . '&'. $_POST['produto']              
+               . '&'. $data_tratativa    
+               . '&'. $_POST['nome_solicitante']     
+               . '&'. $_POST['n_gs']           
+               . '&'. $_POST['numero_wcd']           
+               . '&'. $_POST['razao_social']         
+               . '&'. $_POST['cnpj']                 
+               . '&'. $_POST['plano_solicitado']        
+               . '&'. $_POST['qtde_acesso']            
+               . '&'. $data_finalizacao
+               . '&'. $data_cadastro;   
+ 
+    $sql_exec="CALL solicitacao_gcom('$dadosProc');";
+
+    $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+  echo" <script> 
+    alert('Solicitação cadastrada com sucesso!');
+      document.location.replace('principal.php?t=views/home.php');
+    </script>
+    ";
+                                      
+    exit();
+   
+?>

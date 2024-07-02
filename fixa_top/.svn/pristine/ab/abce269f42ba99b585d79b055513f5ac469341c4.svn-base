@@ -1,0 +1,196 @@
+<?php
+
+class Aprovacao {
+     public $operador; 
+     public $siscom; 
+     public $data_entrada_siscom; 
+     public $canal_entrada; 
+     public $produto; 
+     public $servico; 
+     public $complemento_servico;
+     public $qtd_acessos; 
+     public $data_recebimento_aprovacao; 
+     public $cnpj; 
+     public $razao_social; 
+     public $oportunidade; 
+     public $proposta; 
+     public $data_finalizado; 
+     public $obs; 
+     public $status_solicitacao_aprovacao;
+     public $motivo_devolucao;
+     public $regDataEntrada;
+     public $revisao;
+
+      function __construct($operador, $siscom, $data_entrada_siscom, $canal_entrada, $produto, $servico, $complemento_servico, $qtd_acessos, $data_recebimento_aprovacao, $cnpj, $razao_social, $oportunidade, $proposta, $data_finalizado, $obs, $status_solicitacao_aprovacao,$motivo_devolucao) 
+      {
+          $this->operador = $operador; 
+          $this->siscom = $siscom; 
+          $this->data_entrada_siscom = $data_entrada_siscom; 
+          $this->canal_entrada = $canal_entrada; 
+          $this->produto = $produto; 
+          $this->servico = $servico; 
+          $this->complemento_servico = $complemento_servico;
+          $this->qtd_acessos = $qtd_acessos; 
+          $this->data_recebimento_aprovacao = $data_recebimento_aprovacao; 
+          $this->cnpj = $cnpj; 
+          $this->razao_social = $razao_social; 
+          $this->oportunidade = $oportunidade; 
+          $this->proposta = $proposta; 
+          $this->data_finalizado = $data_finalizado; 
+          $this->obs = $obs; 
+          $this->status_solicitacao_aprovacao = $status_solicitacao_aprovacao;
+          $this->motivo_devolucao = $motivo_devolucao;
+          $this->regDataEntrada = date("Y-m-d H:i:s");
+      }
+
+  
+       function validaCamposObrigatorios(Aprovacao $aprovacao)
+        {
+             if(
+                ($aprovacao->data_recebimento_aprovacao == "") ||  
+                ($aprovacao->oportunidade == "") ||  
+                ($aprovacao->proposta == "") ||  
+                ($aprovacao->data_finalizado == "") || 
+                ($aprovacao->status_solicitacao_aprovacao == "")               
+               )
+              {
+                return true;
+              }
+        }
+
+      function enviaDadosBase(Aprovacao $aprovacao)
+      {
+
+          $dadosProc = str_replace("&","E",$aprovacao->operador)
+                . '&'. str_replace("&","E",$aprovacao->siscom)  
+                . '&'. str_replace("&","E",$aprovacao->oportunidade)
+                . '&'. str_replace("&","E",$aprovacao->proposta)
+                . '&'. str_replace("&","E",$aprovacao->data_recebimento_aprovacao)      
+                . '&'. str_replace("&","E",$aprovacao->data_finalizado)             
+                . '&'. str_replace("&","E",$aprovacao->obs)               
+                . '&'. str_replace("&","E",$aprovacao->status_solicitacao_aprovacao)
+                . '&'. str_replace("&","E",$aprovacao->motivo_devolucao)            
+                . '&'. str_replace("&","E",$aprovacao->regDataEntrada)
+                . '&'. str_replace("&","E",$aprovacao->revisao);     
+
+              $sql_exec="CALL SP_APROVACAO('$dadosProc');";
+
+        
+              $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+              
+              return true;
+      }
+
+    function verificaSituacaoSolicitacao($id_solicitacao, $revisao)
+     {
+
+           $verificaSolicitacao = mysql_query("SELECT * FROM aprovacao WHERE siscom = '$id_solicitacao' and revisao = $revisao and id_aprovacao is not null
+                                                UNION SELECT * FROM aprovacao WHERE siscom = '$id_solicitacao' and revisao = $revisao-1 and id_aprovacao is not null");
+
+           if(mysql_affected_rows() > 0)
+           {
+             return true;
+           }
+     }
+
+     function buscaUltimaSolicitacaoCompletaByIdRevisao(Aprovacao $solicitacao, $id_solicitacao, $revisao)
+     {
+          
+          $busca_solicitacao_redistribuida = mysql_query("SELECT sf.id_solicitacao, sf.aprovacao, sp.situacao  FROM solicitacao_fases sf
+                                                                LEFT JOIN solicitacoes_pendentes sp
+                                                                ON sf.id_solicitacao = sp.id_solicitacao
+                                                                WHERE 
+                                                                sf.id_solicitacao = '$id_solicitacao'
+                                                                AND sf.aprovacao = 'Com operador' 
+                                                                AND sp.situacao = 'Corrigido' 
+                                                          UNION
+                                                          SELECT sf.id_solicitacao, sf.aprovacao, sp.situacao  FROM solicitacao_fases sf
+                                                                LEFT JOIN solicitacoes_pendentes sp
+                                                                ON sf.id_solicitacao = sp.id_solicitacao
+                                                                WHERE 
+                                                                sf.id_solicitacao = '$id_solicitacao'
+                                                                AND sf.aprovacao = 'Com operador' 
+                                                                AND sp.situacao IS NULL ");  
+          //solicitacao redistribuida 
+          if(mysql_affected_rows() > 0)
+          {
+              //se for reentrada de item reprovado
+              $buscaUltimaSolicitacaoCompletaByIdRevisao = mysql_query("SELECT * FROM aprovacao 
+                                                                        WHERE siscom = '$id_solicitacao' AND revisao = $revisao
+                                                                        ORDER BY revisao DESC 
+                                                                        LIMIT 1");
+               if(mysql_affected_rows() > 0)
+                {
+                       while($rsc=mysql_fetch_array($buscaUltimaSolicitacaoCompletaByIdRevisao))
+                       {                  
+                              $solicitacao->siscom               = $rsc['siscom']; 
+                               $solicitacao->data_entrada_siscom  = $rsc['data_entrada_siscom']; 
+                               $solicitacao->canal_entrada        = $rsc['id_canal_entrada']; 
+                               $solicitacao->produto              = $rsc['id_produto']; 
+                               $solicitacao->servico              = $rsc['servico']; 
+                               $solicitacao->complemento_servico  = $rsc['complemento_servico'];
+                               $solicitacao->qtd_acessos          = $rsc['quantidade_acessos']; 
+                               $solicitacao->data_recebimento_aprovacao = $rsc['data_recebimento_aprovacao']; 
+                               $solicitacao->cnpj                 = $rsc['cnpj']; 
+                               $solicitacao->razao_social         = $rsc['razao_social']; 
+                               $solicitacao->oportunidade         = $rsc['oportunidade']; 
+                               $solicitacao->proposta             = $rsc['proposta']; 
+                               $solicitacao->data_finalizado      = $rsc['data_finalizado']; 
+                               $solicitacao->obs                  = $rsc['obs'];                                                  
+                       }
+
+                       return $solicitacao;
+                }
+          }
+          else
+          {    
+              //se for reentrada de item reprovado
+              $buscaUltimaSolicitacaoCompletaByIdRevisao = mysql_query("SELECT * FROM aprovacao 
+                                                                        WHERE id_solicitacao = '$id_solicitacao' AND revisao = $revisao - 1
+                                                                        ORDER BY revisao DESC 
+                                                                        LIMIT 1");
+               if(mysql_affected_rows() > 0)
+                {
+                       while($rsc=mysql_fetch_array($buscaUltimaSolicitacaoCompletaByIdRevisao))
+                       {                  
+                           $solicitacao->siscom               = $rsc['siscom']; 
+                           $solicitacao->data_entrada_siscom  = $rsc['data_entrada_siscom']; 
+                           $solicitacao->canal_entrada        = $rsc['canal_entrada']; 
+                           $solicitacao->produto              = $rsc['produto']; 
+                           $solicitacao->servico              = $rsc['servico']; 
+                           $solicitacao->complemento_servico  = $rsc['complemento_servico'];
+                           $solicitacao->qtd_acessos          = $rsc['qtd_acessos']; 
+                           $solicitacao->data_recebimento_aprovacao = $rsc['data_recebimento_aprovacao']; 
+                           $solicitacao->cnpj                 = $rsc['cnpj']; 
+                           $solicitacao->razao_social         = $rsc['razao_social']; 
+                           $solicitacao->oportunidade         = $rsc['oportunidade']; 
+                           $solicitacao->proposta             = $rsc['proposta']; 
+                           $solicitacao->data_finalizado      = $rsc['data_finalizado']; 
+                           $solicitacao->obs                  = $rsc['obs']; 
+                       }
+
+                       return $solicitacao;
+                }
+                else
+                {
+                         $solicitacao->data_entrada_siscom  =    null;
+                         $solicitacao->canal_entrada        =    null;
+                         $solicitacao->produto              =    null;
+                         $solicitacao->servico              =    null;
+                         $solicitacao->complemento_servico  =    null;
+                         $solicitacao->qtd_acessos          =    null;
+                         $solicitacao->data_recebimento_aprovacao =    null;
+                         $solicitacao->cnpj                 =    null;
+                         $solicitacao->razao_social         =    null;
+                         $solicitacao->oportunidade         =    null;
+                         $solicitacao->proposta             =    null;
+                         $solicitacao->data_finalizado      =    null;
+                         $solicitacao->obs                  =    null;
+      
+                    return $solicitacao;
+                }
+          }
+      }
+}
+?>
+    

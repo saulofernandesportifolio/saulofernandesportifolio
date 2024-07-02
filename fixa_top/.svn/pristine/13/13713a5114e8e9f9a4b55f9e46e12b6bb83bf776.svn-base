@@ -1,0 +1,26 @@
+<?php
+
+class Servico {
+	 public $id_servico; 
+     public $servico_descricao; 
+     public $complemento_servico; 
+
+
+	function buscaServicoByDescricao(Servico $servico, $servico_descricao){
+	//busca cp
+	  	$fetchServico = mysql_query("SELECT * FROM servicos WHERE descricao = '$servico_descricao'");
+
+	  	if(mysql_affected_rows() > 0)
+        {
+			while($row_servico=mysql_fetch_array($fetchServico))
+			{ 
+			    $servico->id_servico = $row_servico['id_servicos'];
+			    $servico->servico_descricao  = $row_servico['descricao'];
+			}
+		}	
+	  
+	  return $servico;
+	}
+}
+?>
+

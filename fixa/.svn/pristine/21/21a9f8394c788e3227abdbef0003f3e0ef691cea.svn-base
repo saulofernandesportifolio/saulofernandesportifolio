@@ -1,0 +1,16 @@
+
+<div class="bradius wrapper" style="margin-left: 30%;">
+	<form action="principal.php?t=views/form_solicitacao_fases.php" method="POST">  
+			<fieldset>
+					<h2>Consulta Solicitação</h2>
+					<br/>
+					<div class="div_forms">
+						<label for="solicitacao_label">Solicitação:</label>
+						<input type="text" name="solicitacao" style="width: 60%;" maxlength="50"/>
+					</div>
+					<br/>
+					 <input name="bt_enviar" id="bt_enviar_busca_solic" type="submit" class="sb2 bradius" />
+		 	</fieldset>   
+	 </form>
+</div>
+

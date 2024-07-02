@@ -1,0 +1,212 @@
+
+$(document).ready(function() {
+
+    //abaixo usamos o seletor da jQuery para acessar o botão, e em seguida atribuir à ele um evento de click
+    $("#entrar").click(function() {
+
+        //Aqui chamamos a função validaLogin(), e passamos a ela o que foi digitado no campo cpf e no campo senha
+        validaLogin($("#cpf"), $("#senha"));
+        return;
+
+    });
+
+    $("#bt_enviar").click(function() {
+        //somente será permitido cpfs válidos
+        if ($('#cpf').val() != "") {
+            validaCpf($('#cpf').val());
+        }
+    });
+
+    $("#bt_enviar_form").click(function() {
+        //somente será permitido cnpjs válidos
+        if ($('#cnpj').val() != "") {
+            validaCnpj($('#cnpj').val());
+        }
+    });
+
+    $("#status_solicitacao").change(function() {
+        //seleciona status
+        if($("#status_solicitacao").val() == 8 || $("#status_solicitacao").val() == 15 || $("#status_solicitacao").val() == 12){
+            //em analise(pre) ,ag. aprovacao vantive(tra) ou encerrado analista(tra-voz) é solicitacao aprovada
+            //desabilita campos devolucao
+            $("#area_devolucao").attr('disabled', 'disabled');
+            $("#motivo_devolucao").attr('disabled', 'disabled');
+            $("#data_devolucao").attr('disabled', 'disabled');
+            $("#descricao_motivo_devolucao").attr('disabled', 'disabled');
+
+            //seta campo aprovacao = 'Sim' e ativa campo aprovacao
+            $('#aprovacao').val('Sim');
+
+            //esconde campos de devolucao
+            $("#rcd1").addClass("campos_devolucao");
+            $("#rcd2").addClass("campos_devolucao");
+            $("#rcd3").addClass("campos_devolucao");
+
+            //observacao não é obrigatoria neste caso
+            $("#obs").removeAttr("required");
+            $("#obs_label").text("Obs");
+
+            //esconde campos de devolucao
+            $("#rcd1").addClass("campos_devolucao");
+            $("#rcd2").addClass("campos_devolucao");
+            $("#rcd3").addClass("campos_devolucao");
+
+            //caso de aprovação campo data de encerramento é obrigatório
+            $("#data_encerramento_label").text("Data de Encerramento*");
+            $("#data_encerramento").attr("required",true);
+        }else if($("#status_solicitacao").val() == 5){
+            //quando sistemas não será mostrado campos devolucao, os mesmos serão mostrados na tela de chamados
+            //desativa campos de devolucao
+            $("#area_devolucao").attr('disabled', 'disabled');
+            $("#motivo_devolucao").attr('disabled', 'disabled');
+            $("#data_devolucao").attr('disabled', 'disabled');
+            $("#descricao_motivo_devolucao").attr('disabled', 'disabled');
+
+            //seta campo aprovacao = 'Não' e desativa campo aprovacao
+            $('#aprovacao').val('N\u00e3o');
+            $('#aprovacao').addClass("campos_desabilitados");
+
+            //esconde campos de devolucao
+            $("#rcd1").addClass("campos_devolucao");
+            $("#rcd2").addClass("campos_devolucao");
+            $("#rcd3").addClass("campos_devolucao");
+
+            //observacao é obrigatoria neste caso
+            $("#obs").attr("required", true);
+            $("#obs_label").text("Obs*");
+        }
+        else if($("#status_solicitacao").val() == 1 && $('#cat_prod').val() == 'Voz' && $('#qtd_acessos').val() < 200)
+        {
+            //se for voz o status somente podera ser ag. aprovação comercial quando for mais de 200 acessos
+            alert("Somente status Ag. Aprova\u00e7\u00e3o do Comercial quando for mais de 200 acessos");
+            $("#status_solicitacao").val('');
+            $("#status_solicitacao").focus();
+            return;
+        }else{
+            //neste caso obs não é obrigatoria
+            $("#obs_label").removeAttr("required");        
+            $("#obs_label").text("Obs");
+
+            //ativa campos de devolucao e tornar obrigatorio campos
+            $("#area_devolucao").removeAttr("disabled");
+            $("#motivo_devolucao").removeAttr("disabled");
+            $("#data_devolucao").removeAttr("disabled");
+            $("#descricao_motivo_devolucao").removeAttr("disabled");
+
+            $("#area_devolucao").attr("required", true);
+            $("#motivo_devolucao").attr("required", true);
+            $("#data_devolucao").attr("required", true);
+            $("#descricao_motivo_devolucao").attr("required", true);
+
+            //caso de devolução campo data de encerramento não é obrigatório
+            $("#data_encerramento_label").text("Data de Encerramento");
+            $("#data_encerramento").removeAttr("required");
+
+            //seta campo aprovacao = 'Não' e desativa campo aprovacao
+            $('#aprovacao').val('N\u00e3o');
+            $('#aprovacao').addClass("campos_desabilitados");
+
+            //mostra campos de devolucao
+            $("#rcd1").removeClass("campos_devolucao");
+            $("#rcd2").removeClass("campos_devolucao");
+            $("#rcd3").removeClass("campos_devolucao");
+        }
+    });
+
+    $("#servicoIntragov").blur(function() {
+        var servicoSelecionado = $('#servicoIntragov').val();
+        if (servicoSelecionado == "CANCELAMENTO") {
+            $("#motivo_cancelamento").removeAttr("disabled");
+            $("#descricao_motivo_devolucao").removeAttr("disabled");
+
+            $("#motivo_cancelamento").attr("required", true);
+            $("#descricao_motivo_devolucao").attr("required", true);
+        } else {
+            $("#motivo_cancelamento").attr('disabled', 'disabled');
+            $("#descricao_motivo_devolucao").attr('disabled', 'disabled');
+        }
+    });
+    //mascaras
+    $("#cpf").mask("999.999.999-99");
+    $("#cnpj").mask("99.999.999/9999-99");
+    $(".campoData").mask("99/99/9999");
+
+    //valida se navegador é ie
+    if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)) {
+        var ieversion = new Number(RegExp.$1)
+        if (ieversion >= 8) {
+            // Para IE8
+            $("#fieldset_style").css({ "width": "650px" });
+
+            //fix placeholder for IE7 and IE8
+            $(function() {
+                if (!$.support.placeholder) {
+                    $("[placeholder]").focus(function() {
+                        if ($(this).val() == $(this).attr("placeholder")) $(this).val("");
+                    }).blur(function() {
+                        if ($(this).val() == "") $(this).val($(this).attr("placeholder"));
+                    }).blur();
+
+                    $("[placeholder]").parents("form").submit(function() {
+                        $(this).find('[placeholder]').each(function() {
+                            if ($(this).val() == $(this).attr("placeholder")) {
+                                $(this).val("");
+                            }
+                        });
+                    });
+                }
+            });
+
+            // fix required fields for IE < 11
+            if ($("<input />").prop("required") === undefined) {
+                $(document).on("submit", function(e) {
+                    $(this)
+                        .find("input, select, textarea")
+                        .filter("[required]")
+                        .filter(function() {
+                            return this.value == ''; })
+                        .each(function() {
+                            e.preventDefault();
+                            $(this).css({ "border-color": "red" });
+                        });
+                });
+
+            }
+        } else if (ieversion >= 7)
+        // Para IE7
+            $("#fieldset_style").css({ "width": "650px" });
+        else if (ieversion >= 6)
+        // Para IE6
+            $("#fieldset_style").css({ "width": "650px" });
+    }
+
+    $("#status_solicitacao_postramitacao").click(function() {
+        if ($("#status_solicitacao_postramitacao").val() == 15) {
+            $("#motivo_devolucao").val('');
+            $("#motivo_devolucao").attr('disabled', 'disabled');
+        } else {
+            $("#motivo_devolucao").attr("required", true);
+            $("#motivo_devolucao").removeAttr("disabled");
+        }
+    });
+});
+
+/** Função responsável por validar os dados do formulário no lado Cliente, e enviar para a cama Controller (que está no Servidor) os dados informados pelo usuário para serem autenticados */
+function validaLogin(cpf, senha) {
+
+    //Se o usuário informou login e senha, então é hora do Ajax entrar em ação
+    //Adicionamos um texto na DIV #resultado para alertar o usuário que o sistema está autenticando os dados
+    $("#resultado").html("Autenticando...");
+
+    /**Função ajax nativa da jQuery, onde passamos como parâmetro o endereço do arquivo que queremos chamar, os dados que irá receber, e criamos de forma encadeada a função que irá armazenar o que foi retornado pelo servidor, para poder se trabalhar com o mesmo */
+
+    $.post("valida.usuario.php", { usuario: cpf.val(), senha: senha.val() },
+
+        function(retorno) {
+
+            //Insere na DIV #resultado o que foi retornado pelas classes de manipulação do Usuário (Se os dados estão corretos ou não)
+            $("#resultado").html(retorno);
+
+        } //function(retorno)
+    ); //$.post()
+} //validaLogin()

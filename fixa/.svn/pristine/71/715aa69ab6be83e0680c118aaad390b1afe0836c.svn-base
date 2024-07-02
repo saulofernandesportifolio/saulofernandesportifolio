@@ -1,0 +1,121 @@
+<?php
+
+class SolicitacaoPreTramitacao {
+	 public $id_usuario; 
+     public $siscom; 
+     public $cat_prod; 
+     public $devolucao; 
+     public $canal_entrada;
+     public $data_receb;
+     public $n_pact_siscom;
+     public $produto;
+     public $tipo_solicitacao;
+     public $servicos;
+     public $cnpj;
+     public $razao_social;
+     public $qtd_acessos;
+     public $n_gs;
+     public $data_abertura_gestao;
+     public $area_devolucao;
+     public $motivo_devolucao;
+     public $data_devolucao;
+     public $status_solicitacao;
+     public $obs;
+     public $aprovacao;
+
+	  public function __construct($id_usuario, $siscom, $cat_prod, $devolucao, $canal_entrada, $data_receb, $n_pact_siscom, $produto, $tipo_solicitacao, $servicos, $cnpj, $razao_social, $qtd_acessos, $n_gs, $data_abertura_gestao, $area_devolucao, $motivo_devolucao, $data_devolucao, $status_solicitacao, $obs, $aprovacao) 
+	  {
+	    	$this->id_usuario 			= $id_usuario;
+	    	$this->siscom 				= $siscom;
+	    	$this->cat_prod 			= $cat_prod; 
+     		$this->devolucao 			= $devolucao; 
+     		$this->canal_entrada 		= $canal_entrada;
+     		$this->data_receb 			= $data_receb;
+     		$this->n_pact_siscom 		= $n_pact_siscom;
+     		$this->produto 				= $produto;
+     		$this->tipo_solicitacao 	= $tipo_solicitacao;
+     		$this->servicos 			= $servicos;
+     		$this->cnpj 				= $cnpj;
+     		$this->razao_social 		= $razao_social;
+     		$this->qtd_acessos 			= $qtd_acessos;
+     		$this->n_gs 				= $n_gs;
+     		$this->data_abertura_gestao = $data_abertura_gestao;
+     		$this->area_devolucao 		= $area_devolucao;
+     		$this->motivo_devolucao 	= $motivo_devolucao;
+     		$this->data_devolucao 		= $data_devolucao;
+     		$this->status_solicitacao	= $status_solicitacao;
+     		$this->obs 					= $obs;
+     		$this->aprovacao 			= $aprovacao;
+	  }
+
+	  function mostraObjeto() 
+	  { 
+        print "id_usuario "    		. $this->id_usuario 			. "<br/>";
+		print "siscom " 	   		. $this->siscom 				. "<br/>";
+		print "cat_prod " 	   		. $this->cat_prod 				. "<br/>";
+		print "devolucao "     		. $this->devolucao 				. "<br/>";
+		print "canal_entrada " 		. $this->canal_entrada 			. "<br/>";
+		print "data_receb "    		. $this->data_receb 			. "<br/>";
+		print "n_pact_siscom " 		. $this->n_pact_siscom 			. "<br/>";
+		print "produto" 			. $this->produto 				. "<br/>";
+		print "tipo_solicitacao" 	. $this->tipo_solicitacao 		. "<br/>";
+		print "servicos" 			. $this->servicos 				. "<br/>";
+		print "cnpj" 				. $this->cnpj 					. "<br/>";
+		print "razao_social" 		. $this->razao_social 			. "<br/>";
+		print "qtd_acessos" 		. $this->qtd_acessos 			. "<br/>";
+		print "n_gs" 				. $this->n_gs 					. "<br/>";
+		print "data_abertura_gestao". $this->data_abertura_gestao	. "<br/>";
+		print "area_devolucao" 		. $this->area_devolucao 		. "<br/>";
+		print "motivo_devolucao" 	. $this->motivo_devolucao 		. "<br/>";
+		print "data_devolucao" 		. $this->data_devolucao 		. "<br/>";
+		print "status_solicitacao" 	. $this->status_solicitacao		. "<br/>";
+		print "obs" 				. $this->obs 					. "<br/>";
+		print "aprovacao" 			. $this->aprovacao;			
+      }
+
+      function validaInputsObrigatorios($siscom, $cat_prod, $canal_entrada, $data_receb, $n_pact_siscom, $produto, $tipo_solicitacao, $servicos, $cnpj, $razao_social, $qtd_acessos, $n_gs, $data_abertura_gestao, $status_solicitacao, $aprovacao)
+      {
+	  		//valida campos obrigatórios
+	        if(
+	            ($siscom == "")               		  ||
+	            empty($cat_prod)             		  ||
+	            empty($canal_entrada)        		  ||
+	            empty($data_receb)    				  ||
+	            ($n_pact_siscom == "")                ||
+	            empty($produto)						  ||
+	            empty($tipo_solicitacao)			  ||
+	            empty($servicos )					  ||
+	            empty($cnpj)						  || 
+	            empty($razao_social)				  ||
+            	empty($qtd_acessos)					  ||
+	            ($n_gs == "")                		  ||
+	            empty($data_abertura_gestao)		  ||
+	            empty($status_solicitacao)			  ||
+	            empty($aprovacao)			          
+	        ) 
+	        {
+	          return true;   
+	        }
+	   }
+
+	   function validaSiscom($siscom){
+		   //valida siscom
+	        $query_valida_siscom = mysql_query("SELECT siscom FROM pre_tramitacao WHERE siscom != 0 AND siscom = '{$siscom}'");
+
+	        //verifica na base se valor ja foi inserido
+	        if(mysql_affected_rows() > 0){
+	         	return true;  
+	        }
+        }
+
+        function validaGs($ngs){
+	        //valida gestao servicos
+	        $query_valida_gs = mysql_query("SELECT n_gestao_servicos FROM pre_tramitacao WHERE n_gestao_servicos != 0 and n_gestao_servicos = '{$ngs}'");
+
+	        //valida numero do gs 
+	        if(mysql_affected_rows() > 0){
+	         	return true; 
+	        }
+        } 
+ }
+?>

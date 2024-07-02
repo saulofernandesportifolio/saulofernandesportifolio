@@ -1,0 +1,270 @@
+<?php
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario_logado = $_GET['id'];
+
+$id_usuario_logado = $cripto->decodificar($id_usuario_logado);
+
+?>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_page.css" />
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_table.css" />
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    
+   $("#tabela3").dataTable({  
+        
+  "oLanguage": {
+    
+    "sProcessing": "Aguarde enquanto os dados s&atilde;o carregados ...",
+    "sLengthMenu": "Mostrar _MENU_ registros por pagina",
+    "sZeroRecords": "Nenhum registro encontrado",
+    "sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",
+    "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+    "sInfoFiltered": "",
+    "sSearch": "Procurar",
+    "oPaginate": {
+       "sFirst":    "Primeiro",
+       "sPrevious": "Anterior",
+       "sNext":     "Pr&oacute;ximo",
+       "sLast":     "&uacute;ltimo"
+    }
+ }                              
+}); 
+});
+
+</script>
+
+<script type="text/javascript">
+var oTable;
+ 
+$(document).ready(function() {
+
+    /* Add a click handler to the rows - this could be used as a callback */
+    $("#tabela3 tbody tr").click( function( e ) {
+        if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+    });
+     
+    /* Add a click handler for the delete row */
+    $('#delete').click( function() {
+        var anSelected = fnGetSelected( oTable );
+        if ( anSelected.length !== 0 ) {
+            oTable.fnDeleteRow( anSelected[0] );
+        }
+    } );
+     
+    /* Init the table */
+    oTable = $('#tabela3').dataTable();
+} );
+ 
+ 
+/* Get the rows which are currently selected */
+function fnGetSelected( oTableLocal )
+{
+    return oTableLocal.$('tr.row_selected');
+}
+
+</script>
+
+<br />
+  <form action="principal.php?id=<?php echo $cripto->codificar($id_usuario)?>&t=controles/sql_enviar_redistribuicao.php"  method="POST">
+       <table border="0" id="tabela3"  width="auto" class="display">
+         <thead>
+           <tr>
+             <th></th>
+             <th style="width: 56px;">Data</th>
+             <th>Analista</th>
+             <th>Siscom</th>
+             <th style="width: 48px;">Categ. Prod.</th>
+             <th>Devolução</th>
+             <!--<th>Canal Entrada</th>-->
+             <!--<th>Data Receb. da Solicitação</th>-->
+             <th style="width: 70px;">Nº Pac. Siscom</th>
+             <th>Prod.</th>
+             <th>Tipo Solicitação</th>
+             <th>Serviços</th>
+             <th>Cnpj</th>
+             <th>Razão Social</th>
+             <th style="width: 60px;">Qtde Acessos</th>
+             <th>Nº GS</th>
+             <!--<th>Data Abert. Gestão</th>-->
+             <th>Motivo Devolução</th>
+             <th>Área Devolução</th>
+             <!--<th>Data Devolução</th>-->
+             <th>Status</th>
+             <th style="width: 60px;">Obs</th>
+           </tr>
+         </thead>
+         <tbody>
+         
+         <?php 
+         
+          include("../fixa/bd.php");
+           
+         	$buscarusuario=mysql_query("SELECT * FROM v_geral_pre_tramitacao ORDER BY data_hora");
+
+    			while($linha=mysql_fetch_array($buscarusuario)){
+              //$data_receb_solicitacao = $linha['data_receb_solicitacao'];
+              //$data_abert_gestao = $linha['data_abert_gestao'];
+              //$data_devolucao = $linha['data_devolucao'];
+            ?>          
+             <tr>
+              <td>
+                <input type="checkbox" style="width: 12px;" name="cod_siscom" value="<?php echo $linha['id_solicitacao']; ?>">
+              </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['data_hora']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['analista_pre']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['id_solicitacao']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['cat_produto']; ?>
+                  </a>
+                </td>
+                 <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['devolucao']; ?>
+                  </a>
+                </td>
+                <!--<td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php //echo $linha['canal_entrada']; ?>
+                  </a>
+                </td>-->
+                <!--<td class="colunas-centralizados">
+                  <a id="td">
+                    <?php //echo $data_receb_solicitacao =substr($data_receb_solicitacao,8,2).substr($data_receb_solicitacao,4,4).substr($data_receb_solicitacao,0,4); ?>
+                  </a>
+                </td>-->
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['n_pac_siscom']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['produto']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['tipo_solicitacao']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['servicos']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['cnpj']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['razao_social']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['qtd_acessos']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['n_gestao_servicos']; ?>
+                  </a>
+                </td>
+                 <!--<td class="colunas-centralizados">
+                  <a id="td">
+                     <?php //echo $data_receb_solicitacao =substr($data_receb_solicitacao,8,2).substr($data_receb_solicitacao,4,4).substr($data_receb_solicitacao,0,4); ?>
+                  </a>
+                </td>-->
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['motivo_devolucao']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['area_devolucao']; ?>
+                  </a>
+                </td>
+                <!--<td class="colunas-centralizados">
+                  <a id="td">
+                     <?php //echo $data_devolucao =substr($data_devolucao,8,2).substr($data_devolucao,4,4).substr($data_devolucao,0,4); ?>
+                  </a>
+                </td>-->
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['status_solicitacao']; ?>
+                  </a>
+                </td>
+                <td class="colunas-centralizados colunaPreTramitacao">
+                  <a id="td">
+                    <?php echo $linha['obs']; ?>
+                  </a>
+                </td>
+              </tr>
+         <?php 
+              }
+         ?>
+         </tbody>
+         <br/>
+              <div class="div_forms">
+                <label style="font-weight: bold;">Operador</label>
+                <select name="operador" id="operador" class="txt2comboboxpadrao bradius" required >
+                  <?php
+                    $buscarOperador=mysql_query(
+                            "SELECT distinct 
+                                id_usuario, 
+                                nome
+                            FROM usuario WHERE id_perfil in (5,8,9)
+                            "
+                          );
+                          while($linha=mysql_fetch_array($buscarOperador)){ 
+                        ?>
+                    <option value="<?php echo $linha['id_usuario']; ?>">
+                      <?php echo $linha['nome']; ?>
+                    </option>
+                    <?php 
+                          }
+                    ?>
+                  </select>
+                    <input
+                        id="enviar_redistribuicao" 
+                        name="enviar_redistribuicao" 
+                        type="submit" 
+                        value="Enviar Redistribuição" 
+                        class="sb2 bradius" 
+                        style="color: white; width: 10%;"
+                    />
+              </div>
+       </table>
+</form>
+

@@ -1,0 +1,59 @@
+<?php
+
+require_once('../fixa/bd.php');
+
+$query = mysql_query("SELECT 
+						reg_dt_entrada			,
+						operador    	        ,
+						data_receb_documento	,
+						tipo_entrada      		,
+						contrato_mae      		,
+						data_assinatura_doc     ,
+						numero_documento        ,
+ 						sistema_validacao 		,
+						n_vantive               ,
+						produto            		,
+						data_trativa            ,
+						nome_solicitante        ,
+						n_gestao_servicos       ,
+						numero_wcd              ,
+						razao_social            ,
+						cnpj                    ,
+						plano_solicitado        ,
+						qtde_acesso             ,  
+						data_finalizacao        ,
+						revisao       
+					FROM 
+						v_geral_gcom
+					WHERE reg_dt_entrada <> '' ");
+
+while($fetch = mysql_fetch_array($query))
+{
+	$output[] = array (
+			$fetch[0]	, // reg_dt_entrada			
+			$fetch[1]	, //operador    	       
+			$fetch[2]	, //data_receb_documento	
+			$fetch[3]	, //tipo_entrada      		
+			$fetch[4]	, //contrato_mae      		
+			$fetch[5]	, //data_assinatura_doc    
+			$fetch[6]	, //numero_documento       
+ 			$fetch[7]	, //sistema_validacao 		
+			$fetch[8]	, //n_vantive              
+			$fetch[9]	, //produto            		
+			$fetch[10]	, //data_trativa           
+			$fetch[11]	, //nome_solicitante       
+			$fetch[12]	, //n_gestao_servicos      
+			$fetch[13]	, //numero_wcd             
+			$fetch[14]	, //razao_social           
+			$fetch[15]	, //cnpj                   
+			$fetch[16]	, //plano_solicitado       
+			$fetch[17]	, //qtde_acesso            
+			$fetch[18]	, //data_finalizacao
+			$fetch[19]        
+	);
+}
+
+echo json_encode($output);
+
+?>
+

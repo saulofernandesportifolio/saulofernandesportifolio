@@ -1,0 +1,150 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+    //setup default
+    include("../fixa/bd.php");
+
+    $tempo = 0;
+
+    set_time_limit($tempo);
+    date_default_timezone_set("Brazil/East");
+
+    $data_cadastro=date("Y-m-d H:i:s");
+
+    include("../fixa/site/funcoes/f_geral.php");
+    require_once '../fixa/site/classes/cripto.php';
+
+    $cripto = new cripto();
+
+    $id_usuario= $_GET['id'];
+
+    $id_usuario = $cripto->decodificar($id_usuario);
+
+
+    //valida campos obrigatórios
+    if(
+        empty($_POST['data_solicitacao'])             ||
+        empty($_POST['canal_entrada'])                ||
+        empty($_POST['produtoIntragov'])              ||
+        empty($_POST['servicoIntragov'])              ||
+        ($_POST['qtd_acessos'] == "")                 ||    
+        empty($_POST['cnpj'])                         ||
+        empty($_POST['razao_social'])                 ||
+        ($_POST['n_gs'] == "")                        ||
+        empty($_POST['data_abert_gestao'])            ||
+        empty($_POST['area_solicitante'])             ||
+        empty($_POST['data_encerramento'])            ||
+        empty($_POST['status_solicitacao_intragov'])  
+    ) 
+    {
+      echo" <script> 
+              alert('Por favor preencher todos os campos obrigatórios !');
+              history.back();
+            </script>
+            "; 
+            exit();   
+    }
+
+
+      //valida gestao servicos
+      $query_valida_gs = mysql_query("SELECT n_gestao_servicos FROM intragov WHERE n_gestao_servicos != 0 and n_gestao_servicos = '{$_POST['n_gs']}'");
+
+      //passar nsiscom como parametro para validar se usuario alterou nsiscom, se for igual nao passa pela validação abaixo 
+      if(mysql_affected_rows() > 0){
+        echo" <script> 
+                alert('Número do GS já cadastrado na base!');
+                history.back();
+              </script>
+              "; 
+            exit();   
+      }
+
+     //formata campos data
+     $data_solicitacao = formataDataBD($_POST['data_solicitacao']);
+     $data_abert_gestao = formataDataBD($_POST['data_abert_gestao']);
+     $data_encerramento = formataDataBD($_POST['data_encerramento']);    
+
+
+    //valida se inputs variaveis foram ativados
+    if (isset($_POST['motivo_cancelamento']))
+    {
+          $motivo_cancelamento = $_POST['motivo_cancelamento'];
+          if(empty($motivo_cancelamento)){
+             echo" <script> 
+              alert('Campo Motivo Cancelamento deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+        $motivo_cancelamento = '';
+    }
+
+    //campos devolucao sao obrigatorios se houver devolucao 
+    if (isset($_POST['motivo_devolucao']))
+    {
+          $motivo_devolucao = $_POST['motivo_devolucao'];
+          if(empty($motivo_devolucao)){
+             echo" <script> 
+              alert('Campo Motivo Devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+        $motivo_devolucao = '';
+    }
+
+
+    if (isset($_POST['data_devolucao'])){
+      $data_devolucao = formataDataBD($_POST['data_devolucao']);
+      if(empty($data_devolucao)){
+             echo" <script> 
+              alert('Campo Data Devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+      $data_devolucao = '';
+    }
+
+
+    //insere dados em variavel para proc
+    $dadosProc = '&'. $id_usuario 
+               . '&'. $data_solicitacao
+               . '&'. $_POST['devolucao']  
+               . '&'. $_POST['canal_entrada']
+               . '&'. $_POST['produtoIntragov']
+               . '&'. $_POST['servicoIntragov']  
+               . '&'. $_POST['qtd_acessos']                
+               . '&'. $motivo_cancelamento
+               . '&'. $_POST['cnpj']  
+               . '&'. $_POST['razao_social'] 
+               . '&'. $_POST['n_gs']       
+               . '&'. $data_abert_gestao  
+               . '&'. $motivo_devolucao
+               . '&'. $_POST['area_solicitante']   
+               . '&'. $data_devolucao
+               . '&'. $data_encerramento       
+               . '&'. $_POST['status_solicitacao_intragov']  
+               . '&'. $data_cadastro;
+
+
+    $sql_exec="CALL solicitacao_intragov('$dadosProc');";
+
+    $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+  echo" <script> 
+    alert('Solicitação cadastrada com sucesso!');
+      document.location.replace('principal.php?t=views/home.php');
+    </script>
+    ";
+                                      
+    exit();
+   
+?>
+
+

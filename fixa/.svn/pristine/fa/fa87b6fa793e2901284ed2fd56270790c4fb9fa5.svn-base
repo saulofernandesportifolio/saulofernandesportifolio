@@ -1,0 +1,102 @@
+<?php
+// Verifica se foi feita alguma busca
+// Caso contrario, redireciona o visitante pra home
+
+if (empty($_POST['solicitacao'])) {
+  echo" <script> 
+      alert('Informe a solicitacão!');
+        history.back();
+      </script>
+      ";                                        
+    exit();  
+}
+
+include("../fixa/bd.php");
+
+ // Salva o que foi buscado em uma variável
+$solicitacao = $_POST['solicitacao'];
+
+?>
+
+<div id="t_consulta_solicitacao" style="margin-left: 20%; ">
+		<table class="tabelas_dashboard">
+		<caption>
+			<h2>Informações</h2>
+		</caption>
+			<thead>
+                <tr>
+                    <th>Solicitação</th>
+                    <th>Pre-Tramitacao</th>
+                    <th>Tramitacao</th>
+                    <th>Pós-Tramitacao</th>
+                    <th>Operador Atual</th>
+                    <th>Supervisor</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			     
+			       
+			     	$buscarsolicitacao=mysql_query("SELECT 
+														sf.id_solicitacao,
+														sf.pre_tramitacao,
+														sf.tramitacao,
+														sf.pos_tramitacao,
+														u.nome AS operador,
+														s.nome AS supervisor 
+													FROM solicitacao_fases sf
+														INNER JOIN usuario u
+															ON sf.id_usuario_resp = u.id_usuario
+														INNER JOIN supervisor s
+															ON u.id_supervisor = s.id_supervisor
+													WHERE sf.id_solicitacao = $solicitacao");
+
+			     	if(mysql_affected_rows() > 0){
+						while($linhas=mysql_fetch_array($buscarsolicitacao)){   
+							if($linhas['tramitacao'] == "Não preenchido"){
+								$form = "pt";
+							}else if($linhas['pos_tramitacao'] == "Não preenchido"){
+								$form = "t";
+							}
+
+			        ?>          
+			         <tr>
+			         	<td class="colunas-centralizados">
+			              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($linhas['id_solicitacao'])?>&form=<?php echo $form?>&t=views/v_form_dados.php">
+			                <?php echo $linhas['id_solicitacao'];  ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['pre_tramitacao']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['tramitacao']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['pos_tramitacao']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['operador']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['supervisor']; ?>
+			              </a>
+			            </td>
+			          </tr>
+			     <?php 
+		     			}
+	     		}
+		          ?>
+           </tbody>
+		</table>
+	</div>

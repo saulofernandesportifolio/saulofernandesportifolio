@@ -1,0 +1,61 @@
+<div id="fieldset" class="bradius">
+	<form action="principal.php?t=controles/sql_enviar_formusuarios.php"  method="POST">
+		<input type="hidden" value="0" id="conterro" />
+		<legend align="center">
+			<h3 align="center">Cadastro usuários</h3>
+		</legend>
+		<div class="divformservico">
+			<label>*Nome:</label> 
+			<p>
+			   <input 
+			   		type="text" 
+			   		name="nome" 
+			   		id="nome" 
+			   		required 
+			   		size="60" 
+			   		class="txt bradius" 
+			   		value=""
+		   		/>
+			</p>
+			<label>*CPF:</label> 
+			<p>
+			   <input 
+			   		type="text" 
+			   		class="txt bradius" 
+			   		onblur="validaCpf(this);" 
+			   		name="cpf" 
+			   		required 
+			   		id="cpf"  
+			   		size="30" 
+			   		value=""/>
+			</p>
+			<label>*Perfil:</label>
+			<p>
+				<select name="perfil" id="perfil" onblur="ValidaEntrada(this,'combo');" class="txt2comboboxpadrao bradius">
+			   		<option value="">Selecione....</option>
+			   		<option value="3">Supervisor</option>
+			   		<option value="4">Analista Lider</option>
+			   		<option value="5">Operador Normal</option>
+			   		<option value="6">Operador GNC</option>
+			   		<option value="3">Operador Intragov</option>
+			  	</select>
+			</p>
+			<label>Turno:</label>
+			<p>
+				<select name="turno" id="turno" onblur="ValidaEntrada(this,'combo');" class="txt2comboboxpadrao bradius">
+			   		<option value="">Selecione....</option>
+			   		<option value="1">Diurno</option>
+			   		<option value="2">Noturno</option>
+			   		<option value="3">Intermediário</option>
+			  	</select>
+			</p>
+			 <input name="bt_enviar" id="bt_enviar" type="submit" value="Salvar" class="sb2 bradius" />
+			 <input type="reset" value="Limpar" class="sb2 bradius"/>
+			 <input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" onClick="window.location='principal.php?t=forms/home.php'"/>
+		 </div>
+	</form>
+</div>
+
+</body>
+</html>
+

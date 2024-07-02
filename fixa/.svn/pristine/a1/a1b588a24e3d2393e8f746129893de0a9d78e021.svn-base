@@ -1,0 +1,177 @@
+<p align="center">
+	<?php
+		//setup defaulT
+		include("../fixa/bd.php");
+
+		$cripto = new cripto();
+		$id_usuario= $_GET['id'];
+		$id_usuario = $cripto->decodificar($id_usuario);
+		//get info of user
+		$buscarPerfil=mysql_query("SELECT id_perfil FROM usuario WHERE id_usuario = $id_usuario");  
+
+		while($linha=mysql_fetch_array($buscarPerfil))
+		{ 
+			$id_perfil = $linha['id_perfil'];
+		}
+	?>
+	<?php if($id_perfil == 5 || $id_perfil == 6 || $id_perfil == 7 || $id_perfil == 8 || $id_perfil == 9 || $id_perfil == 1){?>
+	<div class="tela_principal_dasbboard">
+			<div id="menu_vertical_f">
+				<ul class="menu_vertical">
+		    		<?php if($id_perfil == 9 || $id_perfil == 1){?>
+		    		<li class="menu_vertical">
+		      			<i class="fa fa-bars icones_style"></i>
+		    			<a href="principal.php?&tipo=intragov&id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_pre_solicitacao_manual.php" id="form_intragov">Novo Formulário Intragov</a>
+		   			 </li>
+		    		<?php }?>
+		    		<?php if($id_perfil == 8 || $id_perfil == 1){?>
+		    		<li class="menu_vertical">
+		      			<i class="fa fa-bars icones_style"></i>
+		    			<a href="principal.php?&tipo=gcom&id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_pre_solicitacao_manual.php" id="form_gcom">Novo Formulário GCOM</a>
+		   			 </li>
+		    		<?php }?>
+		    		<?php if($id_perfil == 5 || $id_perfil == 1){?>
+		    		<li class="menu_vertical">
+		      			<i class="fa fa-bars icones_style"></i>
+		    			<a href="principal.php?&tipo=pre&id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_pre_solicitacao_manual.php" id="form_pre_tramitacao_manual">Novo Formulário Pré-Tramitação</a>
+		   			 </li>
+		    		<?php }?>
+				</ul>
+			</div>
+			<div id="t_m_d">
+				      	 <?php 
+					     	$buscarItens=mysql_query("SELECT 
+														IFNULL(count(id_solicitacao),0) AS quantidade,
+														'Pré-Tramitação' AS fase,
+														pre_tramitacao AS status 
+													FROM 
+														solicitacao_fases 
+													WHERE 
+														pre_tramitacao = 'Com operador' AND 
+														id_usuario_resp = $id_usuario
+													UNION
+					     							SELECT 
+														IFNULL(count(id_solicitacao),0) AS quantidade,
+														'Tramitação' AS fase,
+														tramitacao AS status  
+													FROM 
+														solicitacao_fases 
+													WHERE 
+														tramitacao = 'Com operador' AND 
+														id_usuario_resp = $id_usuario
+													UNION
+													SELECT 
+														IFNULL(count(id_solicitacao),0) AS quantidade,
+														'Pós-Tramitação' AS fase,
+														pos_tramitacao AS status  
+													FROM 
+														solicitacao_fases 
+													WHERE 
+														pos_tramitacao = 'Com operador' AND 
+														id_usuario_resp = $id_usuario
+													UNION
+													SELECT 
+														IFNULL(count(id_solicitacao),0) AS quantidade,
+														'Intragov' AS fase,
+														intragov AS status  
+													FROM 
+														solicitacao_fases 
+													WHERE 
+														intragov = 'Com operador' AND 
+														id_usuario_resp = $id_usuario
+													UNION
+													SELECT 
+														IFNULL(count(id_solicitacao),0) AS quantidade,
+														'Gcom' AS fase,
+														gcom AS status  
+													FROM 
+														solicitacao_fases 
+													WHERE 
+														gcom = 'Com operador' AND 
+														id_usuario_resp = $id_usuario
+							");
+
+					     	if(mysql_affected_rows() > 0){
+									while($linha=mysql_fetch_array($buscarItens)){                   
+						        ?>          
+						         
+						        <p class="textoParagrafo">
+						        	<?php if($id_perfil == 5 || $id_perfil == 1){?>
+							        	<?php if ($linha['fase'] == 'Pré-Tramitação'){?>
+								        	Número de solicitações de pré-tramitação a serem preenchidas: <?php echo $linha['quantidade']; ?>
+								        	<form action="principal.php?t=views/v_itens_pendentes_usuario.php"	method="POST">
+									        	<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" name="id_usuario"></input>
+									        	<input type="hidden" value="pre" name="solicitacao_pendentes"></input>
+									        	<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Visualizar" class="sb2 bradius" />
+						        			<form/>
+						        	<?php 
+						        			}
+						   				} 
+						        	?>
+						        </p>
+						        <p class="textoParagrafo">
+						        	<?php if($id_perfil == 6 || $id_perfil == 1){?>
+							        	<?php if ($linha['fase'] ==  'Tramitação'){?>
+								        	Número de solicitações de tramitação a serem preenchidas:<?php echo $linha['quantidade']; ?>
+								        	<form action="principal.php?t=views/v_itens_pendentes_usuario.php"	method="POST">
+									        	<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" name="id_usuario"></input>
+									        	<input type="hidden" value="tra" name="solicitacao_pendentes"></input>
+									        	<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Visualizar" class="sb2 bradius" />
+						        			<form/> 
+						        	<?php 
+						        			}
+					        			}
+						        	?>
+						        </p>
+						        <p class="textoParagrafo">
+						        	<?php if($id_perfil == 7 || $id_perfil == 1){?>
+							        	<?php if ($linha['fase'] ==  'Pós-Tramitação'){?>
+								        	Número de solicitações de pós-tramitação a serem preenchidas: <?php echo $linha['quantidade']; ?>
+								        	<form action="principal.php?t=views/v_itens_pendentes_usuario.php"	method="POST">
+									        	<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" name="id_usuario"></input>
+									        	<input type="hidden" value="pos" name="solicitacao_pendentes"></input>
+									        	<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Visualizar" class="sb2 bradius" />
+						        			<form/> 
+						        	<?php 
+						        			}
+					        			}
+						        	?>
+						        </p>
+						         <p class="textoParagrafo">
+						        	<?php if($id_perfil == 8 || $id_perfil == 1){?>
+							        	<?php if ($linha['fase'] ==  'Gcom'){?>
+								        	Número de solicitações de gcom a serem preenchidas: <?php echo $linha['quantidade']; ?>
+								        	<form action="principal.php?t=views/v_itens_pendentes_usuario.php"	method="POST">
+									        	<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" name="id_usuario"></input>
+									        	<input type="hidden" value="gcon" name="solicitacao_pendentes"></input>
+									        	<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Visualizar" class="sb2 bradius" />
+						        			<form/> 
+						        	<?php 
+						        			}
+					        			}
+						        	?>
+						        </p>
+						        <p class="textoParagrafo">
+						        	<?php if($id_perfil == 9 || $id_perfil == 1){?>
+							        	<?php if ($linha['fase'] ==  'Intragov'){?>
+								        	Número de solicitações de intragov a serem preenchidas: <?php echo $linha['quantidade']; ?>
+								        	<form action="principal.php?t=views/v_itens_pendentes_usuario.php"	method="POST">
+									        	<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" name="id_usuario"></input>
+									        	<input type="hidden" value="intragov" name="solicitacao_pendentes"></input>
+									        	<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Visualizar" class="sb2 bradius" />
+						        			<form/> 
+						        	<?php 
+						        			}
+					        			}
+						        	?>
+						        </p>
+					     <?php 
+						          }
+					          }
+					     ?>
+		           </tbody>
+				</table>
+			</div>
+		</div>
+	<?php }?>
+</p>

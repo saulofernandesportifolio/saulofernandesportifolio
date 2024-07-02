@@ -1,0 +1,1356 @@
+
+<?php
+
+include("../fixa/bd.php");
+  
+require_once '../fixa/site/classes/cripto.php';
+
+$id_form = $_GET['id'];
+
+$id_form = $cripto->decodificar($id_form);
+
+$form = $_GET['form'];
+
+if($form == "pt"){
+	//query pretramitacao
+	$buscarsolicitacao=mysql_query("SELECT * FROM pre_tramitacao WHERE siscom = $id_form");
+
+	while($linha=mysql_fetch_array($buscarsolicitacao)){ 
+	       $siscom 						= $linha['siscom'];
+	       $cat_produto 				= $linha['cat_produto'];
+	       $id_canal_entrada 			= $linha['id_canal_entrada'];
+	       $data_receb_solicitacao 		= $linha['data_receb_solicitacao'];
+	       $n_pac_siscom 				= $linha['n_pac_siscom'];
+	       $id_produto 					= $linha['id_produto'];
+	       $id_tipo_solicitacao_categ 	= $linha['id_tipo_solicitacao_categ'];
+	       $id_servicos	 				= $linha['id_servicos'];
+	       $cnpj 						= $linha['cnpj'];
+	       $razao_social	 			= $linha['razao_social'];
+	       $qtd_acessos 				= $linha['qtd_acessos'];
+	       $n_gestao_servicos 			= $linha['n_gestao_servicos'];
+	       $data_abertura_gestao 		= $linha['data_abert_gestao'];
+	       $id_status_solicitacao 		= $linha['id_status_solicitacao'];
+	       $obs 						= $linha['obs'];       
+	       $id_motivo_devolucao 		= $linha['id_motivo_devolucao'];
+	       $area_devolucao 				= $linha['area_devolucao'];
+	       $data_devolucao 				= $linha['data_devolucao'];
+	       $devolucao 					= $linha['devolucao'];
+	       $Aprovado                    = $linha['aprovado'];
+	}
+
+	if($data_receb_solicitacao != ""){
+		$data_receb_solicitacao = explode("-", $data_receb_solicitacao);
+		$data_receb_solicitacao = $data_receb_solicitacao[2] . '-' . $data_receb_solicitacao[1] . '-' . $data_receb_solicitacao[0];
+	}
+
+	if($data_abertura_gestao != ""){
+		$data_abertura_gestao = explode("-", $data_abertura_gestao);
+		$data_abertura_gestao = $data_abertura_gestao[2] . '-' . $data_abertura_gestao[1] . '-' . $data_abertura_gestao[0];
+	}
+
+	if($data_devolucao != ""){
+		$data_devolucao = explode("-", $data_devolucao);
+		$data_devolucao = $data_devolucao[2] . '-' . $data_devolucao[1] . '-' . $data_devolucao[0];
+	}
+
+}else if($form == "t"){
+	//query tramitacao
+	$buscarsolicitacao=mysql_query("SELECT * FROM tramitacao WHERE siscom = $id_form");
+
+	while($linha=mysql_fetch_array($buscarsolicitacao)){ 
+		  $devolucao						= $linha['devolucao'];
+	      $siscom 							= $linha['siscom'];
+	      $data_entrada_siscom   			= $linha['data_entrada_siscom'];
+		  $id_canal_entrada 				= $linha['id_canal_entrada'];
+	      $id_produto 						= $linha['id_produto'];
+	      $id_tipo_solicitacao_categ 		= $linha['id_tipo_solicitacao_categ'];
+	      $id_servicos	 					= $linha['id_servicos'];
+	      $qtd_acessos 						= $linha['qtd_acessos'];
+		  $n_pac_siscom 					= $linha['n_pac_siscom'];
+	      $cnpj 							= $linha['cnpj'];
+ 		  $razao_social	 					= $linha['razao_social'];
+	      $n_gestao_servicos 				= $linha['n_gestao_servicos'];
+	      $data_abertura_gestao 			= $linha['data_abertura_gestao'];
+	      $cat_produto 						= $linha['cat_produto']; 
+	      $data_devolucao 					= $linha['data_devolucao']; 
+	      $data_encerramento 				= $linha['data_encerramento']; 
+	      $id_status_solicitacao_tramitacao = $linha['id_status_solic_tramitacao'];
+	      $obs 								= $linha['obs'];    
+	      $Aprovado 						= $linha['aprovado'];
+	      $n_oportunidade_proposta			= $linha['n_oportunidade_propostas'];
+	}
+
+
+	if($data_abertura_gestao != ""){
+		$data_abertura_gestao = explode("-", $data_abertura_gestao);
+		$data_abertura_gestao = $data_abertura_gestao[2] . '-' . $data_abertura_gestao[1] . '-' . $data_abertura_gestao[0];
+	}
+	
+	if($data_entrada_siscom != ""){
+		$data_entrada_siscom = explode("-", $data_entrada_siscom);
+		$data_entrada_siscom = $data_entrada_siscom[2] . '-' . $data_entrada_siscom[1] . '-' . $data_entrada_siscom[0];
+	}
+
+	if($data_devolucao != ""){
+		$data_devolucao = explode("-", $data_devolucao);
+		$data_devolucao = $data_devolucao[2] . '-' . $data_devolucao[1] . '-' . $data_devolucao[0];
+	}
+
+	if($data_encerramento != ""){
+		$data_encerramento = explode("-", $data_encerramento);
+		$data_encerramento = $data_encerramento[2] . '-' . $data_encerramento[1] . '-' . $data_encerramento[0];
+	}
+
+}else if($form == "i"){
+	//query tramitacao
+	$buscarsolicitacao=mysql_query("SELECT * FROM v_geral_intragov WHERE n_gestao_servicos = $id_form");
+
+	while($linha=mysql_fetch_array($buscarsolicitacao)){ 
+		  $data_solicitacao			= $linha['data_solicitacao'];
+	      $devolucao 				= $linha['devolucao'];    
+	      $canal_entrada   			= $linha['canal_entrada'];
+		  $produto 					= $linha['produto'];
+		  $servico 					= $linha['servico'];
+		  $qtd_acessos 				= $linha['qtd_acessos'];
+	      $motivo_cancelamento 		= $linha['motivo_cancelamento'];
+	      $cnpj 					= $linha['cnpj'];
+	      $razao_social 			= $linha['razao_social'];
+	      $n_gestao_servicos 		= $linha['n_gestao_servicos'];
+	      $data_abertura_gestao		= $linha['data_abertura_gestao'];
+		  $motivo_devolucao			= $linha['motivo_devolucao'];
+		  $area_solicitante			= $linha['area_solicitante'];
+		  $data_devolucao			= $linha['data_devolucao'];
+		  $data_encerramento		= $linha['data_encerramento'];
+		  $status_solicitacao		= $linha['status_solicitacao'];
+		  $reg_dt_entrada			= $linha['reg_dt_entrada'];
+	}
+
+
+	if($data_abertura_gestao != ""){
+		$data_abertura_gestao = explode("-", $data_abertura_gestao);
+		$data_abertura_gestao = $data_abertura_gestao[2] . '-' . $data_abertura_gestao[1] . '-' . $data_abertura_gestao[0];
+	}
+	
+	if($data_solicitacao != ""){
+		$data_solicitacao = explode("-", $data_solicitacao);
+		$data_solicitacao = $data_solicitacao[2] . '-' . $data_solicitacao[1] . '-' . $data_solicitacao[0];
+	}
+
+	if($data_devolucao != ""){
+		$data_devolucao = explode("-", $data_devolucao);
+		$data_devolucao = $data_devolucao[2] . '-' . $data_devolucao[1] . '-' . $data_devolucao[0];
+	}
+
+	if($data_encerramento != ""){
+		$data_encerramento = explode("-", $data_encerramento);
+		$data_encerramento = $data_encerramento[2] . '-' . $data_encerramento[1] . '-' . $data_encerramento[0];
+	}
+
+}else if($form == "g"){
+	//query tramitacao
+	$buscarsolicitacao=mysql_query("SELECT * FROM v_geral_gcom WHERE n_gestao_servicos = $id_form");
+
+	while($linha=mysql_fetch_array($buscarsolicitacao)){ 
+
+		$reg_dt_entrada			= $linha['reg_dt_entrada'];
+		$operador    	        = $linha['operador'];
+		$data_receb_documento	= $linha['data_receb_documento'];
+		$tipo_entrada      		= $linha['tipo_entrada'];
+		$contrato_mae      		= $linha['contrato_mae'];
+		$data_assinatura_doc    = $linha['data_assinatura_doc'];
+		$numero_documento       = $linha['numero_documento'];
+		$sistema_validacao 		= $linha['sistema_validacao'];
+		$n_vantive              = $linha['n_vantive'];
+		$produto            	= $linha['produto'];
+		$data_trativa           = $linha['data_trativa'];
+		$nome_solicitante       = $linha['nome_solicitante'];
+		$n_gestao_servicos      = $linha['n_gestao_servicos'];
+		$numero_wcd             = $linha['numero_wcd'];
+		$razao_social           = $linha['razao_social'];
+		$cnpj                   = $linha['cnpj'];
+		$plano_solicitado       = $linha['plano_solicitado'];
+		$qtde_acesso            = $linha['qtde_acesso']; 
+		$data_finalizacao       = $linha['data_finalizacao'];
+	}
+
+
+	if($data_receb_documento != ""){
+		$data_receb_documento = explode("-", $data_receb_documento);
+		$data_receb_documento = $data_receb_documento[2] . '-' . $data_receb_documento[1] . '-' . $data_receb_documento[0];
+	}
+	
+	if($data_assinatura_doc != ""){
+		$data_assinatura_doc = explode("-", $data_assinatura_doc);
+		$data_assinatura_doc = $data_assinatura_doc[2] . '-' . $data_assinatura_doc[1] . '-' . $data_assinatura_doc[0];
+	}
+
+	if($data_trativa != ""){
+		$data_trativa = explode("-", $data_trativa);
+		$data_trativa = $data_trativa[2] . '-' . $data_trativa[1] . '-' . $data_trativa[0];
+	}
+
+	if($data_finalizacao != ""){
+		$data_finalizacao = explode("-", $data_finalizacao);
+		$data_finalizacao = $data_finalizacao[2] . '-' . $data_finalizacao[1] . '-' . $data_finalizacao[0];
+	}
+
+}
+?>
+
+<?php if($form == "pt"){ ?>
+<div class="bradius wrapper" style="margin-left: 26%;">
+	<form>
+		<fieldset id="fieldset_style">
+			<h2>Pré-Tramitação</h2> 
+			<table id="form_pretramitacao">
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>SISCOM*</label>
+							<input 
+								type="text" 
+								id="siscom"  
+								name="siscom"
+								size= "50"
+								disabled="true"
+								value="<?php echo $siscom?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Categoria de produto*</label>
+							<input
+					   			type="text" 
+								id="cat_prod"  
+								name="cat_prod"
+								size= "50"
+								disabled="true"
+								value="<?php echo $cat_produto?>" 
+							/>
+						</div>
+					</td>	
+					
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Devolução</label><br/>
+							<input
+					   			type="text" 
+								id="devolucao"  
+								name="devolucao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $devolucao?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Canal de entrada*</label>
+								<?php 
+						         	$canal_entrada=mysql_query("SELECT * FROM canal_entrada WHERE id_canal_entrada = $id_canal_entrada");
+
+									while($rowce=mysql_fetch_array($canal_entrada)){
+										$canal_entrada_desc = $rowce['descricao'];
+									}
+					                     
+					        	?>
+					        	<input
+					   				type="text" 
+									id="canal_entrada"  
+									name="canal_entrada"
+									size= "50"
+									disabled="true"
+									value="<?php echo $canal_entrada_desc?>" 
+								/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data Receb. Solicitação*</label>
+							<input 
+								type="text"
+								id="data_receb"
+								name="data_receb"
+								size= "50"
+								disabled="true"
+								value="<?php echo $data_receb_solicitacao?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Nº Pacote SISCOM*</label>
+							<input 
+								type="text" 
+								id="n_pact_siscom"  
+								name="n_pact_siscom"
+								size= "50"
+								disabled="true"
+								value="<?php echo $n_pac_siscom?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Produto*</label>
+							<?php 
+					         	$produto=mysql_query("SELECT * FROM produto WHERE id_produto = $id_produto");
+
+								while($rowp=mysql_fetch_array($produto)){
+									$produto_desc = $rowp['descricao'];
+								}              
+				        	?>
+				        	<input
+				   				type="text" 
+								id="produto"  
+								name="produto"
+								size= "50"
+								disabled="true"
+								value="<?php echo $produto_desc?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Tipo Solicitação/Categoria*</label>
+							<?php 
+					         	$tipo_solicitacao = mysql_query("SELECT * FROM tipo_solicitacao WHERE id_tipo_solicitacao_categ = $id_tipo_solicitacao_categ");
+
+								while($rowts=mysql_fetch_array($tipo_solicitacao)){
+									$tipo_solicitacao_desc = $rowts['descricao'];
+								}              
+				        	?>
+				        	<input
+				   				type="text" 
+								id="tipo_solicitacao"  
+								name="tipo_solicitacao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $tipo_solicitacao_desc?>" 
+							/>
+						</div>
+					</td>	
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Serviços*</label>
+							<?php 
+					         	$servico = mysql_query("SELECT * FROM servicos WHERE id_servicos = $id_servicos");
+
+								while($rowse=mysql_fetch_array($servico)){
+									$servico_desc = $rowse['descricao'];
+								}              
+				        	?>
+				        	<input
+				   				type="text" 
+								id="servicos"  
+								name="servicos"
+								size= "50"
+								disabled="true"
+								value="<?php echo $servico_desc?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>CNPJ*</label>
+							<input 
+								type="text" 
+								id="cnpj"  
+								name="cnpj"
+								size= "50"
+								disabled="true"
+								value="<?php echo $cnpj?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Razão Social*</label>
+							<input 
+								type="text" 
+								id="razao_social"  
+								name="razao_social"
+								size= "100"
+								disabled="true"
+								value="<?php echo $razao_social?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Quantidade de acessos*</label>
+							<input 
+								type="text" 
+								id="qtd_acessos"  
+								name="qtd_acessos"
+								size= "50"
+								disabled="true"
+								value="<?php echo $qtd_acessos?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Número gestão de serviços*</label>
+							<input 
+								type="text" 
+								id="n_gs"  
+								name="n_gs"
+								size= "50"
+								disabled="true"
+								value="<?php echo $n_gestao_servicos?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data abertura gestão</label>
+							<input 
+								type="text"
+								id="data_abertura_gestao"
+								name="data_abertura_gestao" 
+								size= "50"
+								disabled="true"
+								value="<?php echo $data_abertura_gestao?>" 
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Motivo devolução</label>
+							<?php 
+								if($id_motivo_devolucao != 0){
+						         	$motivo_devolucao_q = mysql_query("SELECT * FROM motivo_devolucao WHERE id_motivo_devolucao = $id_motivo_devolucao");
+
+									while($rowmd=mysql_fetch_array($motivo_devolucao_q)){
+										$motivo_devolucao_desc = $rowmd['descricao'];
+									}       
+								}else{
+									$motivo_devolucao_desc =  "";
+								}       
+				        	?>
+				        	<input
+				   				type="text" 
+								id="motivo_devolucao"  
+								name="motivo_devolucao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $motivo_devolucao_desc?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Área devolução</label>
+							<input
+				   				type="text" 
+								id="area_devolucao"  
+								name="area_devolucao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $area_devolucao?>" 
+							/>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data de devolução</label>
+							<input 
+								type="text"
+								id="data_devolucao"
+								name="data_devolucao" 
+								size= "50"
+								disabled="true"
+								value="<?php echo $data_devolucao?>" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Status*</label>
+							<?php 
+					         	$status_solicitacao_q = mysql_query("SELECT * FROM status_solicitacao WHERE id_status_solicitacao = $id_status_solicitacao");
+
+					         	if(mysql_affected_rows() > 0){
+									while($rowst=mysql_fetch_array($status_solicitacao_q)){
+										$status_solicitacao_desc = $rowst['descricao'];
+									} 
+								}      
+				        	?>
+				        	<input
+				   				type="text" 
+								id="status_solicitacao"  
+								name="status_solicitacao"
+								size= "50"
+								disabled="true"
+								<?php if(mysql_affected_rows() > 0){?>
+								value="<?php echo $status_solicitacao_desc?>" 
+								<?php }?>
+							/>
+						</div>
+					</td>		
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Observações</label>
+							<input
+				   				type="text" 
+								id="obs"  
+								name="obs"
+								size= "50"
+								disabled="true"
+								value="<?php echo $obs?>" 
+								style="font-size: smaller;"
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Aprovado*</label>
+							<input
+				   				type="text" 
+								id="aprovacao"  
+								name="aprovacao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $Aprovado?>" 
+							/>
+						</div>	
+					</td>	
+				</tr>
+			</table>
+	 	</fieldset>
+	</form>
+</div>
+<?php }else if($form == "t"){?>
+<div class="bradius wrapper" style="margin-left: 26%;">
+	<form>
+		<fieldset id="fieldset_style">
+			<h2>Tramitação</h2> 
+			<table id="form_pretramitacao">
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Devolução</label><br/>
+							<input
+					   			type="text" 
+								id="devolucao"  
+								name="devolucao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $devolucao?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>SISCOM*</label>
+							<input 
+								type="text" 
+								id="siscom"  
+								name="siscom"
+								size= "50"
+								disabled="true"
+								value="<?php echo $siscom?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data Entrada Siscom*</label>
+							<input 
+								type="text"
+								id="data_entrada_siscom"
+								name="data_entrada_siscom"
+								size= "50"
+								disabled="true"
+								value="<?php echo $data_entrada_siscom?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Canal de entrada*</label>
+								<?php 
+						         	$canal_entrada=mysql_query("SELECT * FROM canal_entrada WHERE id_canal_entrada = $id_canal_entrada");
+
+									while($rowce=mysql_fetch_array($canal_entrada)){
+										$canal_entrada_desc = $rowce['descricao'];
+									}
+					                     
+					        	?>
+					        	<input
+					   				type="text" 
+									id="canal_entrada"  
+									name="canal_entrada"
+									size= "50"
+									disabled="true"
+									value="<?php echo $canal_entrada_desc?>" 
+								/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Tipo Solicitação/Categoria*</label>
+							<?php 
+					         	$tipo_solicitacao = mysql_query("SELECT * FROM tipo_solicitacao WHERE id_tipo_solicitacao_categ = $id_tipo_solicitacao_categ");
+
+								while($rowts=mysql_fetch_array($tipo_solicitacao)){
+									$tipo_solicitacao_desc = $rowts['descricao'];
+								}              
+				        	?>
+				        	<input
+				   				type="text" 
+								id="tipo_solicitacao"  
+								name="tipo_solicitacao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $tipo_solicitacao_desc?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Produto*</label>
+							<?php 
+					         	$tipo_solicitacao = mysql_query("SELECT * FROM tipo_solicitacao WHERE id_tipo_solicitacao_categ = $id_tipo_solicitacao_categ");
+
+								while($rowts=mysql_fetch_array($tipo_solicitacao)){
+									$tipo_solicitacao_desc = $rowts['descricao'];
+								}              
+				        	?>
+				        	<input
+				   				type="text" 
+								id="tipo_solicitacao"  
+								name="tipo_solicitacao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $tipo_solicitacao_desc?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Quantidade de acessos*</label>
+							<input 
+								type="text" 
+								id="qtd_acessos"  
+								name="qtd_acessos"
+								size= "50"
+								disabled="true"
+								value="<?php echo $qtd_acessos?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Serviços*</label>
+							<?php 
+					         	$servico = mysql_query("SELECT * FROM servicos WHERE id_servicos = $id_servicos");
+
+								while($rowse=mysql_fetch_array($servico)){
+									$servico_desc = $rowse['descricao'];
+								}              
+				        	?>
+				        	<input
+				   				type="text" 
+								id="servicos"  
+								name="servicos"
+								size= "50"
+								disabled="true"
+								value="<?php echo $servico_desc?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Nº Pacote SISCOM*</label>
+							<input 
+								type="text" 
+								id="n_pact_siscom"  
+								name="n_pact_siscom"
+								size= "50"
+								disabled="true"
+								value="<?php echo $n_pac_siscom?>" 
+							/>
+						</div>
+					</td>	
+					<td>
+						<div class="div_forms">
+							<label>CNPJ*</label>
+							<input 
+								type="text" 
+								id="cnpj"  
+								name="cnpj"
+								size= "50"
+								disabled="true"
+								value="<?php echo $cnpj?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Razão Social*</label>
+							<input 
+								type="text" 
+								id="razao_social"  
+								name="razao_social"
+								size= "50"
+								disabled="true"
+								value="<?php echo $razao_social?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Número gestão de serviços*</label>
+							<input 
+								type="text" 
+								id="n_gs"  
+								name="n_gs"
+								size= "50"
+								disabled="true"
+								value="<?php echo $n_gestao_servicos?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Data abertura gestão</label>
+							<input 
+								type="text"
+								id="data_abertura_gestao"
+								name="data_abertura_gestao" 
+								size= "50"
+								disabled="true"
+								value="<?php echo $data_abertura_gestao?>" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Categoria*</label>
+							<input
+					   			type="text" 
+								id="cat_prod"  
+								name="cat_prod"
+								size= "50"
+								disabled="true"
+								value="<?php echo $cat_produto?>" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data de devolução</label>
+							<input 
+								type="text"
+								id="data_devolucao"
+								name="data_devolucao" 
+								size= "50"
+								disabled="true"
+								value="<?php echo $data_devolucao?>" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data de Encerramento*</label>
+							<input 
+								type="text"
+								id="data_encerramento"
+								name="data_encerramento" 
+								size= "50"
+								disabled="true"
+								value="<?php echo $data_encerramento?>" 
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Status*</label>
+							<?php 
+					         	$status_solicitacao_q = mysql_query("SELECT * FROM status_solicitacao WHERE id_status_solicitacao = $id_status_solicitacao_tramitacao");
+
+					         	if(mysql_affected_rows() > 0){
+									while($rowst=mysql_fetch_array($status_solicitacao_q)){
+										$status_solicitacao_desc = $rowst['descricao'];
+									}
+								}else{
+									$status_solicitacao_desc = "";
+								}              
+				        	?>
+				        	<input
+				   				type="text" 
+								id="status_solicitacao"  
+								name="status_solicitacao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $status_solicitacao_desc?>" 
+							/>
+						</div>
+					</td>		
+					<td>
+						<div class="div_forms">
+							<label>Observações</label>
+							<input
+				   				type="text" 
+								id="obs"  
+								name="obs"
+								size= "50"
+								disabled="true"
+								value="<?php echo $obs?>" 
+								style="font-size: smaller;"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Nº Oportunidade e Proposta</label>
+							<input
+				   				type="text" 
+								id="n_oport_proposta"  
+								name="n_oport_proposta"
+								size= "50"
+								disabled="true"
+								value="<?php echo $n_oportunidade_proposta?>" 
+							/>
+						</div>	
+					</td>	
+					<td>
+						<div class="div_forms">
+							<label>Aprovado*</label>
+							<input
+				   				type="text" 
+								id="aprovacao"  
+								name="aprovacao"
+								size= "50"
+								disabled="true"
+								value="<?php echo $Aprovado?>" 
+							/>
+						</div>	
+					</td>	
+				</tr>
+			</table>
+	 	</fieldset>
+	</form>
+</div>
+<?php }else if($form == "i"){?>
+<div class="bradius wrapper" style="margin-left: 26%;" >
+	<form>
+		<fieldset id="fieldset_style">
+			<h2>Intragov</h2> 
+			<table id="form_intragov">
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data da solicitação*</label>
+							<input 
+								type="text"
+								id="data_solicitacao"
+								name="data_solicitacao"
+								disabled="true"
+								size= "50"
+								value="<?php echo $data_solicitacao?>" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data da solicitação*</label>
+							<input 
+								type="text"
+								id="data_solicitacao"
+								name="data_solicitacao"
+								disabled="true"
+								size= "50"
+								value="<?php echo $devolucao?>" 
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Canal de entrada*</label>
+							<input 
+								type="text"
+								id="canal_entrada"
+								name="canal_entrada"
+								size= "50"
+								value="<?php echo $canal_entrada?>" 
+								disabled="true"
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Produto Intragov*</label>
+							<input 
+								type="text"
+								id="produtoIntragov"
+								name="produtoIntragov"
+								size= "50"
+								value="<?php echo $produto?>" 
+								disabled="true"
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Serviço Intragov*</label>
+							<input 
+								type="text"
+								id="servicoIntragov"
+								name="servicoIntragov"
+								size= "50"
+								value="<?php echo $servico?>"
+								disabled="true" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Quantidade de acessos*</label>
+							<input 
+								type="text" 
+								id="qtd_acessos"  
+								name="qtd_acessos"
+								size= "50"
+								value="<?php echo $qtd_acessos?>" 
+								disabled="true"
+							/>
+						</div>
+					</td>	
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Motivo Cancelamento</label>
+							<input 
+								type="text" 
+								id="motivo_cancelamento"  
+								name="motivo_cancelamento"
+								size= "50"
+								value="<?php echo $motivo_cancelamento?>" 
+								disabled="true"
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>CNPJ*</label>
+							<input 
+								type="text" 
+								id="cnpj"  
+								name="cnpj"
+								size= "50"
+								value="<?php echo $cnpj?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Razão Social*</label>
+							<input 
+								type="text" 
+								id="razao_social"  
+								name="razao_social"
+								size= "50"
+								value="<?php echo $razao_social?>" 
+								disabled="true"
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Número gestão de serviços*</label>
+							<input 
+								type="text" 
+								id="n_gs"  
+								name="n_gs"
+								size= "50"
+								value="<?php echo $n_gestao_servicos?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Data abertura gestão*</label>
+							<input 
+								type="text"
+								id="data_abert_gestao"
+								name="data_abert_gestao" 
+								disabled="true"
+								size= "50"
+								value="<?php echo $data_abertura_gestao?>" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Motivo devolução</label>
+							<input 
+								type="text"
+								id="motivo_devolucao"
+								name="motivo_devolucao" 
+								disabled="true"
+								size= "50"
+								value="<?php echo $motivo_devolucao?>" 
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Área Solicitante*</label>
+							<input 
+								type="text"
+								id="area_solicitante"
+								name="area_solicitante" 
+								size= "50"
+								value="<?php echo $area_solicitante?>"
+								disabled="true" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data de devolução</label>
+							<input 
+								type="text"
+								id="data_devolucao"
+								name="data_devolucao" 
+								disabled="true"
+								size= "50"
+								value="<?php echo $data_devolucao?>" 
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Data de encerramento*</label>
+							<input 
+								type="text"
+								id="data_encerramento"
+								name="data_encerramento" 
+								disabled="true"
+								size= "50"
+								value="<?php echo $data_encerramento?>" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Status*</label>
+							<input 
+								type="text"
+								id="status_solicitacao_intragov"
+								name="status_solicitacao_intragov" 
+								disabled="true"
+								size= "50"
+								value="<?php echo $status_solicitacao?>" 
+							>
+					</td>		
+				</tr>
+			</table>
+	 	</fieldset>
+ 	</form>
+</div>
+<?php }else if($form == "g"){?>
+<div class="bradius wrapper" style="margin-left: 26%;" >
+	<form>
+		<fieldset id="fieldset_style">
+			<h2>GCOM</h2> 
+			<table id="form_gcom">
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data de Recebimento do Documento*</label>
+							<input 
+								type="text"
+								id="data_recebimento_doc"
+								name="data_recebimento_doc" 
+								size= "50"
+								value="<?php echo $data_receb_documento;?>" 
+								disabled="true"
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Tipo de Entrada*</label>
+							<input 
+								type="text"
+								id="tipo_entrada"
+								name="tipo_entrada" 
+								size= "50"
+								value="<?php echo $tipo_entrada;?>" 
+								disabled="true"
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Contrato Mãe*</label>
+							<input 
+								type="text"
+								id="contrato_mae"
+								name="contrato_mae"
+								size= "50"
+								value="<?php echo $contrato_mae;?>" 
+								disabled="true"
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data de Assinatura Documento*</label>
+							<input 
+								type="text"
+								id="data_assinatura_doc"
+								name="data_assinatura_doc"
+								size= "50"
+								value="<?php echo $data_assinatura_doc;?>"
+								disabled="true" 
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Número do Documento*</label>
+							<input 
+								type="text"
+								id="n_documento"
+								name="n_documento"
+								size= "50"
+								value="<?php echo $numero_documento?>"
+								disabled="true" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Sistema de Validação*</label>
+							<input 
+								type="text"
+								id="sistema_validacao"
+								name="sistema_validacao"
+								size= "50"
+								value="<?php echo $sistema_validacao?>"
+								disabled="true" 
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Nº Vantive*</label>
+							<input 
+								type="text" 
+								id="n_vantive"  
+								name="n_vantive"
+								size= "50"
+								value="<?php echo $n_vantive;?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Produto*</label>
+							<input 
+								type="text" 
+								id="produto"  
+								name="produto"
+								size= "50"
+								value="<?php echo $produto;?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>	
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data de Tratativa*</label>
+							<input 
+								type="text"
+								id="data_tratativa"
+								name="data_tratativa" 
+								size= "50"
+								value="<?php echo $data_trativa;?>"
+								disabled="true" 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Nome do Solicitante*</label>
+							<input 
+								type="text" 
+								id="nome_solicitante"  
+								name="nome_solicitante"
+								size= "50"
+								value="<?php echo $nome_solicitante?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Número Gestão de Serviços*</label>
+							<input 
+								type="text" 
+								id="n_gs"  
+								name="n_gs"
+								size= "50"
+								value="<?php echo $n_gestao_servicos?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Numero do WCD*</label>
+							<input 
+								type="text" 
+								id="numero_wcd"  
+								name="numero_wcd"
+								size= "50"
+								value="<?php echo $numero_wcd?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>CNPJ*</label>
+							<input 
+								type="text" 
+								id="cnpj"  
+								name="cnpj"
+								size= "50"
+								value="<?php echo $cnpj?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Razão Social*</label>
+							<input 
+								type="text" 
+								id="razao_social"  
+								name="razao_social"
+								size= "50"
+								value="<?php echo $razao_social?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Plano Solicitado*</label>
+							<input 
+								type="text" 
+								id="plano_solicitado"  
+								name="plano_solicitado"
+								size= "50"
+								value="<?php echo $plano_solicitado?>"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Qtde de Acesso*</label>
+							<input 
+								type="text" 
+								id="qtde_acesso"  
+								name="qtde_acesso"
+								size= "50"
+								value="<?php echo $qtde_acesso?>"
+								disabled="true"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data de Finalização*</label>
+							<input 
+								type="text"
+								id="data_finalizacao"
+								name="data_finalizacao" 
+								size= "50"
+								value="<?php echo $data_finalizacao?>"
+								disabled="true"
+							>
+						</div>
+					</td>
+				</tr>	
+			</table>
+	 	</fieldset>
+	</form>
+</div>
+<?php }?>    
+    

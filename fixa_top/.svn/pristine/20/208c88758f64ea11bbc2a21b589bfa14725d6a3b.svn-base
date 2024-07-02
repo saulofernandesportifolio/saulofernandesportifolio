@@ -1,0 +1,435 @@
+$(document).ready(function() {
+     $('#form_tramitacao_itens_preencher_operador').click(function(){
+            var idUsuario = $('#id_usuario_tramitacao').val();
+            var fase = $('#solicitacao_pendentes_tramitacao').val();
+                              
+            document.location.replace('../fixa_top/principal.php?idu='+idUsuario+'&solicitacao_pendentes='+fase+'&t=View/SolicitacaoPendenteTramitacao.php');
+     })
+
+     $('#form_aprovacao_itens_preencher_operador').click(function(){
+            var idUsuario = $('#id_usuario_aprovacao').val();
+            var fase = $('#solicitacao_pendentes_aprovacao').val();
+                              
+            document.location.replace('../fixa_top/principal.php?idu='+idUsuario+'&solicitacao_pendentes='+fase+'&t=View/SolicitacaoPendenteAprovacao.php');
+     })
+
+     // consulta redistribuicao
+    $('#consultaSolicitacoesRedistribuicao').click(function(e) {
+        $('#faseRedistribuicao').html('');
+        $('#operadorRedistribuir').html('');
+
+
+            var n_solicitacao = $('#nSolicitacaoRedistribuicao').val();
+
+        if(n_solicitacao == '' || n_solicitacao == undefined){n_solicitacao = '0'};
+
+
+        $.getJSON('app/Controller/SolicitacaoController.php?opcao=tabela_redistribuicao&n_solicitacao=' + n_solicitacao, function(dados) {
+            if (dados.length > 0) {
+                var tr = '<tr style="display: none;"></tr>';
+                $.each(dados, function(i, obj) {
+                            tr += '<tr>';
+                            tr += '<td class="lalign">' + obj[0] + '</td>';
+                            tr += '<td id="tramitacaor" class="lalign">' + obj[1] + '</td>';
+                            tr += '<td id="aprovacaor" class="lalign">' + obj[2] + '</td>';
+                            tr += '<td class="lalign">' + obj[3] + '</td>';
+                            tr += '<td id="revisaor" class="lalign">' + obj[4] + '</td>';
+                        tr += '</tr>';        
+                })
+            } else {
+                Reset();
+            }
+            $('#rowSolicitacoes').html(tr).show();
+        }).error(function() { 
+            var tr = '<tr><td colspan="10">Nenhum registro encontrado</td></tr>';
+            $('#rowSolicitacoes').html(tr);
+        })
+    })
+
+    $('#consultaSolicitacoesRedistribuicao').blur(function(e){
+        //atualiza opcao de redistribuicao
+       
+        var tramitacao = $('#tramitacaor').text();
+        var aprovacao = $('#aprovacaor').text();
+
+        if(tramitacao == "Com operador" || tramitacao == "Conclu\u00eddo" && aprovacao == ''){
+             $('#faseRedistribuicao').html("<option value='tramitacao'>Tramita\u00e7\u00e3o</option>").show();
+        }else if(aprovacao == "Com operador" || aprovacao == "Conclu\u00eddo"){
+             var option = "<option value='tramitacao'>Tramita\u00e7\u00e3o</option>";
+                option += "<option value='aprovacao'>Aprova\u00e7\u00e3o</option>"
+             $('#faseRedistribuicao').html(option).show();
+        }
+    })
+
+     $('#faseRedistribuicao').blur(function(e){
+        //atualiza opcao de redistribuicao
+        var fase = $('#faseRedistribuicao').val();
+        var idUsuarioCriptografado = $('#id_usuario').val();
+
+        $.getJSON('app/Controller/SolicitacaoController.php?opcao=usuario_fase&fase=' + fase + '&idUsuarioCriptografado=' + idUsuarioCriptografado , function(dados) {
+            if (dados.length > 0) {
+                var option = '<option>Selecione o operador</option>';
+                $.each(dados, function(i, obj) {
+                    option += '<option value="' + obj[0] + '">' + obj[1] +  ' - ' + obj[2] +'(pedidos)'+ '</option>';
+                })
+            } else {
+                Reset();
+            }
+            $('#operadorRedistribuir').html(option).show();
+        }).error(function() { 
+            var option = '<option></option>';
+            $('#operadorRedistribuir').html(option).show();
+        })
+    })
+});
+
+function buscaSolicitacoesPendentes(){
+      
+      var idUsuario = $('#id_usuario').val();
+      var fase = $('#fase').val();
+
+      $.getJSON('app/Controller/SolicitacaoController.php?opcao=consultaItensPendentesFasesOperador&idUsuarioCriptografado=' + idUsuario + '&fase=' + fase, function(dados) {
+        if (dados.length > 0) {
+             var tr = '<tr style="display: none;"></tr>';
+            $.each(dados, function(i, obj) {
+                if(obj[7] == 'tramitacao')
+                {
+                    var pagina = 'Tramitacao.php';
+                }else if(obj[7] == 'aprovacao')
+                {
+                    var pagina = 'Aprovacao.php';
+                }
+                tr += '<tr>';
+                    tr += '<td class="lalign">' + obj[0] + '</td>';
+                    tr += '<td class="lalign">' + obj[1] + '</td>';
+                    tr += '<td class="lalign">' + obj[2] + '</td>';
+                    tr += '<td class="lalign">' + obj[3] + '</td>';
+                    tr += '<td class="lalign">' + obj[4] + '</td>';
+                    tr += '<td class="lalign">' + obj[5] + '</td>';
+                    tr += '<td class="lalign">' + obj[6] + '</td>';
+                    tr += '<td><form action="principal.php?t=View/'+ pagina+'"method="post">';
+                    tr += '<input type="hidden" value=' +obj[6]+' name="revisao" id="revisao"></input>';
+                    tr += '<input type="hidden" value=' +idUsuario+' name="id_usuario" id="id_usuario"></input>';
+                    tr += '<input type="hidden" value=' +obj[0]+' name="id_solicitacao" id="id_solicitacao"></input>';
+                    tr += '<input type="submit" value="Preencher" class="ItensDistribuidos">';
+                    tr += '</form></td>';
+                    tr += '</tr>';                    
+
+            })
+            $('#rowSolicitacoes').html(tr).show();
+        }
+    })
+ }
+
+function buscaSolicitacoesDistribuicaoByFase(idUsuarioCriptografado)
+{
+    var faseDistribuirSolicitacao = $('#areaConsultaFaseItens').val();
+
+    if(faseDistribuirSolicitacao == "tramitacao")
+    {
+        //atualiza cabeçalho de acordo com a fase
+        var th = ' <th><span></span></th>';
+            th += '<th><span>Priorizar</span></th>';
+            th += '<th><span>Siscom</span></th>'; 
+            th += '<th><span>CNPJ</span></th>'; 
+            th += '<th><span>Raz\u00e3o Social</span></th>'; 
+            th += '<th><span>Gerente Neg\u00f3cio</span></th>'; 
+            th += '<th><span>Escrit\u00f3rio GN</span></th>';
+            th += '<th><span>Gn respons\u00e1vel</span></th>';
+            th += '<th><span>Status</span></th>';
+            th += '<th><span>Revis\u00e3o</span></th>';
+            th += '<th><span>Importa\u00e7\u00e3o Data</span></th>';
+            th += '<th><span>Importa\u00e7\u00e3o usu\u00e1rio</span></th>'; 
+            th += '<th><span>Origem</span></th>';
+    }
+    
+    if(faseDistribuirSolicitacao == "aprovacao")
+    {
+       //atualiza cabeçalho de acordo com a fase
+        var th = '<th><span></span></th>';
+            th += '<th><span>Priorizar</span></th>';
+            th += '<th><span>Siscom</span></th>'; 
+            th += '<th><span>CNPJ</span></th>'; 
+            th += '<th><span>Raz\u00e3o Social</span></th>'; 
+            th += '<th><span>Data Entrada Siscom</span></th>'; 
+            th += '<th><span>Produto</span></th>';
+            th += '<th><span>Servi\u00e7o</span></th>';
+            th += '<th><span>Qtde Acessos</span></th>';
+            th += '<th><span>Status</span></th>';
+            th += '<th><span>Obs</span></th>';          
+            th += '<th><span>Operador Tramita\u00e7\u00e3o</span></th>';
+            th += '<th><span>Data de Finaliza\u00e7\u00e3o Tramita\u00e7\u00e3o</span></th>';
+            th += '<th><span>Revis\u00e3o</span></th>';
+     }       
+
+    //cola o cabeçalho
+    $('#keywords thead tr').html(th).show();
+
+    //buscando os dados
+        if(faseDistribuirSolicitacao == "tramitacao")
+        {
+            //busca itens
+            $.getJSON('app/Controller/SolicitacaoController.php?opcao=buscaSolicitacoesTramitacaoDistribuir', function(dados) {
+               
+               //monta os dados
+               if (dados.length > 0) 
+               {
+                   var tr = '<tr style="display: none;"></tr>';
+                    $.each(dados, function(i, obj) {
+                        tr += '<tr>';
+                        tr += '<td><input type="checkbox" style="width: 12px;" class="checkboxSiscom" name="cod_siscom_tramitacao[]" value="' + obj[0] + '&' + obj[7] + '">';
+                        tr += '</td>';
+                        tr += '<td><input type="text" value="0" id="priorizar" name="priorizar[]" style="width: 30px;text-align: center;">';
+                        tr += '<td class="lalign">' + obj[0] + '</td>'; //Siscom
+                        tr += '<td class="lalign">' + obj[1] + '</td>'; //cnpj
+                        tr += '<td class="lalign">' + obj[2] + '</td>'; //razao_social
+                        tr += '<td class="lalign">' + obj[3] + '</td>'; //gerente negocio
+                        tr += '<td class="lalign">' + obj[4] + '</td>'; //escritorio gn
+                        tr += '<td class="lalign">' + obj[5] + '</td>'; //gn responsavel
+                        tr += '<td class="lalign">' + obj[6] + '</td>'; //status
+                        tr += '<td class="lalign">' + obj[7] + '</td>'; //revisao
+                        tr += '<td class="lalign">' + obj[8] + '</td>'; //importacao data
+                        tr += '<td class="lalign">' + obj[9] + '</td>'; //importacao_usuario
+                        tr += '<td class="lalign">' + obj[10] + '</td>'; //origem
+                        tr += '</tr>';                    
+                    })
+                }
+
+                //cola os dados
+                $('#areaConsultaFaseItensDados').html(tr).show();
+
+            }).error(function() { 
+                 var tr = '<tr><td colspan="12">Nenhum registro encontrado</td></tr>';
+
+                //cola mensagem de retorno
+                $('#areaConsultaFaseItensDados').html(tr).show();
+            })
+        }
+        else if(faseDistribuirSolicitacao == "aprovacao")
+        {
+            //busca itens
+            $.getJSON('app/Controller/SolicitacaoController.php?opcao=buscaSolicitacoesAprovacaoDistribuir&idUsuarioCriptografado=' + idUsuarioCriptografado, function(dados) {
+               
+               //monta os dados
+               if (dados.length > 0) 
+               {
+                   var tr = '<tr style="display: none;"></tr>';
+                    $.each(dados, function(i, obj) {
+                            tr += '<tr>';  
+                            tr += '<td><input type="checkbox" style="width: 12px;" class="checkboxSiscom" name="cod_siscom_aprovacao[]" value="' + obj[0] + '&' + obj[11] + '">';
+                            tr += '</td>';
+                            tr += '<td><input type="text" value="0" id="priorizar" name="priorizar[]" style="width: 30px;text-align: center;">';
+                            tr += '<td class="lalign">' + obj[0] + '</td>'; //Siscom
+                            tr += '<td class="lalign">' + obj[1] + '</td>'; //cnpj
+                            tr += '<td class="lalign">' + obj[2] + '</td>'; //razao_social
+                            tr += '<td class="lalign">' + obj[3] + '</td>'; //data entrada siscom
+                            tr += '<td class="lalign">' + obj[4] + '</td>'; //produto
+                            tr += '<td class="lalign">' + obj[5] + '</td>'; //servico
+                            tr += '<td class="lalign">' + obj[6] + '</td>'; //quantidade_acessos
+                            tr += '<td class="lalign">' + obj[7] + '</td>'; //status
+                            tr += '<td class="lalign">' + obj[8] + '</td>'; //obs
+                            tr += '<td class="lalign">' + obj[9] + '</td>'; //usuario_tramitacao
+                            tr += '<td class="lalign">' + obj[10] + '</td>'; //data
+                            tr += '<td class="lalign">' + obj[11] + '</td>'; //revisao
+                            tr += '</tr>';  
+                    })                 
+
+                    //cola os dados
+                    $('#areaConsultaFaseItensDados').html(tr).show();
+                }
+            }).error(function() { 
+                 var tr = '<tr><td colspan="15">Nenhum registro encontrado</td></tr>';
+
+                //cola mensagem de retorno
+                $('#areaConsultaFaseItensDados').html(tr).show();
+            })
+        }
+
+    //carrega usuarios
+
+    if(faseDistribuirSolicitacao == "tramitacao")
+    {
+        var option = '<option>Selecione o operador</option>';
+        //carregar os usuarios de acordo com a fase
+        $.getJSON('app/Controller/SolicitacaoController.php?opcao=buscaSolicitacoesTramitacaoOperador&idUsuarioCriptografado=' + idUsuarioCriptografado, function(dadosOperadores) {
+            //monta os dados
+           if (dadosOperadores.length > 0) 
+           {
+                
+                $.each(dadosOperadores, function(i, obj) {
+                    if(obj[0] == "S"){ 
+                        option += '<option style="font-weight: bold;" value="'+ obj[0]+'">'+ obj[1] + ' - ' + obj[2] + ' (Pedidos) </option>';
+                    }else{
+                        option += '<option value="'+ obj[0]+'">'+ obj[1] + ' - ' + obj[2] + ' (Pedidos) </option>';
+                    }
+                })
+
+                $('#operadorDistribuir').html(option).show();
+           }
+        })
+
+    }else if(faseDistribuirSolicitacao == "aprovacao")
+    {
+        var option = '<option>Selecione o operador</option>';
+        $.getJSON('app/Controller/SolicitacaoController.php?opcao=buscaSolicitacoesAprovacaoOperador&idUsuarioCriptografado=' + idUsuarioCriptografado + '&fase=' + faseDistribuirSolicitacao, function(dadosOperadores) {
+            //monta os dados
+           if (dadosOperadores.length > 0) 
+           {
+                $.each(dadosOperadores, function(i, obj) { 
+                    if(obj[3] == "S"){
+                        option += '<option style="font-weight: bold;" value="'+ obj[0]+'">'+ obj[1] + ' - ' + obj[2] + ' (Pedidos) </option>';
+                    }else{
+                        option += '<option value="'+ obj[0]+'">'+ obj[1] + ' - ' + obj[2] + ' (Pedidos) </option>';
+                    }
+                })
+                $('#operadorDistribuir').html(option).show();
+           }
+        })
+    }
+}
+
+
+function enviarSolicitacao(dados, idUsuario, acao, fase) 
+{
+    //get checkbox selected
+    solicitacoesMarcadas = new Array();
+
+    //get operador
+    if (acao == 'red') 
+    {
+        if($('#faseRedistribuicao').val() == null){
+            alert("Nenhuma fase selecionada!");
+            return;
+        }else if($('#operadorRedistribuir').val() == null){
+            alert("Nenhuma usuario selecionado!");
+            return;
+        }else{
+            var operador = $('#operadorRedistribuir').val();
+            var fase = $('#faseRedistribuicao').val();
+            var ids = $('#nSolicitacaoRedistribuicao').val();
+            var source = "redistribuicao";
+            var supervisorid = idUsuario;
+            var ngs = $('#nGsRedistribuicao').val();
+
+            if(ids != undefined)
+                solicitacoesMarcadas.push(ids + '&' + $('#revisaor').text());
+            else if(ngs != undefined)
+                solicitacoesMarcadas.push(ngs + '&' + $('#revisaor').text());
+        }
+    } 
+    else if (acao == 'dist') 
+    {
+         if($('#operadorDistribuir').val() == null || $('#operadorDistribuir').val() == "Selecione o operador"){
+            alert("Nenhuma usuario selecionado!");
+            return;
+        }
+
+        var fase = $('#areaConsultaFaseItens').val();
+
+        var OperadorId = $('#operadorDistribuir').val();
+
+        if (fase == 'tramitacao') 
+        {
+
+            $("input[type=checkbox][name='cod_siscom_tramitacao[]']:checked").each(function() 
+            {
+                var priorizar = $(this).parent().next().find('input').val();
+                if(priorizar == null || priorizar == undefined || priorizar == "")
+                {
+                    priorizar = 0;
+                }
+
+                solicitacoesMarcadas.push($(this).val() + '&' + priorizar);
+            });
+
+            //verifica se existem checkbox selecionados
+            if (solicitacoesMarcadas.length == 0) 
+            {
+                alert("Nenhuma solicita\u00e7\u00e3o selecionada!");
+                return;
+            }
+
+            var operador = OperadorId;
+            var source =  "distribuicao_sup";
+        } 
+        else if (fase == 'aprovacao') 
+        {
+            
+            $("input[type=checkbox][name='cod_siscom_aprovacao[]']:checked").each(function() 
+            {
+                var priorizar = $(this).parent().next().find('input').val();
+                if(priorizar == null || priorizar == undefined || priorizar == ""){
+                    priorizar = 0;
+                }
+                solicitacoesMarcadas.push($(this).val() + '&' + priorizar);
+            });
+
+            //verifica se existem checkbox selecionados
+            if (solicitacoesMarcadas.length == 0)
+            {
+                alert("Nenhuma solicita\u00e7\u00e3o selecionada!");
+                return;
+            }
+
+            var operador = OperadorId;
+            var source =  "distribuicao_sup";
+        }
+    }
+    else if(acao == 'solicitacao_manual')
+    {
+        if(fase == 'tramitacao')
+        {
+
+            var n_solicitacao =  $('#n_solicitacao_manual').val();
+            var data_recebimento = $('#data_recebimento_solicitacao').val();
+            var operador = idUsuario;
+            
+            solicitacoesMarcadas.push(n_solicitacao);
+            var source =  "distribuicao_manual";
+
+            if(n_solicitacao == "" || data_recebimento == "")
+            {
+                alert("Preencha todos os campos!");
+                return;
+            }
+
+        }
+    }
+
+    //get supervisor id
+    var supervisorid = idUsuario;
+
+    //checking correct url
+    if (acao == 'red') 
+    {
+        var url = "principal.php?t=Controller/SolicitacaoController.php";
+        var msgRequisicao = "Redistribui\u00e7\u00e3o feita com sucesso";
+        var opcao = "redistribuirSolicitacoes";
+    } 
+    else if (acao == 'dist') 
+    {
+        var url = "principal.php?t=Controller/SolicitacaoController.php";
+        var msgRequisicao = "Distribui\u00e7\u00e3o feita com sucesso";
+        var opcao = "distribuirSolicitacoes";
+    } 
+    else if(acao == 'solicitacao_manual')
+    {
+         var url = "principal.php?t=controles/sql_distribuir_solicitacoes.php";
+         var msgRequisicao = "Solicita\u00e7\u00e3o habilitada para preenchimento";
+    }
+
+
+    //call ajax function
+    $.ajax({
+        type: "POST",
+        data: { sm: solicitacoesMarcadas, op: operador, sup: supervisorid, fase: fase, source:source, data:data_recebimento, opcao:opcao},
+        url: url,
+        success: function(data) {
+            alert(msgRequisicao);
+            document.location.replace('../fixa_top/principal.php?id='+idUsuario+'&t=View/home.php');
+        }
+    });
+}
+
+
+ 

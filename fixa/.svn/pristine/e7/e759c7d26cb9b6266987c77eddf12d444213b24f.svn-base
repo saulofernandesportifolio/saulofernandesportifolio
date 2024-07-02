@@ -1,0 +1,107 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+include("../fixa/bd.php");
+include("../fixa/site/funcoes/f_geral.php");
+require_once '../fixa/site/classes/cripto.php';
+require_once '../fixa/site/classes/SolicitacaoTramitacao.php';
+
+$tempo = 0;
+set_time_limit($tempo);
+date_default_timezone_set("Brazil/East");
+$data_cadastro=date("Y-m-d H:i:s");
+?>
+
+<?php
+    $id_usuario_tramitacao= $_GET['id'];
+    $id_solicitacao =  $_GET['ids'];
+    $id_usuario_tramitacao = $cripto->decodificar($id_usuario_tramitacao);   
+    $revisao = $_GET['rev'];
+
+?>
+
+<?php
+    $cripto = new cripto();
+    $SolicitacaoTramitacao = new SolicitacaoTramitacao();
+
+    //constroi solicitacao
+    $SolicitacaoTramitacao->constroiSolicitacaoTramitacao($SolicitacaoTramitacao, $id_usuario_tramitacao, $id_solicitacao, $_POST['devolucao'], $_POST['status_solicitacao'], $_POST['aprovacao'], $_POST['data_encerramento'], $_POST['n_oport_proposta'], $_POST['obs'], $data_cadastro);
+
+    //valida campos obrigatórios
+    if($SolicitacaoTramitacao->validaCamposObrigatorios($SolicitacaoTramitacao) == 1)
+    {
+            echo" <script> 
+                    alert('Por favor preencher todos os campos obrigatórios !');
+                    history.back();
+                  </script>
+                  "; 
+                  exit();   
+    }
+   
+     //formata campos data
+     //$SolicitacaoTramitacao->data_encerramento = formataDataBD($SolicitacaoTramitacao->data_encerramento);
+    
+
+    //valida se inputs variaveis foram ativados
+    if (isset($_POST['data_devolucao']))
+    {
+      $SolicitacaoTramitacao->data_devolucao = $_POST['data_devolucao'];
+    }
+    else
+    {
+      $SolicitacaoTramitacao->data_devolucao = '';
+    }
+
+    if(isset($_POST['chamado_remedy']))
+    {
+        $SolicitacaoTramitacao->chamado_remedy = $_POST['chamado_remedy'];
+    }
+    else
+    {
+        $SolicitacaoTramitacao->chamado_remedy = '';
+    }
+
+    //busca revisao
+    $SolicitacaoTramitacao->revisao = $revisao;
+    
+    //busca informacoes ja inseridas na fase de pretramitacao
+    $SolicitacaoTramitacao = $SolicitacaoTramitacao->buscaObjetoByIdsolicitacao($SolicitacaoTramitacao, $SolicitacaoTramitacao->siscom, $revisao);
+
+    //insere dados em variavel para proc
+    $dadosProc = '&'. $SolicitacaoTramitacao->id_usuario_tramitacao
+               . '&'. $SolicitacaoTramitacao->siscom 
+               . '&'. $SolicitacaoTramitacao->data_encerramento
+               . '&'. $SolicitacaoTramitacao->id_status_solic_tramitacao
+               . '&'. $SolicitacaoTramitacao->data_devolucao
+               . '&'. $SolicitacaoTramitacao->devolucao
+               . '&'. $SolicitacaoTramitacao->aprovado
+               . '&'. $SolicitacaoTramitacao->reg_dt_entrada
+               . '&'. $SolicitacaoTramitacao->n_oportunidade_propostas
+               . '&'. $SolicitacaoTramitacao->obs
+               . '&'. $SolicitacaoTramitacao->cat_produto              
+               . '&'. $SolicitacaoTramitacao->id_canal_entrada         
+               . '&'. $SolicitacaoTramitacao->id_produto               
+               . '&'. $SolicitacaoTramitacao->tipo_solicitacao
+               . '&'. $SolicitacaoTramitacao->complemento_tipo_solicitacao              
+               . '&'. $SolicitacaoTramitacao->cnpj                     
+               . '&'. $SolicitacaoTramitacao->razao_social             
+               . '&'. $SolicitacaoTramitacao->qtd_acessos              
+               . '&'. $SolicitacaoTramitacao->n_gestao_servicos        
+               . '&'. $SolicitacaoTramitacao->data_abertura_gestao     
+               . '&'. $SolicitacaoTramitacao->data_entrada_siscom
+               . '&'. $SolicitacaoTramitacao->chamado_remedy
+               . '&'. $SolicitacaoTramitacao->revisao;     
+
+   
+    $sql_exec="CALL solicitacao_tramitacao('$dadosProc');";
+
+    $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+   
+      echo" <script> 
+        alert('Solicitação cadastrada com sucesso!');
+          document.location.replace('principal.php?t=views/home.php');
+        </script>
+        ";                                       
+    exit();
+   
+?>

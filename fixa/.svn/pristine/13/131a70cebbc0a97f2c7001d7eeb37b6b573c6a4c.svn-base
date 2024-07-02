@@ -1,0 +1,60 @@
+<?php
+
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$sql_operador="SELECT id_perfil FROM v_geral_usuario_info WHERE id_usuario=$id_usuario";
+$acao_operador = mysql_query($sql_operador) or die (mysql_error());
+		
+        while($linha_operador = mysql_fetch_assoc($acao_operador))
+        {
+          $id_perfil          = $linha_operador["id_perfil"];
+	    }
+
+?>
+
+
+
+<div id="main-container">
+    <!-- HEADER -->
+    <div id="menu_options">
+		<ul class="header-menu horizontal-list">
+			<li  class="menu_li" onClick="document.location.href='principal.php?t=forms/home.php'">Home</li>
+
+			<?php if($id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10){?>
+			<li  class="menu_li" onClick="document.location.href='principal.php?id=<?php echo $cripto->codificar($id_usuario)?>&t=forms/form_upload_base.php'">Upload de base</li>
+		    <li  class="menu_li" onClick="document.location.href='principal.php?t=forms/formusuariospesquisa.php'">Usuários</li>
+			<li  class="menu_li" onClick="document.location.href='principal.php?t=forms/form_distribuicao.php'">Distribuição</li>
+			 <?php } ?>
+			<li  class="menu_li">Operador
+				<ul>
+				<?php if($id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10 || $id_perfil == 5 || $id_perfil == 8 || $id_perfil == 9){?>
+			      <li style="width:158px;" onClick="document.location.href='principal.php?t=forms/form_operador.php'">Formulário Pré-Tramitação</li>
+			    <?php } ?>
+
+			    <?php if($id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10 || $id_perfil == 6 || $id_perfil == 8 || $id_perfil == 9){?>
+			      <li style="width:158px;" onClick="#'">Formulário Tramitação</li>
+			    <?php } ?>
+			    
+			    <?php if($id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10 || $id_perfil == 7 || $id_perfil == 8 || $id_perfil == 9){?>
+			      <li style="width:158px;" onClick="#'">Formulário Pós-Tramitação</li>
+			    <?php } ?>
+			    </ul>
+			</li>
+		</ul>
+	</div>
+	<div id="menu_usuario">
+		<ul class="header-menu horizontal-list" >
+			<li  class="menu_li" id="usuario"><?php echo $nome . ' - ' . $perfil ?>
+					<ul>
+				      <li onClick="document.location.href='principal.php?id=<?php echo $cripto->codificar($id_usuario)?>&t=forms/formalterasenha.php'">Alterar Senha
+				      </li>
+					   <li  onClick="document.location.href='logout.php'">Logout</li>
+				    </ul>
+				</li>
+			</ul>
+	</div>
+</div>
+
+

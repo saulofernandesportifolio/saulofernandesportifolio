@@ -1,0 +1,33 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+table#table_menu{
+	width:100px;
+	height:30px;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:13px;
+	background-color:#C0C0C0;
+   
+}
+
+td#td_menu{
+	cursor:pointer;
+	color:#FFFFFF;
+	font-family:Verdana, Geneva, sans-serif;
+	font-size:13px;
+	font-weight:bold;
+	padding-left:5px;
+    padding-right:5px;
+	border-bottom:#000000 2px;
+    text-align: center;
+    
+    
+}
+td#td_menu:hover{
+    color: black; 
+    background-color: #E6E6E6;
+}
+/*tr#tr_menu:hover{
+    background-color: #E6E6E6; 
+}*/

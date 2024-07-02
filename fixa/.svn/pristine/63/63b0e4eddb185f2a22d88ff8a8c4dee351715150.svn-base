@@ -1,0 +1,129 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+    include("../fixa/bd.php");
+
+    $tempo = 0;
+
+    set_time_limit($tempo);
+    date_default_timezone_set("Brazil/East");
+
+    $data_cadastro=date("Y-m-d H:i:s");
+
+    include("../fixa/site/funcoes/f_geral.php");
+    require_once '../fixa/site/classes/cripto.php';
+
+    $cripto = new cripto();
+
+    $id_usuario= $_GET['id'];
+
+    $id_usuario = $cripto->decodificar($id_usuario);
+
+    $acao = $_GET['acao'];
+
+    if($acao == "ef"){
+      $nsiscom = $_GET['ids'];
+    }else{
+      $nsiscom = $_POST['siscom'];
+    }
+
+    //valida campos obrigatórios
+    if(
+        ($nsiscom  == "")                   ||
+        ($_POST['n_pact_siscom'] == "")     ||
+        empty($_POST['cat_prod'])           ||
+        empty($_POST['canal_entrada'])      ||
+        empty($_POST['servicos'])           ||
+        empty($_POST['produto'] )           ||    
+        empty($_POST['tipo_solicitacao'] )  ||  
+        empty($_POST['data_receb'])         ||
+        empty($_POST['cnpj'])               ||
+        empty($_POST['razao_social'])       ||
+        ($_POST['qtd_acessos'] == "")       ||    
+        ($_POST['n_gs'] == "")              ||
+        empty($_POST['status_solicitacao']) ||
+        empty($_POST['aprovacao'])
+    ) 
+    {
+      echo" <script> 
+              alert('Por favor preencher todos os campos obrigatórios !');
+              history.back();
+            </script>
+            "; 
+            exit();   
+    }
+
+    if ($acao == "nf") {
+      //valida siscom
+      $query_valida_siscom = mysql_query("SELECT siscom FROM pre_tramitacao WHERE siscom != 0 and siscom = '{$nsiscom}'");
+
+      //passar nsiscom como parametro para validar se usuario alterou nsiscom, se for igual nao passa pela validação abaixo 
+      if(mysql_affected_rows() > 0){
+        echo" <script> 
+                alert('Número do Siscom já cadastrado na base!');
+                history.back();
+              </script>
+              "; 
+            exit();   
+      }
+    }
+
+     //formata campos data
+     $data_receb = formataDataBD($_POST['data_receb']);
+     $data_abertura_gestao = formataDataBD($_POST['data_abertura_gestao']);
+    
+
+    //valida se inputs variaveis foram ativados
+    if (isset($_POST['motivo_devolucao'])){$motivo_devolucao = $_POST['motivo_devolucao'];}else{$motivo_devolucao = '';}
+    if (isset($_POST['area_devolucao'])){$area_devolucao = $_POST['area_devolucao'];}else{$area_devolucao = '';}
+    if (isset($_POST['data_devolucao'])){$data_devolucao = formataDataBD($_POST['data_devolucao']);}else{$data_devolucao = '';}
+
+    //insere dados em variavel para proc
+    $dadosProc = '&'. $id_usuario 
+               . '&'. $nsiscom
+               . '&'. $_POST['cat_prod']
+               . '&'. $_POST['canal_entrada']
+               . '&'. $data_receb
+               . '&'. $_POST['n_pact_siscom']
+               . '&'. $_POST['produto']
+               . '&'. $_POST['tipo_solicitacao']
+               . '&'. $_POST['servicos']
+               . '&'. $_POST['cnpj']
+               . '&'. $_POST['razao_social']
+               . '&'. $_POST['qtd_acessos']
+               . '&'. $_POST['n_gs']
+               . '&'. $data_abertura_gestao
+               . '&'. $_POST['status_solicitacao']
+               . '&'. $_POST['obs']
+               . '&'. $motivo_devolucao
+               . '&'. $area_devolucao
+               . '&'. $data_devolucao
+               . '&'. $_POST['devolucao']
+               . '&'. $_POST['aprovacao']
+               . '&'. $data_cadastro;
+
+
+    if ($acao == "nf") {
+        $sql_exec="CALL solicitacao_pretramitacao('$dadosProc', 'nf');";
+    } else if($acao == "ef"){
+      $sql_exec="CALL solicitacao_pretramitacao('$dadosProc', 'ef');";
+    }
+
+    $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+    if ($acao == "nf") {
+      echo" <script> 
+        alert('Solicitação cadastrada com sucesso!');
+          document.location.replace('principal.php?t=views/home.php');
+        </script>
+        ";
+    } else if($acao == "ef"){
+      echo" <script> 
+        alert('Solicitação editada com sucesso!');
+          document.location.replace('principal.php?t=views/home.php');
+        </script>
+        ";
+    }                                        
+    exit();
+   
+?>

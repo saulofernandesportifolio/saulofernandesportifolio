@@ -1,0 +1,247 @@
+<?php
+//setup default
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+
+//get info of user
+$buscarPerfil=mysql_query(
+    "SELECT  
+        id_perfil
+    FROM usuario 
+   where
+    id_usuario = $id_usuario"
+);  
+
+while($linha=mysql_fetch_array($buscarPerfil)){ 
+		$id_perfil = $linha['id_perfil'];
+}
+?>
+
+<script type="text/javascript">
+ 
+$(document).ready(function() {
+
+	 $("#qtd_itens_pret").on('click', function() {
+   		$( "#t_i_pre" ).css({"display": ""});
+   		$( "#div_form_gcom" ).css({"display": "none"});
+   		$( "#div_form_intragov" ).css({"display": "none"});
+   		$( "#div_form_pretramitacao" ).css({"display": "none"});
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#t_i_p" ).css({"display":"none"});
+   		$( "#table_tramitacao_itens_op" ).css({"display":"none"});
+    });
+
+     $("#form_intragov").on('click', function() {
+   		$( "#div_form_intragov" ).css({"display": ""});
+   		$( "#div_form_gcom" ).css({"display": "none"});
+   		$( "#div_form_pretramitacao" ).css({"display": "none"});
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#t_i_p" ).css({"display":"none"});
+   		$( "#table_tramitacao_itens_op" ).css({"display":"none"});
+   		$( "#t_i_pre" ).css({"display": "none"});
+    });
+
+     $("#form_gcom").on('click', function() {
+   		$( "#div_form_gcom" ).css({"display": ""});
+   		$( "#div_form_intragov" ).css({"display": "none"});
+   		$( "#div_form_pretramitacao" ).css({"display": "none"});
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#t_i_p" ).css({"display":"none"});
+   		$( "#table_tramitacao_itens_op" ).css({"display":"none"});
+   		$( "#t_i_pre" ).css({"display": "none"});
+    });
+
+    $("#cancelar").on('click', function(){
+    	$( "#t_m_d" ).css({"display":""});
+    	$( "#div_form_pretramitacao" ).css({"display": "none"});
+    	$( "#div_form_intragov" ).css({"display": "none"});
+   		$( "#div_form_gcom" ).css({"display": "none"});
+   		$( "#t_i_pre" ).css({"display": "none"});
+    });
+
+    $("#qtd_itens_pt").on('click', function() {
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#t_i_p" ).css({"display":""});
+   		$( "#distribuir_table" ).css({"display": "none"});
+   		$( "#t_i_pre" ).css({"display": "none"});
+    });
+
+     $("#qtd_itens_t").on('click', function() {
+ 		$( "#table_tramitacao_itens_op" ).css({"display":""});
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#distribuir_table" ).css({"display": "none"});
+   		$( "#t_i_pre" ).css({"display": "none"});
+    });
+
+    $("#qtd_itens_post").on('click', function() {
+ 		$( "#table_postramitacao_itens_op" ).css({"display":""});
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#distribuir_table" ).css({"display": "none"});
+   		$( "#t_i_pre" ).css({"display": "none"});
+    });
+
+
+     $("#solicitacao_redistribuicao").on('click', function() {
+     	 window.location.href = $('#solicitacao_redistribuicao').attr('href');
+    });
+
+     $("#solicitacao_tramitacao_itens_op").on('click', function() {
+     	 window.location.href = $('#solicitacao_tramitacao_itens_op').attr('href');
+    });
+
+});
+
+</script>
+
+<div class="tela_principal_dasbboard">
+	<div id="menu_vertical_f">
+		<ul class="menu_vertical">
+			<li class="menu_vertical">
+      			<i class="fa fa-bars icones_style"></i>
+    			<a id="forms_preenchidos">Formulários Preenchidos</a>
+   			 </li>
+    		<?php if($id_perfil == 9 || $id_perfil == 1 || $id_perfil == 2){?>
+    		<li class="menu_vertical">
+      			<i class="fa fa-bars icones_style"></i>
+    			<a id="form_intragov">Formulário Intragov</a>
+   			 </li>
+    		<?php }?>
+    		<?php if($id_perfil == 8 || $id_perfil == 1 || $id_perfil == 2){?>
+    		<li class="menu_vertical">
+      			<i class="fa fa-bars icones_style"></i>
+    			<a id="form_gcom">Formulário GCOM</a>
+   			 </li>
+    		<?php }?>
+    		<?php if($id_perfil == 5 || $id_perfil == 1 || $id_perfil == 2){?>
+    		<li class="menu_vertical">
+      			<i class="fa fa-bars icones_style"></i>
+    			<a href="principal.php?&id=<?php echo $cripto->codificar($id_usuario)?>&t=views/form_pretramitacao_manual.php" id="form_pre_tramitacao_manual">Formulário Pré-Tramitação</a>
+   			 </li>
+    		<?php }?>
+		</ul>
+	</div>
+	<div id="t_m_d" style="float: left;">
+		      	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query("SELECT 
+												count(id_solicitacao) AS quantidade,
+												'Pré-Tramitação' AS fase,
+												pre_tramitacao AS status 
+											FROM 
+												solicitacao_fases 
+											WHERE 
+												pre_tramitacao = 'Com operador' AND 
+												id_usuario_resp = $id_usuario
+											UNION
+											SELECT 
+												count(id_solicitacao) AS quantidade,
+												'Pré-Tramitação' AS fase,
+												pre_tramitacao AS status  
+											FROM 
+												solicitacao_fases 
+											WHERE 
+												pre_tramitacao = 'Em edição' AND 
+												id_usuario_resp = $id_usuario
+											UNION
+			     							SELECT 
+												count(id_solicitacao) AS quantidade,
+												'Tramitação' AS fase,
+												tramitacao AS status  
+											FROM 
+												solicitacao_fases 
+											WHERE 
+												tramitacao = 'Com operador' AND 
+												id_usuario_resp = $id_usuario
+											UNION
+											SELECT 
+												count(id_solicitacao) AS quantidade,
+												'Pós-Tramitação' AS fase,
+												pos_tramitacao AS status  
+											FROM 
+												solicitacao_fases 
+											WHERE 
+												pos_tramitacao = 'Com operador' AND 
+												id_usuario_resp = $id_usuario
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){                   
+				        ?>          
+				         
+				        <p>
+				        	<?php if($id_perfil == 5 || $id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10){?>
+					        	<?php if ($linha['fase'] == 'Pré-Tramitação' && $linha['status'] == 'Com operador'){?>
+						        	Número de solicitações de pré-tramitação a serem preenchidas: 
+						        	<?php if($linha['quantidade'] >  0){ ?>
+						        	<a id="qtd_itens_pret" href="#"> 
+						        		<?php echo $linha['quantidade']; ?>  
+						        	</a>
+				        	<?php 
+				        			}
+				   				}
+				        	} 
+				        	?>
+				        </p>
+				         <p>
+				        	<?php if($id_perfil == 5 || $id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10){?>
+					        	<?php if ($linha['fase'] ==  'Pré-Tramitação' && $linha['status'] == 'Em edição'){?>
+						        	Número de solicitações de pré-tramitação a serem repreenchidas: 
+						        	<?php if($linha['quantidade'] >  0){ ?>
+						        	<a id="qtd_itens_pt" href="#"> 
+						        		<?php echo $linha['quantidade']; ?>  
+						        	</a>
+				        	<?php 
+				        			}
+				   				}
+				        	} 
+				        	?>
+				        </p>
+				        <p>
+				        	<?php if($id_perfil == 6 || $id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10){?>
+					        	<?php if ($linha['fase'] ==  'Tramitação'){?>
+						        	Número de solicitações de tramitação a serem preenchidas: 
+						        	<?php if($linha['quantidade'] >  0){ ?>
+						        	<a id="qtd_itens_t" href="#"> 
+						        		<?php echo $linha['quantidade']; ?>  
+						        	</a>
+				        	<?php 
+				        			}
+			        			}
+				        	} 
+				        	?>
+				        </p>
+				        <p>
+				        	<?php if($id_perfil == 7 || $id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10){?>
+					        	<?php if ($linha['fase'] ==  'Pós-Tramitação'){?>
+						        	Número de solicitações de pós-tramitação a serem preenchidas: 
+						        	<?php if($linha['quantidade'] >  0){ ?>
+						        	<a id="qtd_itens_post" href="#"> 
+						        		<?php echo $linha['quantidade']; ?>  
+						        	</a>
+				        	<?php 
+				        			}
+			        			}
+				        	} 
+				        	?>
+				        </p>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>
+	<?php include("form_gcom.php");?>
+	<?php include("form_intragov.php");?>
+	<?php include("v_tabela_itens_edicao.php");?>
+	<?php include("v_itens_tramitacao_op.php");?>
+	<?php include("v_itens_postramitacao_op.php");?>
+	<?php include("v_tabela_itens_pre_tramitacao.php");?>
+</div>

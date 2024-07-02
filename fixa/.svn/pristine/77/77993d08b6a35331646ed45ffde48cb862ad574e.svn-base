@@ -1,0 +1,68 @@
+<div id="t_tram" style="display: none;">
+		<table class="tabelas_dashboard">
+		<caption><h2>Formulários Preenchidos Tramitação</h2></caption>
+			<thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Operador</th>
+                    <th>Fase</th>
+                    <th>Solicitação</th>
+                    <th>Status</th>
+                    <th>Nº GS</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarsolicitacao=mysql_query("SELECT v.data_hora, v.analista_tramitacao, v.siscom, sf.tramitacao, v.n_gestao_servicos
+			     									FROM v_geral_tramitacao v
+			     										INNER JOIN solicitacao_fases sf
+			     											ON v.siscom = sf.id_solicitacao
+			     										WHERE v.id_supervisor = (
+			     											SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario)
+			     											ORDER BY data_hora DESC");
+
+			     	if(mysql_affected_rows() > 0){
+						while($linhaspt=mysql_fetch_array($buscarsolicitacao)){                   
+			        ?>          
+			         <tr>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['data_hora']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['analista_tramitacao']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo "Tramitação"; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($linhaspt['siscom'])?>&form=t&t=views/v_form_dados.php">
+			                <?php echo $linhaspt['siscom'];  ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['tramitacao']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['n_gestao_servicos']; ?>
+			              </a>
+				        </td>
+			          </tr>
+			     <?php 
+		     			}
+		          }
+			     ?>
+           </tbody>
+		</table>
+	</div>

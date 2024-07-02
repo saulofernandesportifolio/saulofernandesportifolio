@@ -1,0 +1,106 @@
+<script type="text/javascript">
+
+$(document).ready(function(){
+    
+   $("#tabela_itens_processo_postramitacao").dataTable({  
+        
+		  "oLanguage": {
+		    
+		    "sProcessing": "Aguarde enquanto os dados s&atilde;o carregados ...",
+		    "sLengthMenu": "Mostrar _MENU_ ",
+		    "sZeroRecords": "Nenhum registro encontrado",
+		    "sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",
+		    "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+		    "sInfoFiltered": "",
+		    "sSearch": "Procurar",
+		    "oPaginate": {
+		       "sFirst":    "Primeiro",
+		       "sPrevious": "Anterior",
+		       "sNext":     "Pr&oacute;ximo",
+		       "sLast":     "&uacute;ltimo"
+		    }
+		 }                              
+	}); 
+
+	var oTable;
+
+    /* Add a click handler to the rows - this could be used as a callback */
+    $("#tabela_itens_processo_postramitacao tbody tr").click( function( e ) {
+        if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+    });
+     
+    /* Add a click handler for the delete row */
+    $('#delete').click( function() {
+        var anSelected = fnGetSelected( oTable );
+        if ( anSelected.length !== 0 ) {
+            oTable.fnDeleteRow( anSelected[0] );
+        }
+    });
+     
+    /* Init the table */
+    oTable = $('#tabela_itens_processo_postramitacao').dataTable( );
+} );
+ 
+ 
+/* Get the rows which are currently selected */
+function fnGetSelected( oTableLocal )
+{
+    return oTableLocal.$('tr.row_selected');
+}
+
+</script>
+<div id="t_i_pos">
+		<table id="tabela_itens_processo_postramitacao" class="tabelas_dashboard">
+		<caption class="textoParagrafo"><h2 style="color: #7b682e;">Itens a preencher</h2></caption>
+			<thead>
+                <tr>
+                    <th class="textoParagrafo">Solicitação</th>
+                    <th class="textoParagrafo">Nº GS</th>
+                    <th class="textoParagrafo">Data Recebimento</th>
+                    <th class="textoParagrafo">Revisão</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query("SELECT 
+												sf.id_solicitacao,
+												sf.id_gestao_servicos,
+												date_format(sf.data_ultima_acao,'%d/%m/%Y %H:%i:%s') AS data_hora,
+												sf.revisao
+											FROM 
+												solicitacao_fases sf 
+											WHERE 
+												sf.id_usuario_resp = $id_usuario AND
+												sf.pos_tramitacao = 'Com operador' AND
+												sf.tramitacao = 'Concluído'
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){                   
+				        ?>          
+			         <tr>
+			            <td class="colunas-centralizados">
+			               		<a id="solicitacao_pos_tramitacao_itens_op" href="principal.php?&rev=<?php echo $linha['revisao']?>&id=<?php echo $cripto->codificar($id_usuario)?>&ids=<?php echo $linha['id_solicitacao']?>&t=views/form_pos_tramitacao.php">
+			              			<?php echo $linha['id_solicitacao']; ?>
+		              			</a>
+			            </td>
+			            <td><?php echo $linha['id_gestao_servicos']; ?></td>
+			            <td><?php echo $linha['data_hora']; ?></td>
+			            <td><?php echo $linha['revisao']; ?></td>
+			          </tr>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>

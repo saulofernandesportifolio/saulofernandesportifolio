@@ -1,0 +1,105 @@
+<div id="redistribuir_table" style="display: none">
+	<table class="tabelas_dashboard">
+	<caption><h2>Redistribuir Formulários</h2></caption>
+		<thead>
+            <tr>
+            	<th></th>
+                <th>Data</th>
+                <th>Operador</th>
+                <th>Fase</th>
+                <th>Solicitação</th>
+                <th>Status</th>
+                <th>Nº GS</th>
+            </tr>
+        </thead>
+        <tbody>
+       	 <?php 
+ 
+		      include("../fixa/bd.php");
+		       
+		     	$buscarsolicitacao=mysql_query("SELECT v.data_hora, v.analista_pre, v.id_solicitacao, sf.pre_tramitacao, 
+													v.n_gestao_servicos
+			     									FROM v_geral_pre_tramitacao v
+			     										INNER JOIN solicitacao_fases sf
+			     											ON v.id_solicitacao = sf.id_solicitacao
+			     										WHERE v.id_supervisor = (
+			     											SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario
+			     											)
+			     											AND sf.tramitacao = 'Não preenchido'
+			     											ORDER BY data_hora DESC"
+ 											);
+
+		     	if(mysql_affected_rows() > 0){
+					while($linhaspt=mysql_fetch_array($buscarsolicitacao)){                   
+			        ?>          
+			         <tr>
+			         	<td>
+			         		<input type="checkbox" style="width: 12px;" class="checkboxSiscom" name="cod_siscom[]" value="<?php echo $linhaspt['id_solicitacao']; ?>">
+			         	</td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['data_hora']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['analista_pre']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo "Pré-Tramitação"; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($linhaspt['id_solicitacao'])?>&form=pt&t=views/v_form_dados.php">
+			                <?php echo $linhaspt['id_solicitacao'];  ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['pre_tramitacao']; ?>
+			              </a>
+				        </td>
+				        <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhaspt['n_gestao_servicos']; ?>
+			              </a>
+				        </td>
+			          </tr>
+		     <?php 
+		          	}
+	          	}
+		     ?>
+       </tbody>
+	</table>
+	<br/>
+		<div class="div_forms">
+			<label>Escolha o operador:</label>
+			<select name="operadorRedistribuir" id="operadorRedistribuir" class="txt2comboboxpadrao bradius" required>
+				<?php 
+					$buscarOperador=mysql_query(
+			            "SELECT distinct 
+			                id_usuario, 
+			                nome
+			            FROM usuario 
+			           where
+			            id_supervisor = (SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario)
+			            AND id_perfil = 5"
+		            );  
+
+					while($linha=mysql_fetch_array($buscarOperador)){ 
+					?>  
+				   		<option value="<?php echo $linha['id_usuario']; ?>">
+				   			<?php echo $linha['nome']; ?>
+			   			</option>
+		   			<?php 
+		          		}
+		     		?>
+		  	</select>
+		</div>
+		<br/>
+		<input name="bt_enviar" onclick="enviarSolicitacao(this, <?php echo  $id_usuario?>, 'red');" id="bto_enviar" type="button" value="Salvar" class="sb2 bradius" />
+		<input type="button" id="bto_limpar" value="Limpar" class="sb2 bradius"/>
+		<input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" onClick="document.location.href='principal.php?id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_area_supervisor.php'"/>
+</div>

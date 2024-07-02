@@ -1,0 +1,436 @@
+<?php
+include("../fixa/bd.php");
+require_once '../fixa/site/classes/cripto.php';
+require_once '../fixa/site/classes/SolicitacaoTramitacao.php';
+$cripto = new cripto();
+?>
+
+<?php
+//parametros
+$id_solicitacao = $_GET['ids']; 
+$id_usuario = $_GET['id']; 
+$id_usuario = $cripto->decodificar($id_usuario);
+$revisao = $_GET['r'];
+
+$SolicitacaoTramitacaoDone = new SolicitacaoTramitacao();
+$SolicitacaoTramitacaoDone->buscaObjetoCompletoByIdSolicitacao($SolicitacaoTramitacaoDone, $id_solicitacao, $revisao);
+
+if($SolicitacaoTramitacaoDone->data_encerramento != "")
+{
+	$SolicitacaoTramitacaoDone->data_encerramento = explode("-", $SolicitacaoTramitacaoDone->data_encerramento);
+	$SolicitacaoTramitacaoDone->data_encerramento = $SolicitacaoTramitacaoDone->data_encerramento[2] . $SolicitacaoTramitacaoDone->data_encerramento[1] . $SolicitacaoTramitacaoDone->data_encerramento[0];
+}
+
+if($SolicitacaoTramitacaoDone->data_abertura_gestao != "")
+{
+	$SolicitacaoTramitacaoDone->data_abertura_gestao = explode("-", $SolicitacaoTramitacaoDone->data_abertura_gestao);
+	$SolicitacaoTramitacaoDone->data_abertura_gestao = $SolicitacaoTramitacaoDone->data_abertura_gestao[2] . $SolicitacaoTramitacaoDone->data_abertura_gestao[1] . $SolicitacaoTramitacaoDone->data_abertura_gestao[0];
+}
+
+if($SolicitacaoTramitacaoDone->data_entrada_siscom != "")
+{
+	$SolicitacaoTramitacaoDone->data_entrada_siscom = explode("-", $SolicitacaoTramitacaoDone->data_entrada_siscom);
+	$SolicitacaoTramitacaoDone->data_entrada_siscom = $SolicitacaoTramitacaoDone->data_entrada_siscom[2] . $SolicitacaoTramitacaoDone->data_entrada_siscom[1] . $SolicitacaoTramitacaoDone->data_entrada_siscom[0];
+}
+
+if($SolicitacaoTramitacaoDone->data_devolucao != "")
+{
+	$SolicitacaoTramitacaoDone->data_devolucao = explode("-", $SolicitacaoTramitacaoDone->data_devolucao);
+	$SolicitacaoTramitacaoDone->data_devolucao = $SolicitacaoTramitacaoDone->data_devolucao[2] . $SolicitacaoTramitacaoDone->data_devolucao[1] . $SolicitacaoTramitacaoDone->data_devolucao[0];
+}
+
+
+?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#cancelar").on('click', function(){
+			window.location.href = "principal.php?&id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_area_operador.php";
+	    });
+	});
+</script>
+<div id="div_form_tramitacao" class="bradius wrapper" style="margin-left: 25%;" >
+	<form 
+		action="principal.php?&rev=<?php echo $revisao?>&acao=nft&id=<?php echo $cripto->codificar($id_usuario) ?>&ids=<?php echo $id_solicitacao ?>&t=controles/sql_form_tramitacao.php" 
+		method="POST"	
+	>
+		<fieldset id="fieldset_style">
+			<h2>Tramitação</h2> 
+			<table id="form_pretramitacao">
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Devolução</label><br/>
+							<label class="radio-inline">
+							  	<input 
+							  		style="width: 24px;" 
+							  		type="radio" 
+							  		name="devolucao" 
+							  		id="devolucao_n" 
+							  		value="Não"
+							  	> Não
+							</label>
+							<label class="radio-inline">
+							  	<input 
+							  		style="width: 24px;" 
+							  		type="radio" 
+							  		name="devolucao" 
+							  		id="devolucao_s" 
+							  		value="Sim"
+							  		checked="true" 
+						  		> Sim
+							</label>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>SISCOM*</label>
+							<input 
+								type="text" 
+								id="siscom"  
+								name="siscom"
+								size= "50"
+								placeholder=" Caso não haja, favor preencher como 0"
+								pattern="\d+"
+								required
+								value = <?php echo $SolicitacaoTramitacaoDone->siscom?>
+								disabled="true"
+								class="campos_desabilitados"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data Entrada Siscom</label>
+							<input 
+								type="text"
+								id="data_entrada_siscom"
+								name="data_entrada_siscom"
+								class="campos_desabilitados" 
+								value="<?php echo $SolicitacaoTramitacaoDone->data_entrada_siscom?>";
+								disabled="true" 
+						>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Canal de entrada*</label>
+							<select 
+								name="canal_entrada" 
+								id="canal_entrada" 
+								class="txt2comboboxpadrao bradius campos_desabilitados"
+								required
+								disabled="true" 
+								>
+
+								<?php 
+						         
+						         	$canal_entrada=mysql_query("SELECT * FROM canal_entrada WHERE id_canal_entrada = $SolicitacaoTramitacaoDone->id_canal_entrada");
+
+						         while($rowce=mysql_fetch_array($canal_entrada)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowce['id_canal_entrada']; ?>">
+						   			<?php echo $rowce['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Produto*</label>
+							<select 
+								name="produto" 
+								id="produto" 
+								class="txt2comboboxpadrao bradius campos_desabilitados"
+								required
+								disabled="true" 
+							>
+								<?php 
+					         		$produto=mysql_query("SELECT * FROM produto WHERE id_produto = $SolicitacaoTramitacaoDone->id_produto");
+
+									while($rowp=mysql_fetch_array($produto)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowp['id_produto']; ?>">
+						   			<?php echo $rowp['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Tipo Solicitação/Categoria*</label>
+							<select 
+								name="tipo_solicitacao" 
+								id="tipo_solicitacao" 
+								class="txt2comboboxpadrao bradius campos_desabilitados"
+								required
+								disabled="true"
+								>
+								<?php 
+					         		$solicitacao=mysql_query("SELECT * FROM tipo_solicitacao WHERE id_tipo_solicitacao_categ = $SolicitacaoTramitacaoDone->id_tipo_solicitacao_categ");
+
+									while($rowsc=mysql_fetch_array($solicitacao)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowsc['id_tipo_solicitacao_categ']; ?>">
+						   			<?php echo $rowsc['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>	
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Serviços*</label>
+							<select 
+								name="servicos" 
+								id="servicos" 
+								class="txt2comboboxpadrao bradius campos_desabilitados"
+								required
+								disabled="true";
+								>
+								<?php 
+						         	$servico=mysql_query("SELECT * FROM servicos WHERE id_servicos = $SolicitacaoTramitacaoDone->id_servicos");
+
+									while($rowso=mysql_fetch_array($servico)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowso['id_servicos']; ?>">
+						   			<?php echo $rowso['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+					  		</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Quantidade de acessos*</label>
+							<input 
+								type="text" 
+								id="qtd_acessos"  
+								name="qtd_acessos"
+								pattern="\d+"
+								required
+								disabled="true"
+								value = "<?php echo $SolicitacaoTramitacaoDone->qtd_acessos?>"
+								class="campos_desabilitados"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>CNPJ*</label>
+							<input 
+								type="text" 
+								id="cnpj"  
+								name="cnpj"
+								required
+								value = "<?php echo $SolicitacaoTramitacaoDone->cnpj?>"
+								disabled="true";
+								class="campos_desabilitados"
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Razão Social*</label>
+							<input 
+								type="text" 
+								id="razao_social"  
+								name="razao_social"
+								size= "100"
+								required
+								value = "<?php echo $SolicitacaoTramitacaoDone->razao_social?>"
+								disabled="true";
+								class="campos_desabilitados"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Número gestão de serviços*</label>
+							<input 
+								type="text" 
+								id="n_gs"  
+								name="n_gs"
+								placeholder="Caso não haja, favor preencher como 0"
+								pattern="\d+"
+								required
+								disabled="true"
+								value = <?php echo $SolicitacaoTramitacaoDone->n_gestao_servicos?>
+								class="campos_desabilitados"
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data abertura gestão*</label>
+							<input 
+								type="text"
+								id="data_abertura_gestao"
+								name="data_abertura_gestao" 
+								class="campoData campos_desabilitados"
+								disabled="true"
+								value = <?php echo $SolicitacaoTramitacaoDone->data_abertura_gestao?>
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Categoria*</label>
+							<select name="cat_prod" id="cat_prod" class="txt2comboboxpadrao bradius campos_desabilitados" required disabled="true">
+								<?php  if($SolicitacaoTramitacaoDone->cat_produto == "Voz"){ ?>
+									<option value="Voz">Voz</option>
+						   		<?php } else{?>
+						   			<option value="Dados">Dados</option>
+						   		<?php }	?>
+					  		</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label id="data_encerramento_label">Data de Encerramento*</label>
+							<input 
+								type="text"
+								id="data_encerramento"
+								name="data_encerramento" 
+								onblur = "validaData(this)";
+								class="campoData"
+								required
+								value="<?php echo $SolicitacaoTramitacaoDone->data_encerramento?>" 		
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Status*</label>
+							<select 
+								name="status_solicitacao" 
+								id="status_solicitacao" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+								<?php 
+						         	
+									
+						         	$statuss=mysql_query("SELECT * FROM status_solicitacao WHERE id_status_solicitacao = $SolicitacaoTramitacaoDone->id_status_solic_tramitacao
+														UNION SELECT * FROM status_solicitacao WHERE id_status_solicitacao IN(12,10,1,2,3,11,4,5,13,14,15)");
+						         	
+
+									while($rowss=mysql_fetch_array($statuss)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowss['id_status_solicitacao']; ?>">
+						   			<?php echo $rowss['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+		     				</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Observações</label>
+							<input 
+								type="text" 
+								id="obs"  
+								class="txt bradius" 
+								name="obs"
+								value="<?php echo $SolicitacaoTramitacaoDone->obs?>" 
+							/> 
+						</div>
+					</td>		
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Nº Oportunidade e Proposta*</label>
+							<input 
+								type="text" 
+								id="n_oport_proposta"  
+								class="txt bradius" 
+								name="n_oport_proposta"
+								required
+								value="<?php echo $SolicitacaoTramitacaoDone->n_oportunidade_propostas?>"  
+							/> 
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Aprovado*</label>
+							<select 
+								name="aprovacao" 
+								id="aprovacao"	
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+					     		<option value="Sim">Sim</option>
+						  		<option value="Não">Não</option>
+						  	</select>
+						</div>	
+					</td>
+				</tr>
+				<tr id="rcd2">
+					<td>
+						<div class="div_forms">
+							<label>Data de devolução</label>
+							<input 
+								type="text"
+								id="data_devolucao"
+								name="data_devolucao" 
+								disabled="true"
+								onblur = "validaData(this)";
+								value = <?php echo $SolicitacaoTramitacaoDone->data_devolucao?>
+								class="campoData"
+							>
+						</div>
+					</td>
+					<td id="rcd4">
+						<div class="div_forms">
+							<label>Chamado/Remedy</label>
+							<input 
+								type="text"
+								id="chamado_remedy"
+								name="chamado_remedy" 
+								disabled="true"
+								value = <?php echo $SolicitacaoTramitacaoDone->chamado_remedy?>
+							>
+						</div>
+					</td>			
+				</tr>
+			</table>
+			<br/>
+			<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Salvar" class="sb2 bradius" />
+	 		<input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" id="cancelar"/>
+	 	</fieldset>
+	</form>
+</div>
+
+  
+    

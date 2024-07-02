@@ -1,0 +1,182 @@
+<?php
+// Verifica se foi feita alguma busca
+// Caso contrario, redireciona o visitante pra home
+
+include("../fixa/bd.php");
+
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+//parametro recebido
+if($_POST['pedido'] != ""){
+	$pedido = $_POST['pedido'];
+}else{
+	  echo" <script> 
+	      alert('Informe nº do Siscom ou n° GS!');
+	        history.back();
+	      </script>
+	      ";                                        
+	    exit();  
+}
+
+?>
+<?php
+	$buscarsolicitacao=mysql_query("SELECT 
+										sf.id_solicitacao,
+										sf.id_gestao_servicos,
+										sf.pre_tramitacao,
+										sf.tramitacao,
+										sf.pos_tramitacao,
+										sf.intragov,
+										sf.gcom,
+										u.nome AS operador,
+										s.nome AS supervisor 
+									FROM solicitacao_fases sf
+										INNER JOIN usuario u
+											ON sf.id_usuario_resp = u.id_usuario
+										INNER JOIN supervisor s
+											ON u.id_supervisor = s.id_supervisor
+										WHERE sf.id_solicitacao = $pedido || sf.id_gestao_servicos = $pedido
+								");
+
+	if(mysql_affected_rows() > 0){
+		while($linhas=mysql_fetch_array($buscarsolicitacao)){   
+			if($linhas['intragov'] == "Concluído"){
+				$validaColunas = "intragov";
+			}else if($linhas['gcom'] == "Concluído"){
+				$validaColunas = "gcom";
+			}else{
+				$validaColunas = "";
+			}
+		}
+	}else{
+		$validaColunas = "";
+	}
+?>
+<div id="t_consulta_solicitacao" style="margin-left: 20%; ">
+		<table class="tabelas_dashboard">
+		<caption>
+			<h2>Informações</h2>
+		</caption>
+			<thead>
+                <tr>
+                	<?php if($_POST['pedido_fonte'] == "pedido_solicitacao"){?>
+                    <th>Siscom</th>
+                	<?php }else{?>
+                	<th>GS</th>
+                	<?php }?>
+                	<?php if($validaColunas != "intragov" && $validaColunas != "gcom"){?>
+                    <th>Pre-Tramitacao</th>
+                    <th>Tramitacao</th>
+                    <th>Pós-Tramitacao</th>
+                    <?php }else if($validaColunas == "intragov"){?>
+                    <th>Intragov</th>
+                    <?php }else if($validaColunas == "gcom"){?>
+                    <th>Gcom</th>
+                    <?php }?>
+                    <th>Operador Atual</th>
+                    <th>Supervisor</th>
+                    <th>Histórico</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+
+           	 		$buscarsolicitacaoData=mysql_query("SELECT 
+										sf.id_solicitacao,
+										sf.id_gestao_servicos,
+										sf.pre_tramitacao,
+										sf.tramitacao,
+										sf.pos_tramitacao,
+										sf.intragov,
+										sf.gcom,
+										u.nome AS operador,
+										s.nome AS supervisor 
+									FROM solicitacao_fases sf
+										INNER JOIN usuario u
+											ON sf.id_usuario_resp = u.id_usuario
+										INNER JOIN supervisor s
+											ON u.id_supervisor = s.id_supervisor
+										WHERE sf.id_solicitacao = $pedido || sf.id_gestao_servicos = $pedido
+								");
+
+    		     	if(mysql_affected_rows() > 0){
+						while($linhas=mysql_fetch_array($buscarsolicitacaoData)){   
+							if($linhas['tramitacao'] == "Não preenchido"){
+								$form = "pt";
+							}else if($linhas['pos_tramitacao'] == "Não preenchido"){
+								$form = "t";
+							}else if($linhas['intragov'] == "Concluído"){
+								$form = "i";
+							}else if($linhas['gcom'] == "Concluído"){
+								$form = "g";
+							}
+
+			        ?>          
+			         <tr>
+			         	<td class="colunas-centralizados">
+			              <a id="td">
+			              	<?php if($_POST['pedido_fonte'] == "pedido_solicitacao"){?>
+			                	<?php echo $linhas['id_solicitacao'];  ?>
+		                	<?php } else{?>
+		                		<?php echo $linhas['id_gestao_servicos'];  ?>
+	                		<?php }?>
+			              </a>
+			            </td>
+			            <?php if($validaColunas != "intragov" && $validaColunas != "gcom"){?>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['pre_tramitacao']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['tramitacao']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['pos_tramitacao']; ?>
+			              </a>
+			            </td>
+			            <?php }else if($validaColunas == "intragov"){?>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['intragov']; ?>
+			              </a>
+			            </td>
+			             <?php }else if($validaColunas == "gcom"){?>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['gcom']; ?>
+			              </a>
+			            </td>
+			            <?php }?>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['operador']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			                <?php echo $linhas['supervisor']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+			              <a id="td" href="principal.php?&pedido=<?php echo $pedido?>&form=<?php echo $form?>&t=views/form_solicitacao_fases_historico.php">
+			                <i class="fa fa-arrow-circle-right"></i>
+			              </a>
+			            </td>
+			          </tr>
+			     <?php 
+		     			}
+	     		}
+		          ?>
+           </tbody>
+		</table>
+		<br/>
+		<br/>
+				<input name="cancelar" type="button" value="Voltar" class="sb2 bradius" onClick="document.location.href='principal.php?id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_consulta.php'"/>
+
+	</div>

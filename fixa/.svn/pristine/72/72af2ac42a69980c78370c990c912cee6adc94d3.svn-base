@@ -1,0 +1,128 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../fixa/bd.php");
+
+$tempo = 0;
+
+set_time_limit($tempo);
+date_default_timezone_set("Brazil/East");
+
+$data_cadastro=date("Y-m-d H:i:s");
+
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+
+/*if(
+    echo "siscom " . $_POST['siscom']  . "<br>";
+    echo "n_pact_siscom " . $_POST['n_pact_siscom']  . "<br>";
+    echo "cat_prod " . $_POST['cat_prod'] . "<br>" ;
+    echo "canal_entrada " . $_POST['canal_entrada']  . "<br>";
+    echo "servicos " . $_POST['servicos'] . "<br>";
+    echo "produto " . $_POST['produto'] . "<br>";
+    echo "tipo_solicitacao " . $_POST['tipo_solicitacao']   . "<br>"  ;
+    echo "data_receb " . $_POST['data_receb'] . "<br>";
+    echo "cnpj " . $_POST['cnpj'] . "<br>";
+    echo "razao_social " . $_POST['razao_social'] . "<br>";
+    echo "qtd_acessos " . $_POST['qtd_acessos'] . "<br>";
+    echo "n_gs " . $_POST['n_gs'] . "<br>";
+    echo "status_solicitacao " . $_POST['status_solicitacao'] . "<br>";
+    echo "aprovacao " . $_POST['aprovacao'];
+
+    exit(); 
+/*)*/
+if(
+    ($_POST['siscom'] == "")            ||
+    ($_POST['n_pact_siscom'] == "")     ||
+    empty($_POST['cat_prod'])           ||
+    empty($_POST['canal_entrada'])      ||
+    empty($_POST['servicos'])           ||
+    empty($_POST['produto'] )           ||    
+    empty($_POST['tipo_solicitacao'] )  ||  
+    empty($_POST['data_receb'])         ||
+    empty($_POST['cnpj'])               ||
+    empty($_POST['razao_social'])       ||
+    ($_POST['qtd_acessos'] == "")       ||    
+    ($_POST['n_gs'] == "")              ||
+    empty($_POST['status_solicitacao']) ||
+    empty($_POST['aprovacao'])
+)
+{
+  echo" <script> 
+          alert('Por favor preencher todos os campos obrigatórios !');
+          history.back();
+        </script>
+        "; 
+        exit();   
+}
+
+//valida se inputs variaveis foram ativados
+if (isset($_POST['motivo_devolucao'])){$motivo_devolucao = $_POST['motivo_devolucao'];}else{$motivo_devolucao = '';}
+if (isset($_POST['area_devolucao'])){$area_devolucao = $_POST['area_devolucao'];}else{$area_devolucao = '';}
+if (isset($_POST['data_devolucao'])){$data_devolucao = $_POST['data_devolucao'];}else{$data_devolucao = '';}
+
+$sql_insere="INSERT INTO pre_tramitacao(
+                                id_usuario_pre,
+                                siscom,
+                                cat_produto,
+                                id_canal_entrada,
+                                data_receb_solicitacao,
+                                n_pac_siscom,
+                                id_produto,
+                                id_tipo_solicitacao_categ,
+                                id_servicos,
+                                cnpj,
+                                razao_social,
+                                qtd_acessos,
+                                n_gestao_servicos,
+                                data_abert_gestao,
+                                id_status_solicitacao,
+                                obs,
+                                id_motivo_devolucao,
+                                area_devolucao,
+                                data_devolucao,
+                                devolucao,
+                                aprovado,
+                                reg_dt_entrada
+                              )
+                             VALUES(
+                              $id_usuario,
+                              '{$_POST['siscom']}',
+                              '{$_POST['cat_prod']}',
+                              '{$_POST['canal_entrada']}',
+                              '{$_POST['data_receb']}',
+                              '{$_POST['n_pact_siscom']}',
+                              '{$_POST['produto']}',
+                              '{$_POST['tipo_solicitacao']}',
+                              '{$_POST['servicos']}',
+                              '{$_POST['cnpj']}',
+                              '{$_POST['razao_social']}',
+                              '{$_POST['qtd_acessos']}',
+                              '{$_POST['n_gs']}',
+                              '{$_POST['data_abertura_gestao']}',
+                              '{$_POST['status_solicitacao']}',
+                              '{$_POST['obs']}',
+                              '{$motivo_devolucao}',
+                              '{$area_devolucao}',
+                              '{$data_devolucao}',
+                              '{$_POST['devolucao']}',
+                              '{$_POST['aprovacao']}',
+                              '$data_cadastro'                                                                                                      
+                            )";
+      
+     $acao_insere= mysql_query($sql_insere) or die (mysql_error());
+
+        
+echo" <script> 
+      alert('Formulário preenchido com sucesso!');
+        document.location.replace('principal.php?t=forms/form_operador.php');
+      </script>
+      ";                                        
+    exit();
+    
+?>

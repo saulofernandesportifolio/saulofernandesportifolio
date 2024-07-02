@@ -1,0 +1,248 @@
+
+<?php
+
+include("../fixa/bd.php");
+
+?>
+<div id="fieldset" class="bradius">
+	<form 
+		action="principal.php?&id=<?php echo $id_usuario ?>&t=controles/sql_formuploadbase.php" 
+		method="POST"	
+		enctype="multipart/form-data"
+	>
+		<legend align="center">
+			<h3 text-align="center">PRÉ-TRAMITAÇÃO</h3>
+		</legend>
+		<div class="divformservico"
+			 <?php 
+	         	$buscarusuario=mysql_query("SELECT * FROM usuario WHERE id_perfil != 1 and id_perfil != 2 ORDER BY data_cadastro DESC");
+
+				while($linha=mysql_fetch_array($buscarusuario)){
+                     
+        	?> 
+			<label>Analista pré*:</label>
+			<p>
+				<select name="base" id="base" class="txt2comboboxpadrao bradius">
+			   		<option value="<?php echo $linha['id_usuario']; ?>">
+			   			<?php echo $linha['nome']; ?>
+			   		</option>
+			  	</select>
+			</p>
+
+			 <?php 
+          		}
+     		?>
+
+     		<label>SISCOM*:</label>
+     		<p>Caso não haja, favor preencher como "0"</p>
+			<p>
+				<input 
+					type="text" 
+					id="siscom"  
+					class="txt bradius" 
+					name="siscom"
+					size= "50" 
+				/>
+			</p>
+			<label>Categoria produto:</label>
+			<p>
+				<select name="cat_prod" id="cat_prod" class="txt2comboboxpadrao bradius">
+			   		<option value="4">Selecione....</option>
+			   		<option value="1">Voz</option>
+			   		<option value="2">Dados</option>
+			  	</select>
+			</p>
+			<p>
+			<label>Canal de Entrada:</label>	
+				<select 
+					name="canal_entrada" 
+					id="canal_entrada" 
+					class="txt2comboboxpadrao bradius">
+			   		<option value="4">Selecione....</option>
+			  	</select>
+			</p>
+			<p>
+			<label>Data Recebimento da Solicitação:</label>
+			<p>
+			<label>Produto:</label>	
+				<select 
+					name="canal_entrada" 
+					id="canal_entrada" 
+					class="txt2comboboxpadrao bradius">
+			   		<option value="4">Selecione....</option>
+			  	</select>
+			</p>
+			<p>
+			<label>Tipo da Solicitação/Categoria:</label>	
+				<select 
+					name="canal_entrada" 
+					id="canal_entrada" 
+					class="txt2comboboxpadrao bradius">
+			   		<option value="4">Selecione....</option>
+			  	</select>
+			</p>
+			<p>
+			<label>Serviços:</label>	
+				<select 
+					name="canal_entrada" 
+					id="canal_entrada" 
+					class="txt2comboboxpadrao bradius">
+			   		<option value="4">Selecione....</option>
+			  	</select>
+			</p>
+			<p>
+			<label>CNPJ:</label>	
+				<input 
+					type="text" 
+					id="cnpj"  
+					class="txt bradius" 
+					name="cnpj"
+					size= "50"
+					value="cnpj"
+					disabled="true" 
+				/>
+			</p>
+			<p>
+			<label>Razão Social:</label>	
+				<input 
+					type="text" 
+					id="razao_social"  
+					class="txt bradius" 
+					name="razao_social"
+					size= "50"
+					value="razao_social"
+					disabled="true" 
+				/>
+			</p>
+			<p>
+			<label>Quantidade de acessos:</label>	
+				<input 
+					type="text" 
+					id="qtd_acessos"  
+					class="txt bradius" 
+					name="qtd_acessos"
+					size= "50"
+					value="qtd_acessos"
+					disabled="true" 
+				/>
+			</p>
+			<p>
+			<label>Número gestão de serviços:</label>
+				<input 
+					type="text" 
+					id="n_gs"  
+					class="txt bradius" 
+					name="n_gs"
+					size= "50"
+					value="n_gs"
+					disabled="true" 
+				/>
+			</p>
+			<p>
+			<label>Data abertura gestão:</label>
+				<input 
+					type="text" 
+					id="data_abertura_gestao"  
+					class="txt bradius" 
+					name="data_abertura_gestao"
+					size= "50"
+					value="data_abertura_gestao"
+					disabled="true" 
+				/>
+			</p>
+			<p>
+			<label>Motivo devolução:</label>
+				<input 
+					type="text" 
+					id="motivo_devolucao"  
+					class="txt bradius" 
+					name="motivo_devolucao"
+					size= "50"
+					value="motivo_devolucao"
+					disabled="false" 
+				/>
+			</p>
+			<p>
+			<label>Área devolução:</label>
+				<input 
+					type="text" 
+					id="area_devolucao"  
+					class="txt bradius" 
+					name="area_devolucao"
+					size= "50"
+					value="area_devolucao"
+					disabled="false" 
+				/>
+			</p>
+			<p>
+			<label>Data de devolução:</label>
+				<input 
+					type="text" 
+					id="data_devolucao"  
+					class="txt bradius" 
+					name="data_devolucao"
+					size= "50"
+					value="data_devolucao"
+					disabled="false" 
+				/>
+			</p>
+			<p>
+			<label>Status:</label>
+				<input 
+					type="text" 
+					id="status"  
+					class="txt bradius" 
+					name="status"
+					size= "50"
+					value="status"
+					disabled="false" 
+				/>
+			</p>
+			<p>
+			<label>Observações:</label>
+				<input 
+					type="text" 
+					id="obs"  
+					class="txt bradius" 
+					name="obs"
+					size= "50"
+					value="obs"
+					disabled="false" 
+				/>
+			</p>
+			<p>
+			<label>Aprovado:</label>
+				<select 
+					name="aprovacao" 
+					id="aprovacao" 
+					class="txt2comboboxpadrao bradius">
+			   		<option value="1">Sim</option>
+			   		<option value="0">Não</option>
+			  	</select>
+			</p>					
+	
+			</p>
+				 <input 
+				 	name="submit" 
+				 	id="submit" 
+				 	type="submit" 
+				 	value="Enviar formulario" 
+				 	class="sb2 bradius" 
+			 	/>
+			 	<input 
+			 		name="cancelar" 
+			 		type="button" 
+			 		value="Cancelar" 
+			 		class="sb2 bradius" 
+			 		onClick="window.location='principal.php?t=forms/home.php'"
+		 		/>
+	 		</p>
+		 </div>
+	</form>
+</div>
+
+</body>
+</html>
+
+  
+    

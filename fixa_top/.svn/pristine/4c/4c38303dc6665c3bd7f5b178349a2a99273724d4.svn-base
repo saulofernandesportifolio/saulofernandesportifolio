@@ -1,0 +1,330 @@
+<?php
+
+class Tramitacao {
+     public $operador;
+	   public $siscom;           
+     public $dataEntradaSiscom;
+     public $canalEntrada;                          
+     public $produto;
+     public $servico;
+     public $complementoServico;
+     public $quantidadeAcessos;
+     public $cnpj;
+     public $razaoSocial;
+     public $dataEncerramento;
+     public $numeroOportunidadeProposta;
+     public $status;
+     public $obs;
+     public $areaDevolucao;
+     public $regDataEntrada;
+     public $dataRecebimento;
+     public $revisao;
+     public $escritorio_gn;
+
+      function __construct($operador, $siscom, $revisao, $dataEntradaSiscom, $canalEntrada, $produto, $servico, $complementoServico, $quantidadeAcessos, $cnpj, $razaoSocial, $dataEncerramento, $numeroOportunidadeProposta, $status, $obs) 
+      {
+         $this->operador                   = $operador;
+         $this->siscom                     = $siscom;
+         $this->dataEntradaSiscom          = $dataEntradaSiscom;
+         $this->canalEntrada               = $canalEntrada;
+         $this->produto                    = $produto;
+         $this->servico                    = $servico;
+         $this->complementoServico         = $complementoServico;
+         $this->quantidadeAcessos          = $quantidadeAcessos;
+         $this->cnpj                       = $cnpj;
+         $this->razaoSocial                = $razaoSocial;
+         $this->dataEncerramento           = $dataEncerramento;
+         $this->numeroOportunidadeProposta = $numeroOportunidadeProposta;
+         $this->status                     = $status;
+         $this->obs                        = $obs;
+         $this->regDataEntrada             = date("Y-m-d H:i:s");
+         $this->revisao                    = $revisao;
+      }
+
+  
+       function validaCamposObrigatorios(Tramitacao $tramitacao)
+        {
+             if(
+                ($tramitacao->complementoServico == "") ||                                         
+                ($tramitacao->quantidadeAcessos == "") ||         
+                ($tramitacao->numeroOportunidadeProposta == "") ||
+                ($tramitacao->dataEncerramento == "") ||                 
+                ($tramitacao->status == "")                    
+               )
+              {
+                return true;
+              }
+        }
+
+      function enviaDadosBase(Tramitacao $tramitacao)
+      {
+
+            $dadosProc = str_replace("&","E",$tramitacao->operador) 
+                       . '&'. str_replace("&","E",$tramitacao->siscom)                    
+                       . '&'. str_replace("&","E",$tramitacao->dataEntradaSiscom)
+                       . '&'. str_replace("&","E",$tramitacao->canalEntrada)         
+                       . '&'. str_replace("&","E",$tramitacao->produto)                   
+                       . '&'. str_replace("&","E",$tramitacao->servico)                   
+                       . '&'. str_replace("&","E",$tramitacao->complementoServico)               
+                       . '&'. str_replace("&","E",$tramitacao->quantidadeAcessos)         
+                       . '&'. str_replace("&","E",$tramitacao->cnpj)                      
+                       . '&'. str_replace("&","E",$tramitacao->razaoSocial)
+                       . '&'. str_replace("&","E",$tramitacao->dataEncerramento)               
+                       . '&'. str_replace("&","E",$tramitacao->status)
+                       . '&'. str_replace("&","E",$tramitacao->obs)
+                       . '&'. str_replace("&","E",$tramitacao->numeroOportunidadeProposta)
+                       . '&'. str_replace("&","E",$tramitacao->areaDevolucao)
+                       . '&'. str_replace("&","E",$tramitacao->regDataEntrada)
+                       . '&'. str_replace("&","E",$tramitacao->escritorio_gn)
+                       . '&'. str_replace("&","E",$tramitacao->revisao);                             
+       
+            $sql_exec="CALL SP_TRAMITACAO('$dadosProc');";
+            $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+            
+            return true;
+      }
+
+      function validaCamposObrigatoriosManual(Tramitacao $tramitacao)
+        {
+             if(
+                ($tramitacao->siscom == "") ||                    
+                ($tramitacao->dataEntradaSiscom == "") ||
+                ($tramitacao->canalEntrada == "") ||            
+                ($tramitacao->produto == "") ||                   
+                ($tramitacao->servico  == "") ||                             
+                ($tramitacao->quantidadeAcessos == "") ||         
+                ($tramitacao->cnpj == "") ||                      
+                ($tramitacao->razaoSocial == "") ||
+                ($tramitacao->dataEncerramento == "") ||                 
+                ($tramitacao->numeroOportunidadeProposta == "") ||
+                ($tramitacao->status == "")                    
+               )
+              {
+                return true;
+              }
+        }
+
+      function enviaDadosBaseManual(Tramitacao $tramitacao)
+      {
+
+            $dadosProc = str_replace("&","E",$tramitacao->operador) 
+                       . '&'. str_replace("&","E",$tramitacao->siscom)                    
+                       . '&'. str_replace("&","E",$tramitacao->dataEntradaSiscom)
+                       . '&'. str_replace("&","E",$tramitacao->canalEntrada)         
+                       . '&'. str_replace("&","E",$tramitacao->produto)                   
+                       . '&'. str_replace("&","E",$tramitacao->servico)                   
+                       . '&'. str_replace("&","E",$tramitacao->complementoServico)               
+                       . '&'. str_replace("&","E",$tramitacao->quantidadeAcessos)         
+                       . '&'. str_replace("&","E",$tramitacao->cnpj)                      
+                       . '&'. str_replace("&","E",$tramitacao->razaoSocial)
+                       . '&'. str_replace("&","E",$tramitacao->dataEncerramento)               
+                       . '&'. str_replace("&","E",$tramitacao->status)
+                       . '&'. str_replace("&","E",$tramitacao->obs)
+                       . '&'. str_replace("&","E",$tramitacao->numeroOportunidadeProposta)
+                       . '&'. str_replace("&","E",$tramitacao->devolucao)
+                       . '&'. str_replace("&","E",$tramitacao->areaDevolucao)
+                       . '&'. str_replace("&","E",$tramitacao->regDataEntrada);                           
+         
+    
+            $sql_exec="CALL SP_TRAMITACAO_MANUAL('$dadosProc');";
+            $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+            
+            return true;
+      }
+
+      
+
+       /***** Métodos para as solicitacoes que entraram via bases de id_solicitacao Vendas e id_solicitacao Servicos *****/
+
+        //busca data que o supervisor distribuiu para o operador
+        function buscaDataRecebimentoSolicitacao($ids, $id_usuario, $revisao)
+        {
+          $busca_data_receb_solicitacao = mysql_query("SELECT date_format(reg_data,'%d/%m/%Y') AS reg_data FROM usuario_solicitacao WHERE id_solicitacao = '$ids' AND id_usuario = $id_usuario AND revisao = $revisao");
+
+            if(mysql_affected_rows() > 0)
+            {
+              while($linhaSolicitacao=mysql_fetch_array($busca_data_receb_solicitacao))
+              { 
+                  $data_receb_solicitacao  = $linhaSolicitacao['reg_data'];
+              }
+
+              return $data_receb_solicitacao;
+            } 
+        }
+
+        function buscaDadosSiscomServico(Tramitacao $solicitacao, $ids, $revisao)
+        {
+          $buscarsolicitacaoid_solicitacaoServico=mysql_query("SELECT * FROM siscom_servicos WHERE siscom = '$ids' AND revisao = $revisao");
+                
+                if(mysql_affected_rows() > 0)
+                {
+                    while($linha=mysql_fetch_array($buscarsolicitacaoid_solicitacaoServico))
+                    {   
+                        $data = $linha['data']; 
+                        if($data != ""){
+                          //FORMATA DATA
+                          $data = explode("/", $data);
+                          $dia = $data[0];
+                          $mes = $data[1];
+                          $ano = $data[2];
+
+                          $data = $ano . '/' . $mes . '/' . $dia;
+                        }else{
+                          $data = "";
+                        }
+
+                        $solicitacao->dataEntradaSiscom = $data;  
+                        $solicitacao->cnpj = $linha['cnpj'];          
+                        $solicitacao->razaoSocial = $linha['razao_social_cliente'];
+                        $solicitacao->servico = $linha['evento'];            
+                        $solicitacao->escritorio_gn = $linha['escritorio_gn'];
+                        $solicitacao->produto = $linha['servico'];  
+                    }
+                }
+
+                return $solicitacao;
+        }
+
+        function buscaDadosSiscomVendas(Tramitacao $solicitacao, $ids, $revisao)
+        {
+          $buscarSolicitacaoid_solicitacaoVendas=mysql_query("SELECT * FROM siscom_vendas WHERE siscom = '$ids' AND revisao = $revisao");
+
+               if(mysql_affected_rows() > 0)
+                {
+                    while($linha=mysql_fetch_array($buscarSolicitacaoid_solicitacaoVendas))
+                    {   
+                        $solicitacao->dataEntradaSiscom = '';   
+                        $solicitacao->cnpj = $linha['cnpj'];          
+                        $solicitacao->razaoSocial = $linha['razao_social'];
+                        $solicitacao->produto = $linha['descricao_produto'];            
+                        $solicitacao->escritorio_gn = $linha['escritorio_gn'];
+                    }
+                }
+
+              return $solicitacao;
+        }
+
+     function verificaSituacaoSolicitacao($id_solicitacao, $revisao)
+     {
+
+           $verificaSolicitacao = mysql_query("SELECT * FROM tramitacao WHERE siscom = '$id_solicitacao' and revisao = $revisao and id_tramitacao is not null
+                                                UNION SELECT * FROM tramitacao WHERE siscom = '$id_solicitacao' and revisao = $revisao-1 and id_tramitacao is not null");
+
+           if(mysql_affected_rows() > 0)
+           {
+             return true;
+           }
+     }
+
+     function buscaUltimaSolicitacaoCompletaByIdRevisao(Tramitacao $solicitacao, $id_solicitacao, $revisao)
+     {
+          
+          $busca_solicitacao_redistribuida = mysql_query("SELECT sf.id_solicitacao, sf.tramitacao, sp.situacao  FROM solicitacao_fases sf
+                                                                LEFT JOIN solicitacoes_pendentes sp
+                                                                ON sf.id_solicitacao = sp.id_solicitacao
+                                                                WHERE 
+                                                                sf.id_solicitacao = '$id_solicitacao'
+                                                                AND sf.tramitacao = 'Com operador' 
+                                                                AND sp.situacao = 'Corrigido' 
+                                                          UNION
+                                                          SELECT sf.id_solicitacao, sf.tramitacao, sp.situacao  FROM solicitacao_fases sf
+                                                                LEFT JOIN solicitacoes_pendentes sp
+                                                                ON sf.id_solicitacao = sp.id_solicitacao
+                                                                WHERE 
+                                                                sf.id_solicitacao = '$id_solicitacao'
+                                                                AND sf.tramitacao = 'Com operador' 
+                                                                AND sp.situacao IS NULL ");  
+          //solicitacao redistribuida 
+          if(mysql_affected_rows() > 0)
+          {
+              //se for reentrada de item reprovado
+              $buscaUltimaSolicitacaoCompletaByIdRevisao = mysql_query("SELECT * FROM tramitacao 
+                                                                        WHERE siscom = '$id_solicitacao' AND revisao = $revisao
+                                                                        ORDER BY revisao DESC 
+                                                                        LIMIT 1");
+               if(mysql_affected_rows() > 0)
+                {
+                       while($rsc=mysql_fetch_array($buscaUltimaSolicitacaoCompletaByIdRevisao))
+                       {        
+                              $solicitacao->operador                    = $rsc['id_usuario_tramitacao'];
+                              $solicitacao->siscom                      = $rsc['siscom'];          
+                              $solicitacao->dataEntradaSiscom           = $rsc['data_entrada_siscom'];
+                              $solicitacao->canalEntrada                = $rsc['id_canal_entrada'];    
+                              $solicitacao->produto                     = $rsc['id_produto'];
+                              $solicitacao->servico                     = $rsc['servico'];
+                              $solicitacao->complementoServico          = $rsc['complemento_servico'];
+                              $solicitacao->quantidadeAcessos           = $rsc['quantidade_acessos'];
+                              $solicitacao->cnpj                        = $rsc['cnpj'];
+                              $solicitacao->razaoSocial                 = $rsc['razao_social'];
+                              $solicitacao->dataEncerramento            = $rsc['data_encerramento'];
+                              $solicitacao->numeroOportunidadeProposta  = $rsc['n_oportunidade_proposta'];
+                              $solicitacao->status                      = $rsc['id_status'];
+                              $solicitacao->obs                         = $rsc['obs'];
+                              $solicitacao->areaDevolucao               = $rsc['area_devolucao'];
+                              $solicitacao->regDataEntrada              = $rsc['reg_dt_entrada'];
+                              $solicitacao->revisao                     = $rsc['revisao'];
+                              $solicitacao->escritorio_gn               = $rsc['escritorio_gn'];                                
+                       }
+
+                       return $solicitacao;
+                }
+          }
+          else
+          {    
+              //se for reentrada de item reprovado
+              $buscaUltimaSolicitacaoCompletaByIdRevisao = mysql_query("SELECT * FROM tramitacao 
+                                                                        WHERE id_solicitacao = '$id_solicitacao' AND revisao = $revisao - 1
+                                                                        ORDER BY revisao DESC 
+                                                                        LIMIT 1");
+               if(mysql_affected_rows() > 0)
+                {
+                       while($rsc=mysql_fetch_array($buscaUltimaSolicitacaoCompletaByIdRevisao))
+                       {                  
+                            $solicitacao->siscom                      = $rsc['siscom'];          
+                            $solicitacao->dataEntradaSiscom           = $rsc['data_entrada_siscom'];
+                            $solicitacao->canalEntrada                = $rsc['id_canal_entrada'];    
+                            $solicitacao->produto                     = $rsc['id_produto'];
+                            $solicitacao->servico                     = $rsc['servico'];
+                            $solicitacao->complementoServico          = $rsc['complemento_servico'];
+                            $solicitacao->quantidadeAcessos           = $rsc['quantidade_acessos'];
+                            $solicitacao->cnpj                        = $rsc['cnpj'];
+                            $solicitacao->razaoSocial                 = $rsc['razao_social'];
+                            $solicitacao->dataEncerramento            = $rsc['data_encerramento'];
+                            $solicitacao->numeroOportunidadeProposta  = $rsc['n_oportunidade_proposta'];
+                            $solicitacao->status                      = $rsc['id_status'];
+                            $solicitacao->obs                         = $rsc['obs'];
+                            $solicitacao->areaDevolucao               = $rsc['area_devolucao'];
+                            $solicitacao->regDataEntrada              = $rsc['reg_dt_entrada'];
+                            $solicitacao->revisao                     = $rsc['revisao'];
+                            $solicitacao->escritorio_gn               = $rsc['escritorio_gn'];
+                       }
+
+                       return $solicitacao;
+                }
+                else
+                {
+                          $solicitacao->dataEntradaSiscom           = null; 
+                          $solicitacao->canalEntrada                = null; 
+                          $solicitacao->produto                     = null; 
+                          $solicitacao->servico                     = null; 
+                          $solicitacao->complementoServico          = null; 
+                          $solicitacao->quantidadeAcessos           = null; 
+                          $solicitacao->cnpj                        = null; 
+                          $solicitacao->razaoSocial                 = null; 
+                          $solicitacao->dataEncerramento            = null; 
+                          $solicitacao->numeroOportunidadeProposta  = null; 
+                          $solicitacao->status                      = null; 
+                          $solicitacao->obs                         = null; 
+                          $solicitacao->areaDevolucao               = null; 
+                          $solicitacao->regDataEntrada              = null; 
+                          $solicitacao->revisao                     = null; 
+                          $solicitacao->escritorio_gn               = null; 
+      
+                    return $solicitacao;
+                }
+          }
+      }
+
+}
+?>
+    

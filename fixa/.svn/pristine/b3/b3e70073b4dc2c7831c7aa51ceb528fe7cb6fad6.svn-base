@@ -1,0 +1,483 @@
+
+<?php
+
+include("../fixa/bd.php");
+  
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+//parametros
+$id_usuario = $_GET['id']; 
+
+$id_usuario = $cripto->decodificar($id_usuario);
+
+$buscarusuario=mysql_query("SELECT * FROM usuario WHERE id_usuario = $id_usuario");
+
+while($linha=mysql_fetch_array($buscarusuario)){ 
+	$analista	 = 	$linha['nome'];
+	$id_analista =  $linha['id_usuario'];
+}
+
+$id_solicitacao = $_GET['ids']; 
+
+
+$busca_data_receb_solicitacao = mysql_query("SELECT date_format(reg_data,'%d/%m/%Y %H:%i:%s') AS reg_data FROM usuario_solicitacao WHERE id_solicitacao = $id_solicitacao AND id_usuario = $id_usuario");
+
+while($linhaSolicitacao=mysql_fetch_array($busca_data_receb_solicitacao)){ 
+		$data_receb_solicitacao  = $linhaSolicitacao['reg_data'];
+}
+
+
+//verifica que tipo de solicitacao é (venda/servicos)
+
+$buscarSolicitacaoSiscomServico=mysql_query("SELECT * FROM siscom_servico WHERE nro_solicitacao = $id_solicitacao");
+
+if(mysql_affected_rows() > 0){
+
+	$fonte = "siscom_servico";	
+
+	while($linha=mysql_fetch_array($buscarSolicitacaoSiscomServico)){ 
+		$cliente_especial       = $linha['cliente_especial'];
+		$data                   = $linha['data'];
+		$hora                   = $linha['hora'];
+		$cnpj_cpf_cliente       = $linha['cnpj_cpf_cliente'];
+		$codigo_cliente         = $linha['codigo_cliente'];
+		$razao_social   		= $linha['razao_social_cliente'];
+		$servico                = $linha['evento'];
+		$gerente_negocio        = $linha['gerente_negocio'];
+		$escritorio_gn          = $linha['escritorio_gn'];
+		$gn_responsavel_canal   = $linha['gn_responsavel_canal'];
+		$nro_solicitacao        = $linha['nro_solicitacao'];
+		$status                 = $linha['status'];
+		$qtd_acessos  			= $linha['acessos'];
+	}
+}
+
+$buscarSolicitacaoSiscomVendas=mysql_query("SELECT * FROM siscom_vendas WHERE pacote = $id_solicitacao");
+
+if(mysql_affected_rows() > 0){
+
+	$fonte = "siscom_vendas";	
+
+	while($linha=mysql_fetch_array($buscarSolicitacaoSiscomVendas)){ 
+		$pacote            = $linha['pacote'];      
+		$data              = $linha['data'];      
+		$hora              = $linha['hora'];      
+		$cnpj_cpf_cliente  = $linha['cnpj_cpf_cliente'];      
+		$razao_social      = $linha['razao_social'];      
+		$segmento          = $linha['segmento'];      
+		$gerente_vendas    = $linha['gerente_vendas'];      
+		$servico           = $linha['servico'];      
+		$status            = $linha['status'];      
+		$produto           = $linha['produto'];      
+		$qtd_acessos       = $linha['qtd'];
+	}
+}
+
+?>
+
+<script type="text/javascript">
+	$(document).ready(function() {
+		$( "#div_form_pretramitacao" ).css({"display": ""});
+
+		$("#cancelar").on('click', function(){
+			window.location.href = "principal.php?&id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_area_operador.php";
+	    });
+	});
+</script>
+
+
+<div id="div_form_pretramitacao" class="bradius wrapper" style="display: none;">
+	<form 
+		action="principal.php?&f=<?php echo $fonte?>&ids=<?php echo $id_solicitacao?>&acao=nf&id=<?php echo $cripto->codificar($id_usuario) ?>&t=controles/sql_form_pretramitacao.php" 
+		method="POST"	
+	>
+		<fieldset id="fieldset_style">
+			<h2>Pré-Tramitação</h2> 
+			<table id="form_pretramitacao">
+				<tr>
+					<td>
+						<div class="div_forms">
+						<?php if($fonte == "siscom_servico"){?>		
+							<label>SISCOM*</label>
+							<input 
+								type="text" 
+								id="siscom"  
+								name="siscom"
+								size= "50"
+								value = <?php echo $nro_solicitacao;?>
+								disabled="true"
+								class="campos_desabilitados"
+							/>
+						<?php } else if($fonte == "siscom_vendas"){?>
+							<label>Nº Pacote SISCOM*</label>
+							<input 
+								type="text" 
+								id="n_pact_siscom"  
+								name="n_pact_siscom"
+								size= "50"
+								value = <?php echo $pacote;?>
+								disabled="true"
+								class="campos_desabilitados"
+							/>
+						<?php }?>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Categoria de produto*</label>
+							<select name="cat_prod" id="cat_prod" class="txt2comboboxpadrao bradius" required>
+					   			<option value="Voz">Voz</option>
+					   			<option value="Dados">Dados</option>
+					  		</select>
+						</div>
+					</td>	
+					
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Devolução</label><br/>
+							<label class="radio-inline">
+							  	<input 
+							  		style="width: 24px;" 
+							  		type="radio" 
+							  		name="devolucao" 
+							  		id="devolucao_n" 
+							  		value="Não"
+							  		checked="true" 
+						  		> Não
+							</label>
+							<label class="radio-inline">
+							  	<input 
+							  		style="width: 24px;" 
+							  		type="radio" 
+							  		name="devolucao" 
+							  		id="devolucao_s" 
+							  		value="Sim"
+						  		> Sim
+							</label>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Canal de entrada*</label>
+							<select 
+								name="canal_entrada" 
+								id="canal_entrada" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+
+								<?php 
+
+								$canal_entrada=mysql_query("SELECT * FROM canal_entrada");
+							    
+						         while($rowce=mysql_fetch_array($canal_entrada)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowce['id_canal_entrada']; ?>">
+						   			<?php echo $rowce['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data Receb. Solicitação*</label>
+							<input 
+								disabled="true"
+								size="50"
+								type="text"
+								id="data_receb"
+								name="data_receb"
+								value= "<?php echo $data_receb_solicitacao; ?>"
+								class="campos_desabilitados"
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Produto*</label>
+							<select 
+								name="produto" 
+								id="produto" 
+								<?php if($fonte == "siscom_vendas"){?>
+								class="txt2comboboxpadrao bradius campos_desabilitados"
+								disabled="true"
+								<?php }else{?>
+								class="txt2comboboxpadrao bradius"
+								required
+								<?php }?>
+							>
+								<?php 
+									if($fonte == "siscom_vendas"){
+										$produto=mysql_query("SELECT * FROM produto WHERE descricao LIKE '%$produto%'");
+							        }else{
+							        	$produto=mysql_query("SELECT * FROM produto");
+							        }
+									while($rowp=mysql_fetch_array($produto)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowp['id_produto']; ?>">
+						   			<?php echo $rowp['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Tipo Solicitação/Categoria*</label>
+							<select 
+								name="tipo_solicitacao" 
+								id="tipo_solicitacao" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+								<?php 
+
+									$solicitacao=mysql_query("SELECT * FROM tipo_solicitacao");
+							        
+									while($rowsc=mysql_fetch_array($solicitacao)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowsc['id_tipo_solicitacao_categ']; ?>">
+						   			<?php echo $rowsc['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Serviços*</label>
+							<select 
+								name="servicos" 
+								id="servicos" 
+								class="txt2comboboxpadrao bradius campos_desabilitados"
+								disabled="true" 
+								>
+								<?php 
+									$servico=mysql_query("SELECT * FROM servicos WHERE descricao LIKE '%$servico%'");
+							        
+									while($rowso=mysql_fetch_array($servico)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowso['id_servicos']; ?>">
+						   			<?php echo $rowso['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+					  		</select>
+						</div>
+					</td>	
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Razão Social*</label>
+							<input 
+								type="text" 
+								id="razao_social"  
+								name="razao_social"
+								disabled="true"
+								class="campos_desabilitados"
+								value="<?php echo $razao_social;?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>CNPJ*</label>
+							<input 
+								type="text" 
+								id="cnpj"  
+								name="cnpj"
+								disabled="true"
+								class="campos_desabilitados"
+								value="<?php echo $cnpj_cpf_cliente?>"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Quantidade de acessos*</label>
+							<input 
+								type="text" 
+								id="qtd_acessos"  
+								name="qtd_acessos"
+								pattern="\d+"
+								disabled="true"
+								class="campos_desabilitados"
+								value="<?php echo $qtd_acessos;?>" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Número gestão de serviços*</label>
+							<input 
+								type="text" 
+								id="n_gs"  
+								name="n_gs"
+								placeholder="Caso não haja, favor preencher como 0"
+								pattern="\d+"
+								required
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>		
+					<td>
+						<div class="div_forms">
+							<label>Data abertura gestão*</label>
+							<input 
+								type="text"
+								id="data_abertura_gestao"
+								name="data_abertura_gestao" 
+								class="campoData"
+								onblur = "validaData(this)";
+								required
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Área devolução</label>
+							<select name="area_devolucao" id="area_devolucao" class="txt2comboboxpadrao bradius" disabled="true">
+								<option value=""></option>
+					   			<option value="COMERCIAL">COMERCIAL</option>
+					   			<option value="MKT">MKT</option>
+					   			<option value="AG. TELEFONICA">AG. TELEFONICA</option>
+					  		</select>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Motivo devolução</label>
+							<select 
+								name="motivo_devolucao" 
+								id="motivo_devolucao" 
+								class="txt2comboboxpadrao bradius"
+								disabled="true">
+								<option value=""></option>
+								<?php 
+
+									$devolucao=mysql_query("SELECT * FROM motivo_devolucao");
+							        
+									while($rowmd=mysql_fetch_array($devolucao)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowmd['id_motivo_devolucao']; ?>">
+						   			<?php echo $rowmd['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+					  		</select>
+						</div>
+					</td>	
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data de devolução</label>
+							<input 
+								type="text"
+								id="data_devolucao"
+								name="data_devolucao" 
+								disabled="true"
+								class="campoData" 
+								onblur = "validaData(this)";
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Status*</label>
+							<select 
+								name="status_solicitacao" 
+								id="status_solicitacao" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+								<?php 
+						         	
+						         	$statuss=mysql_query(
+				         					"SELECT * FROM status_solicitacao 
+											WHERE id_status_solicitacao = 8 
+											UNION 
+											SELECT * FROM status_solicitacao 
+											WHERE id_status_solicitacao IN
+											(1,2,3,4,5,6,7)
+											");
+						          	
+
+									while($rowss=mysql_fetch_array($statuss)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowss['id_status_solicitacao']; ?>">
+						   			<?php echo $rowss['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+		     				</select>
+						</div>
+					</td>		
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Observações</label>
+							<input 
+								type="text" 
+								id="obs"  
+								class="txt bradius" 
+								name="obs"
+							/> 
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Aprovado*</label>
+							<select 
+								name="aprovacao" 
+								id="aprovacao"	
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+						   		<option value="Sim">Sim</option>
+						   		<option value="Não">Não</option>
+						  	</select>
+						</div>	
+					</td>	
+				</tr>
+			</table>
+			<br/>
+			<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Salvar" class="sb2 bradius" />
+	 		<input type="reset" value="Limpar" class="sb2 bradius"/>
+	 		<input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" id="cancelar"/>
+	 	</fieldset>
+	</form>
+</div>
+
+  
+    

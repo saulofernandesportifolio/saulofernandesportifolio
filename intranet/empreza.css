@@ -1,0 +1,304 @@
+html, body, span, p, form, img, a, ul, ol, li, table, tr, td, div{
+margin: 0;
+padding: 0; 
+top:0;
+left:0;
+bottom:0;
+right:0;
+border:none; 
+outline:none;
+list-style-type:none;
+}
+
+{behavior:url(complemento/border-radius.htc);}
+
+h1, h2, h3, h4 {color:#4A412D;}
+
+p, h1, h2, h3, h4 {padding-left:3%;}
+
+a {
+	color:#620;
+	font-weight:bold;
+	text-decoration:none;
+}
+a:hover {
+	text-decoration: none;
+}
+body{
+	background: url(img/img_12.jpg) no-repeat scroll top center;
+	background-position-x: center;
+    background-color: #F6F6DA;
+}
+#botao_func{
+	font-weight:600;
+	text-align:center;
+	background-color:#C8BB9B;
+	padding: 10px;
+	width: 40%;
+	border-radius: 10px 5px 10px 5px;
+	box-shadow: #857549	0px 1px 3px 1px;
+	behavior:url(complemento/border-radius.htc);
+	}
+#botao_func a:hover {
+	text-decoration:underline;
+	font-style:italic;
+	}
+#botao_func a{
+	color:Black;
+	font-size:10px;
+	}
+#botao_func.left{
+	width:95px;
+	height:auto;
+	left:0;
+	padding:0;
+}
+#botao_func.center{
+	width:100px;
+	height:auto;
+	padding:0;
+	padding-top:6px;
+	padding-bottom:6px;
+}
+#botao_func.right{
+	width:100px;
+	height:25px;
+	padding:0;
+}
+font{
+	font-family:Geneva, sans-serif;
+	color:#464646;
+	font-size:10px;
+	font-weight:600;
+}
+
+p {
+    text-align:justify;
+	font-size: 16px;
+	font-family: Geneva, sans-serif;
+}	
+
+
+		#log {
+		position: static;
+        margin: 5px 5px 50px 5%;
+		
+		}
+		#boas_vindas{
+		text-align:left;
+		position: static;
+		}
+        #boas_vindas p {
+            font-size: 13px;
+        }
+		#prev_tempo{
+  		margin-left: 5%;
+		}
+
+		#barramenu{
+			position:static;
+			margin-top:5%;
+			margin-left:2%;
+		}
+        #barramenu a{
+			font-size:20px;
+            font-variant: small-caps;           
+		}
+        #barramenu li.selected{
+			text-decoration: underline;           
+		}
+#div_menu{
+    padding-left: 6%;
+    margin-top: 74px;
+    position: absolute;
+
+}
+#div_dest{
+    background-color: #CCC;
+    margin-left: 3%;
+    border-radius: 10px 5px 10px 5px;
+	behavior:url(complemento/border-radius.htc);
+}
+#div_dest.NET{
+    margin-top:-47px;
+}
+#div_menu p{
+    display:inline;
+}
+#div_dest h2{
+    padding-top: 15px;
+}
+#div_menu li {
+	display: inline;
+    background-color: #EEE;
+    padding: 0 12px 0 10px;
+}
+#div_menu li:hover {
+    background-color: #CCC;
+}
+#div_menu li.selected {
+    background-color: #CCC;
+    display: inline;
+}
+#div_menu li a {
+    text-decoration: none;
+}
+
+#corpo_esq{
+	margin-top: 22%;
+	margin-left: 2%;
+	position:absolute;
+	width:20%;
+    border-right: 2px #C8BB9B solid;
+    height:90%;
+    height: 600px;
+}
+#corpo_cen{
+	width: 45%;
+	margin-top: 19%;
+	margin-left: 23%;
+	margin-right:35%;
+	position:absolute;
+    height: 600px;
+}
+#corpo_dir{
+	width: 30%;
+	margin-top: 21%;
+	margin-left:70%;
+    height: 600px;
+    border-left: 2px #C8BB9B solid;
+	position:absolute;
+}
+#rodape{
+    position: relative;
+	margin-top: -150px;
+	height: 150px;
+	clear:both;
+}
+#help.esq{
+    background-color: #F0F0BC;
+    width:180px;
+    height:600px;
+    margin-top:40px;
+}
+#help.dir{
+	position: absolute;
+	margin-top:25px;
+	margin-left:29%;
+	padding-top:15px;
+	padding-right:15px;
+	padding-left:15px;
+	width:65%;
+	float:right;
+	height:620px;
+}
+#msgError{
+    color: red;
+    font-size: smaller;    
+}
+#pesquisa{
+    margin-left: 1%;
+}
+table {
+  margin-left:5%;
+  padding-bottom:3%;
+  padding-top:3%;
+  border: 1px solid #666666;
+  border-radius: 10px;
+  box-shadow: #4A412D 0px 10px 10px 0px;
+  font: normal 11px verdana, arial, helvetica, sans-serif;
+  color: #363636;
+  background: #f6f6f6;
+  text-align:left;
+  width: 90%;
+  behavior:url(complemento/border-radius.htc);
+}
+table.login{
+	font-size:12px;
+	background:none;
+	box-shadow:none;
+	border:none;
+	padding:0;
+	margin-left:3%;
+}
+table.logado{
+	background:none;
+	box-shadow:none;
+	border:none;
+	padding:0;
+	margin:0;
+}
+table.logado td{
+	padding:0;
+	margin:0;
+	width:110px;
+}
+table.logado td font{
+	text-decoration:underline;
+}
+table.logado tr{
+	padding:0;
+	margin:0;
+}
+
+table.logado td H3{
+	font-size:14px;
+
+}
+table.logado td font{
+	font-size:15px;
+	font-style:italic;
+}
+
+#tbCalendario{
+    font-size:  14px;
+    margin: 1px 5px 5px 1px;
+    text-align: center;    
+}
+#tbCalendario td{
+    padding: 5px 2px;
+    background-color: #DDD;
+}
+#tbCalendario font{
+    font-size: 20px;
+    font-weight: bolder;
+    font-family: Geneva, Serif;
+    font-style: italic;
+}
+    #tbCalendario td a{
+   	    text-decoration:none;
+    }
+    #tbCalendario td a.pessoal{
+		color: #090;
+		font-weight:600;
+	}
+	#tbCalendario td a.aniversario{
+		color: #C60;
+		font-weight:600;
+	}
+	#tbCalendario td a.global{
+		color: #0000D9;
+		font-weight:600;
+	}
+	#tbCalendario td a.domingo{
+		color: #B00;
+		font-weight:600;
+	}
+
+table.no_format{
+    text-align: left;
+	width:100%;
+	padding-right: 0px;
+    margin:0;
+	border: 0 solid #666666;
+	border-radius: 0;
+	box-shadow: 0;
+	font-family:Geneva, sans-serif;
+	background: none;
+	text-align: inherit;
+	text-decoration:none;
+	box-shadow: none;
+}
+table.no_format a{
+    font-size:12px;
+}

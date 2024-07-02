@@ -1,0 +1,91 @@
+<?php
+
+class SolicitacaoGcom {           
+	public $id_usuario_gcom;          
+	public $data_receb_documento;     
+	public $tipo_entrada;             
+	public $id_contrato_mae;          
+	public $data_assinatura_doc;      
+	public $numero_documento;         
+	public $id_sistema_validacao;     
+	public $n_vantive;                
+	public $id_produto;               
+	public $data_tratativa;             
+	public $nome_solicitante ;        
+	public $n_gestao_servicos;        
+	public $numero_wcd;               
+	public $razao_social;             
+	public $cnpj;                     
+	public $plano_solicitado;         
+	public $qtde_acesso;              
+	public $data_finalizacao;         
+	public $reg_dt_entrada;           
+	public $revisao;
+
+	function constroiSolicitacaoGcom(SolicitacaoGcom $solicitacao, $tipo_entrada, $id_contrato_mae, $data_assinatura_doc, $numero_documento, $id_sistema_validacao, $n_vantive, $id_produto, $data_tratativa, $nome_solicitante, $numero_wcd, $razao_social,$cnpj, $plano_solicitado, $qtde_acesso, $data_finalizacao, $reg_dt_entrada)
+	{
+		$solicitacao->tipo_entrada			= $tipo_entrada;             
+		$solicitacao->id_contrato_mae		= $id_contrato_mae;          
+		$solicitacao->data_assinatura_doc	= $data_assinatura_doc;      
+		$solicitacao->numero_documento		= $numero_documento;         
+		$solicitacao->id_sistema_validacao	= $id_sistema_validacao;     
+		$solicitacao->n_vantive				= $n_vantive;                
+		$solicitacao->id_produto			= $id_produto;               
+		$solicitacao->data_tratativa		= $data_tratativa;             
+		$solicitacao->nome_solicitante 		= $nome_solicitante;        
+		$solicitacao->numero_wcd			= $numero_wcd;               
+		$solicitacao->razao_social			= $razao_social;             
+		$solicitacao->cnpj					= $cnpj;                     
+		$solicitacao->plano_solicitado		= $plano_solicitado;         
+		$solicitacao->qtde_acesso			= $qtde_acesso;              
+		$solicitacao->data_finalizacao		= $data_finalizacao;         
+		$solicitacao->reg_dt_entrada		= $reg_dt_entrada;           
+	}
+
+	//busca data que o operador habilitou a solicitacao
+     function buscaDataRecebimentoSolicitacao($idgs, $id_usuario, $revisao)
+     {
+          $busca_data_receb_solicitacao = mysql_query("SELECT 
+                                                            date_format(reg_data,'%d/%m/%Y %H:%i:%s') AS reg_data 
+                                                       FROM usuario_solicitacao 
+                                                       WHERE id_solicitacao = $idgs AND id_usuario = $id_usuario AND revisao = $revisao
+                                                  ");
+
+          if(mysql_affected_rows() > 0)
+          {
+                 while($linhaSolicitacao=mysql_fetch_array($busca_data_receb_solicitacao))
+                 { 
+                     $data_receb_solicitacao  = $linhaSolicitacao['reg_data'];
+                 }
+
+                 return $data_receb_solicitacao;
+          } 
+     }
+
+     function validaCamposObrigatorios(SolicitacaoGcom $solicitacao)
+     {
+          //valida campos obrigatórios
+          if(
+               empty($solicitacao->tipo_entrada)      		 ||
+               empty($solicitacao->id_contrato_mae)          ||
+               empty($solicitacao->data_assinatura_doc)    	 ||
+               empty($solicitacao->numero_documento)    	 ||
+       		   empty($solicitacao->id_sistema_validacao)     ||
+               ($solicitacao->n_vantive == "")             	 ||    
+               empty($solicitacao->id_produto)               ||
+               empty($solicitacao->data_tratativa)           ||
+               empty($solicitacao->nome_solicitante)         ||
+               empty($solicitacao->numero_wcd)               ||
+               empty($solicitacao->razao_social)             ||
+               empty($solicitacao->cnpj)                     ||
+               ($solicitacao->plano_solicitado == "")        ||
+               ($solicitacao->qtde_acesso == "")             ||
+               empty($solicitacao->data_finalizacao) 
+          )
+          {
+               return true;
+          }     
+     }      
+}
+?>
+ 

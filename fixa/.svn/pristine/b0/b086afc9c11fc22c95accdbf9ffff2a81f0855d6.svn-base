@@ -1,0 +1,79 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../fixa/bd.php");
+
+$tempo = 0;
+
+set_time_limit($tempo);
+date_default_timezone_set("Brazil/East");
+
+$data_cadastro=date("Y-m-d H:i:s");
+
+$id_usuario= (int) $_GET['id'];
+
+if(empty($_POST['nome']) || empty($_POST['cpf']) || empty($_POST['perfil']))
+{
+  echo" <script> 
+          alert('Por favor preencher todos os campos obrigatórios !');
+          history.back();
+        </script>
+        "; 
+        exit();   
+}
+
+//valida cpf
+$query_valida_cpf = mysql_query("SELECT * FROM usuario WHERE cpf = '{$_POST['cpf']}'");
+
+
+if(mysql_affected_rows() > 0){
+  echo" <script> 
+          alert('CPF já cadastrado na base de dados !');
+          history.back();
+        </script>
+        "; 
+      exit();   
+}
+
+if($_POST['perfil'] == 3){
+
+        $checkperfil = mysql_query("SELECT id_perfil, cpf FROM usuario WHERE id_usuario = $id_usuario");
+
+        while($row_sup=mysql_fetch_array($checkperfil)){ 
+            if($row_sup['id_perfil'] != 3){
+
+                 $sql_insere_supervisor = ("INSERT INTO Supervisor(nome, cpf)
+                                            VALUES('{$_POST['nome']}', '{$_POST['cpf']}')");
+
+            }else{
+             
+                  $sql_insere_supervisor = "UPDATE Supervisor
+                                            SET 
+                                                nome = '{$_POST['nome']}' 
+                                                cpf  = '{$_POST['cpf']}'
+                                            WHERE cpf = '{$row_sup['cpf']}'";
+            }
+        }
+
+        $acao_insere= mysql_query($sql_insere_supervisor) or die (mysql_error());                            
+}
+
+      $sql_insere="UPDATE usuario
+                  SET 
+                    nome      = '{$_POST['nome']}'
+                    ,cpf       = '{$_POST['cpf']}'
+                    ,id_perfil = '{$_POST['perfil']}'
+                    ,id_turno  = '{$_POST['turno']}'
+                  WHERE id_usuario = $id_usuario";
+
+                      
+     $acao_insere= mysql_query($sql_insere) or die (mysql_error());
+
+echo" <script> 
+        alert('Cadastro atualizado com sucesso!');
+        document.location.replace('../fixa/principal.php?t=forms/home.php');
+      </script>
+      ";                                        
+    exit();
+    
+?>

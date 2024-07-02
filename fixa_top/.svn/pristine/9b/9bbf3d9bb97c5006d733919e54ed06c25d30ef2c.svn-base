@@ -1,0 +1,79 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/app/Model/Aprovacao.php");
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/bd.php");
+
+
+if (!empty($opcao))
+{ 
+    switch ($opcao)
+    { 
+        case 'insereSolicitacaoAprovacao': 
+        { 
+          $siscom                         =  isset($_POST['siscom']) ? $_POST['siscom'] : '';
+          $id_usuario                     =  isset($_POST['id_usuario']) ? $_POST['id_usuario'] : '';
+          $revisao                        =  isset($_POST['revisao']) ? $_POST['revisao'] : '';
+          $data_recebimento_aprovacao     =  isset($_POST['data_recebimento_aprovacao']) ? $_POST['data_recebimento_aprovacao'] : '';
+          $oportunidade                   =  isset($_POST['oportunidade']) ? $_POST['oportunidade'] : '';
+          $proposta                       =  isset($_POST['proposta']) ? $_POST['proposta'] : '';
+          $data_finalizado                =  isset($_POST['data_finalizado']) ? $_POST['data_finalizado'] : '';
+          $obs                            =  isset($_POST['obs']) ? $_POST['obs'] : '';
+          $status_solicitacao_aprovacao   =  isset($_POST['status_solicitacao_aprovacao']) ? $_POST['status_solicitacao_aprovacao'] : '';
+          $motivo_devolucao               =  isset($_POST['motivo_devolucao']) ? $_POST['motivo_devolucao'] : '';
+
+          echo insertNewAprovacaoRequest($cripto, $id_usuario, $siscom, '', '', '', '', '', '', $data_recebimento_aprovacao, '', '', $oportunidade, $proposta, $data_finalizado, $obs, $status_solicitacao_aprovacao, $motivo_devolucao, $revisao); 
+          break; 
+        }
+    } 
+}
+
+
+function insertNewAprovacaoRequest(Cripto $cripto, $operador, $siscom, $data_entrada_siscom, $canal_entrada, $produto, $servico, $complemento_servico, $qtd_acessos, $data_recebimento_aprovacao, $cnpj, $razao_social, $oportunidade, $proposta, $data_finalizado, $obs, $status_solicitacao_aprovacao,$motivo_devolucao, $revisao)
+{
+	$operador = $cripto->decodificar($operador);
+  
+  $buscarsolicitacao=mysql_query("SELECT * FROM aprovacao WHERE siscom = '$siscom' AND revisao = $revisao");
+
+    while($linha=mysql_fetch_array($buscarsolicitacao))
+    { 
+        $data_entrada_siscom  = $linha['data_entrada_siscom'];          
+        $id_canal_entrada     = $linha['id_canal_entrada'];             
+        $id_produto       = $linha['id_produto'];                   
+        $servico        = $linha['servico'];                      
+        $complemento_servico  = $linha['complemento_servico'];          
+        $quantidade_acessos   = $linha['quantidade_acessos'];           
+        $cnpj           = $linha['cnpj'];                         
+        $razao_social       = $linha['razao_social'];
+        $quantidade_acessos   = $linha['quantidade_acessos'];                   
+    }
+
+
+
+	//cria solicitacao
+	$aprovacao = new Aprovacao($operador, $siscom, $data_entrada_siscom, $canal_entrada, $produto, $servico, $complemento_servico, $qtd_acessos, $data_recebimento_aprovacao, $cnpj, $razao_social, $oportunidade, $proposta, $data_finalizado, $obs, $status_solicitacao_aprovacao,$motivo_devolucao);
+
+   $aprovacao->revisao = $revisao;
+
+	//valida campos obrigatórios
+    if($aprovacao->validaCamposObrigatorios($aprovacao) == 1)
+    {
+            echo" <script> 
+                    alert('Por favor preencher todos os campos obrigatórios !');
+                    history.back();
+                  </script>
+                  "; 
+                  exit();   
+    }
+
+     //envia para o banco
+    if($aprovacao->enviaDadosBase($aprovacao)==1)
+    {
+    	 echo" <script> 
+	        alert('Solicitação cadastrada com sucesso!');
+	           document.location.href='principal.php?id=" . $operador . "&t=View/home.php'
+	        </script>
+	        ";                                       
+    	exit();
+
+    };
+} 
+?>

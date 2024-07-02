@@ -1,0 +1,87 @@
+
+<?php
+include("../fixa/bd.php");
+
+
+$deleterecords = "TRUNCATE TABLE gestao_servicos"; //Esvaziar a tabela
+mysql_query($deleterecords);
+  
+//Transferir o arquivo
+if (isset($_POST['submit'])) {
+  
+    if (is_uploaded_file($_FILES['filename']['tmp_name'])) {
+        echo "<h1>" . "File ". $_FILES['filename']['name'] ." transferido com sucesso ." . "</h1>";
+        echo "<h2>Exibindo o conteúdo:</h2>";
+    }
+  
+    //Importar o arquivo transferido para o banco de dados
+    $handle = fopen($_FILES['filename']['tmp_name'], "r");
+  
+    $row = 1;
+         
+         while (($data = fgetcsv($handle, 4096, ",")) !== FALSE) {
+             $num = count($data);
+                         
+             $row++;
+             
+             for ($c=0; $c < $num; $c++) {
+                $dados = explode(";", $data[$c]);
+               
+               if($dados[$c] != "Pacote")
+                 echo 
+                    $dados[$c] . "-" . 
+                    $dados[$c + 1] . "-" . 
+                    $dados[$c + 2] . "-" . 
+                    $dados[$c + 3] . "-" . 
+                    $dados[$c + 4] . "-" . 
+                    $dados[$c + 2] . "-" . 
+                    $dados[$c + 5] . "-" . 
+                    $dados[$c + 6] . "-" .
+                    $dados[$c + 7] . "-" .
+                    $dados[$c + 8] . "-" .
+                    $dados[$c + 9] . "-" . 
+                    $dados[$c + 10] . "-" . 
+                    $dados[$c + 11] . "-" . 
+                    $dados[$c + 12] . "-" .
+                    $dados[$c + 13] . "-" .
+                    $dados[$c + 14] . "-" .
+                    $dados[$c + 15] . "-" .
+                    $dados[$c + 16] . "-" . 
+                    $dados[$c + 17] . "-" . 
+                    $dados[$c + 18] . "-" . 
+                    $dados[$c + 19] . "-" .
+                    $dados[$c + 20] . "-" . 
+                    $dados[$c + 21] . "-" . 
+                    $dados[$c + 22] . "-" .
+                    "<br/>";
+             }
+         }
+        fclose ($handle);
+  
+
+    /*while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
+        $import="INSERT into gestao_servicos(cod_solicitacao,cod_sistema_origem)values('$data[0]','$data[1]')";
+  
+        mysql_query($import) or die(mysql_error());
+    }*/
+  
+    
+  
+    print "Importação feita.";
+  
+//Visualizar formulário de transferência
+} else {
+  
+    print "Transferir novos arquivos CSV selecionando o arquivo e clicando no botão Upload<br />\n";
+  
+    print "<form enctype='multipart/form-data' action='#' method='post'>";
+  
+    print "Nome do arquivo para importar:<br />\n";
+  
+    print "<input size='50' type='file' name='filename'><br />\n";
+  
+    print "<input type='submit' name='submit' value='Upload'></form>";
+  
+}
+  
+?>

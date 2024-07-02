@@ -1,0 +1,143 @@
+<?php
+//setup default
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+
+//get info of user
+$buscarPerfil=mysql_query(
+    "SELECT  
+        id_perfil
+    FROM usuario 
+   where
+    id_usuario = $id_usuario"
+);  
+
+while($linha=mysql_fetch_array($buscarPerfil)){ 
+		$id_perfil = $linha['id_perfil'];
+}
+?>
+
+<script type="text/javascript">
+ 
+$(document).ready(function() {
+	$("#form_pretramitacao").on('click', function() {
+   		$( "#div_form_pretramitacao" ).css({"display": ""});
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#t_i_p" ).css({"display":"none"});
+   		$( "#table_tramitacao_itens_op" ).css({"display":"none"});
+    });
+
+    $("#cancelar").on('click', function(){
+    	$( "#t_m_d" ).css({"display":""});
+    	$( "#div_form_pretramitacao" ).css({"display": "none"});
+    });
+
+    $("#qtd_itens_pt").on('click', function() {
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#t_i_p" ).css({"display":""});
+    });
+
+     $("#qtd_itens_t").on('click', function() {
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#table_tramitacao_itens_op" ).css({"display":""});
+    });
+
+     $("#solicitacao_redistribuicao").on('click', function() {
+     	 window.location.href = $('#solicitacao_redistribuicao').attr('href');
+    });
+
+     $("#solicitacao_tramitacao_itens_op").on('click', function() {
+     	 window.location.href = $('#solicitacao_tramitacao_itens_op').attr('href');
+    });
+
+});
+
+</script>
+
+<div class="tela_principal_dasbboard">
+	<div id="menu_vertical_f">
+		<ul class="menu_vertical">
+			<?php if($id_perfil == 5 || $id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10){?>
+	    	<li class="menu_vertical">
+	    		<i class="fa fa-file icones_style"></i>
+	    		<a id="form_pretramitacao">Formulário Pré-Tramitação</a>
+    		</li>
+    		<?php }else{?>
+    		<li class="menu_vertical">
+	    		<a></a>
+    		</li>
+    		<?php }?>
+		</ul>
+	</div>
+	<div id="t_m_d" style="float: left;">
+		      	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query("SELECT 
+												count(id_solicitacao) AS quantidade,
+												'Tramitação' AS fase 
+											FROM 
+												solicitacao_fases 
+											WHERE 
+												tramitacao = 'Em edição' AND 
+												id_usuario_resp = $id_usuario
+											UNION
+											SELECT 
+												count(id_solicitacao) AS quantidade,
+												'Pré-Tramitação' AS fase 
+											FROM 
+												solicitacao_fases 
+											WHERE 
+												pre_tramitacao = 'Em edição' AND 
+												id_usuario_resp = $id_usuario
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){                   
+				        ?>          
+				         
+				        <p>
+				        	<?php if($id_perfil == 5 || $id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10){?>
+					        	<?php if ($linha['fase'] ==  'Pré-Tramitação'){?>
+						        	Número de solicitações de pré-tramitação a serem repreenchidas: 
+						        	<?php if($linha['quantidade'] >  0){ ?>
+						        	<a id="qtd_itens_pt" href="#"> 
+						        		<?php echo $linha['quantidade']; ?>  
+						        	</a>
+				        	<?php 
+				        			}
+				   				}
+				        	} 
+				        	?>
+				        </p>
+				        <p>
+				        	<?php if($id_perfil == 6 || $id_perfil == 1 || $id_perfil == 2 || $id_perfil == 3 || $id_perfil == 4 || $id_perfil == 10){?>
+					        	<?php if ($linha['fase'] ==  'Tramitação'){?>
+						        	Número de solicitações de tramitação a serem preenchidas: 
+						        	<?php if($linha['quantidade'] >  0){ ?>
+						        	<a id="qtd_itens_t" href="#"> 
+						        		<?php echo $linha['quantidade']; ?>  
+						        	</a>
+				        	<?php 
+				        			}
+			        			}
+				        	} 
+				        	?>
+				        </p>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>
+	<?php include("form_pretramitacao.php");?>
+	<?php include("v_tabela_itens_edicao.php");?>
+	<?php include("v_itens_tramitacao_op.php");?>
+</div>

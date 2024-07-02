@@ -1,0 +1,44 @@
+<?php
+include("../fixa/bd.php");
+require_once '../fixa/site/classes/cripto.php';
+?>
+
+<?php
+$cripto = new cripto();
+//parametros
+$id_usuario = $_GET['id']; 
+$id_usuario = $cripto->decodificar($id_usuario);
+?>
+<body>
+<label>Area:</label>
+<select name="areaConsulta" id="areaConsulta" class="selectsTabelas bradius">
+    <option></option>  
+    <option value="POSICIONAMENTO">POSICIONAMENTO</option>
+    <option value="COMERCIAL">COMERCIAL</option>
+    <option value="MKT">MKT</option>
+    <option value="SISTEMAS">SISTEMAS</option>
+    <option value="AG. TELEFONICA">AG. TELEFÔNICA</option>
+  </select>
+  <a href="#" class="estiloLupa" id="consultaDevolucoes"><i class="fa fa-search"></a></i>
+  <br/>
+ <div id="wrapper">
+  <table id="keywords" cellspacing="0" cellpadding="0">
+      <thead>
+        <tr>
+          <th><span>Data</span><i class="fa fa-sort"></i></th>
+          <th><span>Operador</span><i class="fa fa-sort"></i></th>
+          <th><span>Nº Solic.</span><i class="fa fa-sort"></i></th>
+          <th><span>Revisão</span><i class="fa fa-sort"></i></th>
+          <th><span>Fase</span><i class="fa fa-sort"></i></th>
+          <th><span>Status</span><i class="fa fa-sort"></i></th>
+          <th><span>Area</span><i class="fa fa-sort"></i></th>
+          <th><span>Motivo</span><i class="fa fa-sort"></i></th>
+          <th><span>Motivo Desc.</span><i class="fa fa-sort"></i></th>
+          <th><span>Situação</span><i class="fa fa-sort"></i></th>
+        </tr>
+      </thead>
+      <tbody id="rowDevolucoes">
+      </tbody>
+  </table>
+ </div> 
+</body>

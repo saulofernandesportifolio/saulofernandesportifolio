@@ -1,0 +1,297 @@
+<?php
+require_once '../fixa/site/classes/cripto.php';
+require_once '../fixa/site/classes/SolicitacaoPreTramitacao.php';
+require_once '../fixa/site/classes/Produto.php';
+include("../fixa/site/funcoes/f_geral.php");
+include("../fixa/bd.php");
+$tempo = 0;
+set_time_limit($tempo);
+date_default_timezone_set("Brazil/East");
+$data_cadastro=date("Y-m-d H:i:s");
+?>
+
+<?php
+     
+    $cripto = new cripto();
+
+    //parametros
+    $id_usuario = $_GET['id']; 
+    $id_usuario = $cripto->decodificar($id_usuario);
+    $acao       = $_GET['acao'];
+    $ids        = $_GET['ids']; 
+    $fonte      = $_GET['f'];
+    $revisao    = $_GET['r'];
+
+    /*****SOLICITAÇÃO MANUAL******/ 
+    if($acao == 'nfm')
+    {
+
+         //cria objeto com todos os inputs do usuario
+         $SolicitacaoPreTramitacaoManual = new SolicitacaoPreTramitacao();
+
+         //passa para o objeto id solicitacao e id do usuario e revisao da solicitacao
+         $SolicitacaoPreTramitacaoManual->siscom = $ids;
+         $SolicitacaoPreTramitacaoManual->id_usuario = $id_usuario;
+         $SolicitacaoPreTramitacaoManual->revisao = $revisao;
+
+
+         $SolicitacaoPreTramitacaoManual = $SolicitacaoPreTramitacaoManual->constroiSolicitacaoManual($SolicitacaoPreTramitacaoManual, $_POST['cat_prod'] ,$_POST['devolucao'], $_POST['canal_entrada'], $_POST['produto_manual'], $_POST['tipo_solicitacao'], 'servico_desconsiderar', $_POST['cnpj'], $_POST['razao_social'], $_POST['qtd_acessos'], $_POST['n_gs'], $_POST['data_abertura_gestao'], $_POST['status_solicitacao'], $_POST['obs'], $_POST['aprovacao'], $_POST['complemento_tipo_solicitacao']);
+
+          //pega data recebimento da solicitacao(data em que supervisor distribui para o mesmo)
+          $data_receb_solicitacao = $SolicitacaoPreTramitacaoManual->buscaDataRecebimentoSolicitacao($ids, $id_usuario, $revisao);
+
+          $SolicitacaoPreTramitacaoManual->data_receb = $data_receb_solicitacao;
+
+         //valida campos obrigatórios
+         $retornoValidacaoItensObrigatorios = $SolicitacaoPreTramitacaoManual->validaInputsObrigatorios($SolicitacaoPreTramitacaoManual, 'Manual');
+
+         if($retornoValidacaoItensObrigatorios == 1)
+         {
+              echo" <script> 
+                  alert('Por favor preencher todos os campos obrigatórios !');
+                  history.back();
+                </script>
+                "; 
+                exit();               
+          }
+
+          //valida campos obrigatorios iniciados - devolucao
+         if (isset($_POST['motivo_devolucao']) && isset($_POST['descricao_motivo_devolucao']) && isset($_POST['area_devolucao']) &&isset($_POST['data_devolucao']))
+         {
+              //caso haja algum em branco informa ao usuario se nao tiver manda dados ao objeto
+              if($SolicitacaoPreTramitacaoManual->validaItensDevolucao($_POST['motivo_devolucao'], $_POST['descricao_motivo_devolucao'], $_POST['area_devolucao'], $_POST['data_devolucao']) == 1)
+              {
+                 echo" <script> 
+                  alert('Todos os campos de devolução devem ser preenchidos!');
+                  history.back();
+                </script>"; 
+                exit();  
+              }
+              else
+              {
+                  $SolicitacaoPreTramitacaoManual->motivo_devolucao           = $_POST['motivo_devolucao'];
+                  $SolicitacaoPreTramitacaoManual->descricao_motivo_devolucao = $_POST['descricao_motivo_devolucao'];
+                  $SolicitacaoPreTramitacaoManual->area_devolucao             = $_POST['area_devolucao'];
+                  $SolicitacaoPreTramitacaoManual->data_devolucao             = $_POST['data_devolucao'];
+                  if(isset($_POST['chamado_remedy']))
+                  {
+                    $SolicitacaoPreTramitacaoManual->chamado_remedy           = $_POST['chamado_remedy'];
+                  }
+                  else
+                  {
+                      $SolicitacaoPreTramitacaoManual->chamado_remedy         = '';
+                  }
+              }  
+         }
+
+          $SolicitacaoPreTramitacaoManual->produto = $SolicitacaoPreTramitacaoManual->buscaIdProdutoByDescricao($SolicitacaoPreTramitacaoManual->produto);
+
+
+          //formata data entrada manual
+          //$SolicitacaoPreTramitacaoManual->data_receb = str_replace("-", "/", $SolicitacaoPreTramitacaoManual->data_receb);
+
+          
+      
+           //passa objeto para proc
+           $dadosProc =  '&'. $SolicitacaoPreTramitacaoManual->id_usuario
+                       . '&'. $SolicitacaoPreTramitacaoManual->siscom
+                       . '&'. $SolicitacaoPreTramitacaoManual->cat_prod
+                       . '&'. $SolicitacaoPreTramitacaoManual->canal_entrada
+                       . '&'. $SolicitacaoPreTramitacaoManual->data_receb
+                       . '&'. $SolicitacaoPreTramitacaoManual->produto 
+                       . '&'. $SolicitacaoPreTramitacaoManual->tipo_solicitacao
+                       . '&'. $SolicitacaoPreTramitacaoManual->complemento_tipo_solicitacao  
+                       . '&'. $SolicitacaoPreTramitacaoManual->cnpj
+                       . '&'. $SolicitacaoPreTramitacaoManual->razao_social
+                       . '&'. $SolicitacaoPreTramitacaoManual->qtd_acessos
+                       . '&'. $SolicitacaoPreTramitacaoManual->n_gs
+                       . '&'. $SolicitacaoPreTramitacaoManual->data_abertura_gestao
+                       . '&'. $SolicitacaoPreTramitacaoManual->status_solicitacao
+                       . '&'. $SolicitacaoPreTramitacaoManual->obs
+                       . '&'. $SolicitacaoPreTramitacaoManual->motivo_devolucao
+                       . '&'. $SolicitacaoPreTramitacaoManual->area_devolucao
+                       . '&'. $SolicitacaoPreTramitacaoManual->data_devolucao
+                       . '&'. $SolicitacaoPreTramitacaoManual->devolucao
+                       . '&'. $SolicitacaoPreTramitacaoManual->aprovacao
+                       . '&'. $data_cadastro
+                       . '&'. ''
+                       . '&'. $SolicitacaoPreTramitacaoManual->descricao_motivo_devolucao
+                       . '&'. $SolicitacaoPreTramitacaoManual->chamado_remedy
+                       . '&'. $SolicitacaoPreTramitacaoManual->revisao;
+
+          //atualiza tabela solcitacao fases e chama proc
+          if ($acao == "nfm")
+          {
+              //verifica se item ja existe na tabela solicitacao de fases
+              $checkSolicitacaoFases=mysql_query("SELECT * FROM solicitacao_fases WHERE id_solicitacao = $SolicitacaoPreTramitacaoManual->siscom");
+
+              if(mysql_affected_rows() > 0)
+              {
+                  $sql_atualiza_status_fase_edicao = "UPDATE solicitacao_fases
+                                                      SET 
+                                                        pre_tramitacao  = 'Com operador', 
+                                                        id_usuario_resp = $SolicitacaoPreTramitacaoManual->id_usuario,
+                                                        revisao     = $SolicitacaoPreTramitacaoManual->revisao
+                                                      WHERE id_solicitacao = '$SolicitacaoPreTramitacaoManual->siscom'"; 
+              }
+              else
+              {
+                  $sql_atualiza_status_fase_edicao = "INSERT INTO solicitacao_fases(id_solicitacao, pre_tramitacao, id_usuario_resp, revisao) 
+                                                    VALUES('$SolicitacaoPreTramitacaoManual->siscom', 'Com operador', '$SolicitacaoPreTramitacaoManual->id_usuario', '$SolicitacaoPreTramitacaoManual->revisao')";
+              }                   
+
+              $acao_atualiza_status_fase_edicao = mysql_query($sql_atualiza_status_fase_edicao) or die (mysql_error());
+
+              //chama proc
+              $sql_exec="CALL solicitacao_pretramitacao('$dadosProc', 'pre_tramitacao');";
+          } 
+  
+
+          $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+          if ($acao == "nfm") 
+          {
+            echo" <script> 
+              alert('Solicitação cadastrada com sucesso!');
+                document.location.replace('principal.php?t=views/home.php');
+              </script>
+              ";
+          }
+    /*****SOLICITAÇÃO IMPORTADA******/ 
+    }
+    else if($acao == "nf")
+    {
+
+             //cria objeto 
+             $SolicitacaoPreTramitacaoImport = new SolicitacaoPreTramitacao();
+
+             //passa para o objeto id solicitacao e id do usuario e revisao da solicitacao
+             $SolicitacaoPreTramitacaoImport->siscom = $ids;
+             $SolicitacaoPreTramitacaoImport->id_usuario = $id_usuario;
+             $SolicitacaoPreTramitacaoImport->revisao = $revisao;
+
+             //passa informaçoes para objeto
+             $SolicitacaoPreTramitacaoImport = $SolicitacaoPreTramitacaoImport->constroiSolicitacaoSiscom($SolicitacaoPreTramitacaoImport, $_POST['tipo_solicitacao'], $_POST['n_gs'], $_POST['data_abertura_gestao'], $_POST['status_solicitacao'], $_POST['aprovacao'], $_POST['obs'], $_POST['devolucao'], $_POST['complemento_tipo_solicitacao'], $_POST['qtd_acessos']);
+
+
+             //pega data recebimento da solicitacao(data em que supervisor distribui para o mesmo)
+             $data_receb_solicitacao = $SolicitacaoPreTramitacaoImport->buscaDataRecebimentoSolicitacao($ids, $id_usuario, $revisao);
+
+             $SolicitacaoPreTramitacaoImport->data_receb = $data_receb_solicitacao;
+
+
+            //valida campos obrigatórios
+             $retornoValidacaoItensObrigatorios = $SolicitacaoPreTramitacaoImport->validaInputsObrigatorios($SolicitacaoPreTramitacaoImport, 'Import');
+
+             if($retornoValidacaoItensObrigatorios == 1)
+             {
+                  echo" <script> 
+                      alert('Por favor preencher todos os campos obrigatórios !');
+                      history.back();
+                    </script>
+                    "; 
+                    exit();               
+             }
+
+
+             //valida campos obrigatorios iniciados - devolucao
+             if (isset($_POST['motivo_devolucao']) && isset($_POST['descricao_motivo_devolucao']) && isset($_POST['area_devolucao']) && isset($_POST['data_devolucao']))
+             {
+                  //caso haja algum em branco informa ao usuario se nao tiver manda dados ao objeto
+                  if($SolicitacaoPreTramitacaoImport->validaItensDevolucao($_POST['motivo_devolucao'], $_POST['descricao_motivo_devolucao'], $_POST['area_devolucao'], $_POST['data_devolucao']) == 1)
+                  {
+                     echo" <script> 
+                      alert('Todos os campos de devolução devem ser preenchidos!');
+                      history.back();
+                    </script>"; 
+                    exit();  
+                  }
+                  else
+                  {
+                      $SolicitacaoPreTramitacaoImport->descricao_motivo_devolucao = $_POST['descricao_motivo_devolucao'];
+                      $SolicitacaoPreTramitacaoImport->area_devolucao             = $_POST['area_devolucao'];
+                      $SolicitacaoPreTramitacaoImport->data_devolucao             = $_POST['data_devolucao'];
+                      $SolicitacaoPreTramitacaoImport->motivo_devolucao           = $_POST['motivo_devolucao'];
+                      if(isset($_POST['chamado_remedy']))
+                      {
+                          $SolicitacaoPreTramitacaoImport->chamado_remedy         = $_POST['chamado_remedy'];
+                      }
+                      else
+                      {
+                          $SolicitacaoPreTramitacaoImport->chamado_remedy         = '';
+                      }
+                  }
+             }
+
+
+            //busca valores automaticamente preenchidos
+            if($fonte == "siscom_servico")
+            {
+                $SolicitacaoPreTramitacaoImport = $SolicitacaoPreTramitacaoImport->buscaDadosSiscomServico($SolicitacaoPreTramitacaoImport, $ids, $revisao);
+                $SolicitacaoPreTramitacaoImport->produto = $SolicitacaoPreTramitacaoImport->buscaIdProdutoByDescricao($_POST['produto_servico']); 
+                $SolicitacaoPreTramitacaoImport->canal_entrada = 14;
+            }
+            else if($fonte == "siscom_vendas")
+            {
+               $SolicitacaoPreTramitacaoImport = $SolicitacaoPreTramitacaoImport->buscaDadosSiscomVendas($SolicitacaoPreTramitacaoImport, $ids, $revisao);
+               $SolicitacaoPreTramitacaoImport->produto = $SolicitacaoPreTramitacaoImport->buscaIdProdutoByDescricao($SolicitacaoPreTramitacaoImport->produto);
+               $SolicitacaoPreTramitacaoImport->canal_entrada = 14;
+            }
+
+             //cria objeto Produto
+            $Produto = new Produto();
+            $Produto = $Produto->buscaProdutoById($Produto, $SolicitacaoPreTramitacaoImport->produto);
+
+            $SolicitacaoPreTramitacaoImport->cat_prod = $Produto->categoria_produto;
+
+            //formata campos data
+            //$SolicitacaoPreTramitacaoImport->data_entrada_siscom  = formataDataBD(str_replace("-", "/", $SolicitacaoPreTramitacaoImport->data_entrada_siscom));
+
+            //manda dados do objeto pra proc
+            $dadosProc = '&'. $SolicitacaoPreTramitacaoImport->id_usuario
+                       . '&'. $SolicitacaoPreTramitacaoImport->siscom
+                       . '&'. $SolicitacaoPreTramitacaoImport->cat_prod
+                       . '&'. $SolicitacaoPreTramitacaoImport->canal_entrada
+                       . '&'. $SolicitacaoPreTramitacaoImport->data_receb
+                       . '&'. $SolicitacaoPreTramitacaoImport->produto 
+                       . '&'. $SolicitacaoPreTramitacaoImport->tipo_solicitacao
+                       . '&'. $SolicitacaoPreTramitacaoImport->complemento_tipo_solicitacao  
+                       . '&'. $SolicitacaoPreTramitacaoImport->cnpj
+                       . '&'. $SolicitacaoPreTramitacaoImport->razao_social
+                       . '&'. $SolicitacaoPreTramitacaoImport->qtd_acessos
+                       . '&'. $SolicitacaoPreTramitacaoImport->n_gs
+                       . '&'. $SolicitacaoPreTramitacaoImport->data_abertura_gestao
+                       . '&'. $SolicitacaoPreTramitacaoImport->status_solicitacao
+                       . '&'. $SolicitacaoPreTramitacaoImport->obs
+                       . '&'. $SolicitacaoPreTramitacaoImport->motivo_devolucao
+                       . '&'. $SolicitacaoPreTramitacaoImport->area_devolucao
+                       . '&'. $SolicitacaoPreTramitacaoImport->data_devolucao
+                       . '&'. $SolicitacaoPreTramitacaoImport->devolucao
+                       . '&'. $SolicitacaoPreTramitacaoImport->aprovacao
+                       . '&'. $data_cadastro
+                       . '&'. $SolicitacaoPreTramitacaoImport->data_entrada_siscom
+                       . '&'. $SolicitacaoPreTramitacaoImport->descricao_motivo_devolucao
+                       . '&'. $SolicitacaoPreTramitacaoImport->chamado_remedy
+                       . '&'. $SolicitacaoPreTramitacaoImport->revisao;
+
+          if ($acao == "nf") 
+          {
+              $sql_exec="CALL solicitacao_pretramitacao('$dadosProc', 'pre_tramitacao');";
+          }
+
+          $acao_exec= mysql_query($sql_exec) or die (mysql_error()); 
+
+          if ($acao == "nf") 
+          {
+            echo" <script> 
+              alert('Solicitação cadastrada com sucesso!');
+                document.location.replace('principal.php?t=views/home.php');
+              </script>
+              ";
+          }
+
+      }
+                     
+?>
+
+

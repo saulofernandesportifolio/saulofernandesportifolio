@@ -1,0 +1,32 @@
+<?php
+//parametros
+$id_usuario = $_POST['id_usuario']; 
+$fase = $_POST['solicitacao_pendentes']; 
+?>
+<body onload="buscaSolicitacoesPendentes()">
+      <label class="textoParagrafo">Protocolo da Solicitação:</label>
+        <input class="inputsTextTabelas" type="text" id="n_solicitacao"></input>
+        <a href="#" class="estiloLupa" id="consultaItensPendentesFasesOperador"><i class="fa fa-search"></a></i>
+   <br/>
+  <div id="wrapper">
+  		<table id="keywords" cellspacing="0" cellpadding="0">
+			<caption class="textoParagrafo"><h2 style="color: #7b682e;">Itens a preencher</h2></caption>
+	        <thead>
+	          <tr>
+	            <th><span>Protocolo Solicitação</span><i class="fa fa-sort"></i></th>
+	            <th><span>Nº GS</span><i class="fa fa-sort"></i></th>
+	            <th><span>Status</span><i class="fa fa-sort"></i></th>
+	            <th><span>Revisão</span><i class="fa fa-sort"></i></th>  
+	            <th><span>Data Recebimento</span><i class="fa fa-sort"></i></th>
+	            <th><span>Ação</span><i class="fa fa-sort"></i></th>
+	          </tr>
+	        </thead>
+	        <tbody id="rowSolicitacoes">
+	        </tbody>
+	    </table>
+   </div> 
+</body>
+<input type="hidden" value="<?php echo $fase?>" id="fase"></input>
+<input type="hidden" value="<?php echo $id_usuario?>" id="id_usuario"></input>
+
+          

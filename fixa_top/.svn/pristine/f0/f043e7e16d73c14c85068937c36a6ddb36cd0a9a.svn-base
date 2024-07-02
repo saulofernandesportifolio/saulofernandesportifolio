@@ -1,0 +1,99 @@
+<?php
+
+class Aprovacao {
+     public $operador; 
+     public $siscom; 
+     public $data_entrada_siscom; 
+     public $canal_entrada; 
+     public $produto; 
+     public $servico; 
+     public $complemento_servico;
+     public $qtd_acessos; 
+     public $data_recebimento_pos; 
+     public $cnpj; 
+     public $razao_social; 
+     public $oportunidade; 
+     public $proposta; 
+     public $data_finalizado; 
+     public $obs; 
+     public $status_solicitacao_aprovacao;
+     public $motivo_devolucao;
+     public $regDataEntrada;
+
+      function __construct($operador, $siscom, $data_entrada_siscom, $canal_entrada, $produto, $servico, $complemento_servico, $qtd_acessos, $data_recebimento_pos, $cnpj, $razao_social, $oportunidade, $proposta, $data_finalizado, $obs, $status_solicitacao_aprovacao,$motivo_devolucao) 
+      {
+          $this->operador = $operador; 
+          $this->siscom = $siscom; 
+          $this->data_entrada_siscom = $data_entrada_siscom; 
+          $this->canal_entrada = $canal_entrada; 
+          $this->produto = $produto; 
+          $this->servico = $servico; 
+          $this->complemento_servico = $complemento_servico;
+          $this->qtd_acessos = $qtd_acessos; 
+          $this->data_recebimento_pos = $data_recebimento_pos; 
+          $this->cnpj = $cnpj; 
+          $this->razao_social = $razao_social; 
+          $this->oportunidade = $oportunidade; 
+          $this->proposta = $proposta; 
+          $this->data_finalizado = $data_finalizado; 
+          $this->obs = $obs; 
+          $this->status_solicitacao_aprovacao = $status_solicitacao_aprovacao;
+          $this->motivo_devolucao = $motivo_devolucao;
+          $this->regDataEntrada = date("Y-m-d H:i:s");
+      }
+
+  
+       function validaCamposObrigatorios(Aprovacao $aprovacao)
+        {
+             if(
+                ($aprovacao->operador == "") ||  
+                ($aprovacao->siscom == "") ||  
+                ($aprovacao->data_entrada_siscom == "") ||  
+                ($aprovacao->canal_entrada == "") ||  
+                ($aprovacao->produto == "") ||  
+                ($aprovacao->servico == "") ||  
+                ($aprovacao->qtd_acessos == "") ||  
+                ($aprovacao->data_recebimento_pos == "") ||  
+                ($aprovacao->cnpj == "") ||  
+                ($aprovacao->razao_social == "") ||  
+                ($aprovacao->oportunidade == "") ||  
+                ($aprovacao->proposta == "") ||  
+                ($aprovacao->data_finalizado == "") || 
+                ($aprovacao->status_solicitacao_aprovacao == "")               
+               )
+              {
+                return true;
+              }
+        }
+
+      function enviaDadosBase(Aprovacao $aprovacao)
+      {
+
+        $dadosProc = str_replace("&","E",$aprovacao->operador)  
+              . '&'. str_replace("&","E",$aprovacao->siscom)                
+              . '&'. str_replace("&","E",$aprovacao->data_entrada_siscom)   
+              . '&'. str_replace("&","E",$aprovacao->canal_entrada)      
+              . '&'. str_replace("&","E",$aprovacao->produto)        
+              . '&'. str_replace("&","E",$aprovacao->servico)                
+              . '&'. str_replace("&","E",$aprovacao->complemento_servico)   
+              . '&'. str_replace("&","E",$aprovacao->qtd_acessos)      
+              . '&'. str_replace("&","E",$aprovacao->cnpj)                
+              . '&'. str_replace("&","E",$aprovacao->razao_social)
+              . '&'. str_replace("&","E",$aprovacao->oportunidade)
+              . '&'. str_replace("&","E",$aprovacao->proposta)
+              . '&'. str_replace("&","E",$aprovacao->data_recebimento_pos)      
+              . '&'. str_replace("&","E",$aprovacao->data_finalizado)             
+              . '&'. str_replace("&","E",$aprovacao->obs)               
+              . '&'. str_replace("&","E",$aprovacao->status_solicitacao_aprovacao)
+              . '&'. str_replace("&","E",$aprovacao->motivo_devolucao)            
+              . '&'. str_replace("&","E",$aprovacao->regDataEntrada);    
+
+    
+            $sql_exec="CALL SP_APROVACAO('$dadosProc');";
+            $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+            
+            return true;
+      }
+}
+?>
+    

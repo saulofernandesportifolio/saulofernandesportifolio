@@ -1,0 +1,91 @@
+<?php
+
+class Tramitacao {
+     public $operador;
+	   public $siscom;           
+     public $dataEntradaSiscom;
+     public $canalEntrada;                          
+     public $produto;
+     public $servico;
+     public $complementoServico;
+     public $quantidadeAcessos;
+     public $cnpj;
+     public $razaoSocial;
+     public $dataEncerramento;
+     public $devolucao;
+     public $numeroOportunidadeProposta;
+     public $status;
+     public $obs;
+     public $areaDevolucao;
+     public $regDataEntrada;
+
+      function __construct($operador, $siscom, $dataEntradaSiscom, $canalEntrada, $produto, $servico, $complementoServico, $quantidadeAcessos, $cnpj, $razaoSocial, $dataEncerramento, $numeroOportunidadeProposta, $status, $obs) 
+      {
+         $this->operador                   = $operador;
+         $this->siscom                     = $siscom;
+         $this->dataEntradaSiscom          = $dataEntradaSiscom;
+         $this->canalEntrada               = $canalEntrada;
+         $this->produto                    = $produto;
+         $this->servico                    = $servico;
+         $this->complementoServico         = $complementoServico;
+         $this->quantidadeAcessos          = $quantidadeAcessos;
+         $this->cnpj                       = $cnpj;
+         $this->razaoSocial                = $razaoSocial;
+         $this->dataEncerramento           = $dataEncerramento;
+         $this->numeroOportunidadeProposta = $numeroOportunidadeProposta;
+         $this->status                     = $status;
+         $this->obs                        = $obs;
+         $this->regDataEntrada             = date("Y-m-d H:i:s");
+      }
+
+  
+       function validaCamposObrigatorios(Tramitacao $tramitacao)
+        {
+             if(
+                ($tramitacao->siscom == "") ||                    
+                ($tramitacao->dataEntradaSiscom == "") ||
+                ($tramitacao->canalEntrada == "") ||            
+                ($tramitacao->produto == "") ||                   
+                ($tramitacao->servico  == "") ||                             
+                ($tramitacao->quantidadeAcessos == "") ||         
+                ($tramitacao->cnpj == "") ||                      
+                ($tramitacao->razaoSocial == "") ||
+                ($tramitacao->dataEncerramento == "") ||                 
+                ($tramitacao->numeroOportunidadeProposta == "") ||
+                ($tramitacao->status == "")                    
+               )
+              {
+                return true;
+              }
+        }
+
+      function enviaDadosBase(Tramitacao $tramitacao)
+      {
+
+            $dadosProc = str_replace("&","E",$tramitacao->operador) 
+                       . '&'. str_replace("&","E",$tramitacao->siscom)                    
+                       . '&'. str_replace("&","E",$tramitacao->dataEntradaSiscom)
+                       . '&'. str_replace("&","E",$tramitacao->canalEntrada)         
+                       . '&'. str_replace("&","E",$tramitacao->produto)                   
+                       . '&'. str_replace("&","E",$tramitacao->servico)                   
+                       . '&'. str_replace("&","E",$tramitacao->complementoServico)               
+                       . '&'. str_replace("&","E",$tramitacao->quantidadeAcessos)         
+                       . '&'. str_replace("&","E",$tramitacao->cnpj)                      
+                       . '&'. str_replace("&","E",$tramitacao->razaoSocial)
+                       . '&'. str_replace("&","E",$tramitacao->dataEncerramento)               
+                       . '&'. str_replace("&","E",$tramitacao->status)
+                       . '&'. str_replace("&","E",$tramitacao->obs)
+                       . '&'. str_replace("&","E",$tramitacao->numeroOportunidadeProposta)
+                       . '&'. str_replace("&","E",$tramitacao->devolucao)
+                       . '&'. str_replace("&","E",$tramitacao->areaDevolucao)
+                       . '&'. str_replace("&","E",$tramitacao->regDataEntrada);                           
+         
+    
+            $sql_exec="CALL SP_TRAMITACAO('$dadosProc');";
+            $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+            
+            return true;
+      }
+}
+?>
+    

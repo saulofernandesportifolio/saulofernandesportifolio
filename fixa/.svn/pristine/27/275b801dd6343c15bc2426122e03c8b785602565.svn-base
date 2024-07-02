@@ -1,0 +1,56 @@
+<?php
+include("../fixa/bd.php");
+require_once '../fixa/site/classes/cripto.php';
+?>
+
+<?php
+$cripto = new cripto();
+//parametros
+$id_usuario = $_GET['id']; 
+$id_usuario = $cripto->decodificar($id_usuario);
+$tipo = $_GET['tipo'];
+
+
+if (!empty($tipo))
+{	
+	switch ($tipo)
+	{ 
+		case 'intragov': 
+		{ 
+			$tipo = 'intragov'; 
+			break; 
+		} 
+		case 'gcom': 
+		{ 
+			$tipo = 'gcom';
+			break; 
+		}
+		case 'pre': 
+		{ 
+			$tipo = 'pre_tramitacao';
+			break; 
+		}
+	}
+}
+?>
+<body>
+	<?php if($tipo == 'intragov' || $tipo == 'gcom'){?>
+	<label class="textoParagrafo">Informe o nº do gs*:</label>
+        <input class="inputsTextTabelas" type="text" id="n_gs_manual" required="true"></input>
+    <?php }else if($tipo == 'pre_tramitacao'){?>
+    <label class="textoParagrafo">Informe o nº da solicitação*:</label>
+        <input class="inputsTextTabelas" type="text" id="n_solicitacao_manual" required="true"></input>
+    <?php }?>
+    <label class="textoParagrafo">Data recebimento da solicitação*:</label>
+		<input 
+			type="text"
+			id="data_recebimento_solicitacao"
+			name="data_recebimento_solicitacao" 
+			class="campoData inputsTextTabelas"
+			onblur = "validaData(this)";
+			style="width: 6%;"
+			required
+		>
+		<input name="bt_enviar" onclick="enviarSolicitacao(this, <?php echo  $id_usuario?>, 'solicitacao_manual', '<?php echo $tipo?>');" id="bto_enviar" type="button" value="Salvar" class="sb2 bradius" />
+
+</body>

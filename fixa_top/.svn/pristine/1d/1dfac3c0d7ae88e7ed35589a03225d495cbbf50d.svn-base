@@ -1,0 +1,33 @@
+<?php
+set_time_limit(200);
+require_once('../fixa_top/bd.php');
+
+$query = mysql_query('CALL SP_TRAMITACAO_REPORT()');
+
+while($fetch = mysql_fetch_array($query))
+{
+	$output[] = array (
+              $fetch[0],//Data
+              $fetch[1],//Operador  
+              $fetch[2],//siscom         
+              $fetch[3],//data entrada_siscom           
+              $fetch[4],//canal entrada
+              $fetch[5],//produto    
+              $fetch[6],//servico          
+              $fetch[7],//complemento servico          
+              $fetch[8],//quantidade de acessos
+              $fetch[9],//cnpj     
+              $fetch[10],//razao social             
+              $fetch[11], //data de encerramento    
+              $fetch[12], //status
+              $fetch[13], //obs 
+              $fetch[14], //n_oportunidade_proposta          
+              $fetch[15], //escritorio_gn,
+              $fetch[16] //area_devolucao,                        
+	);
+}
+
+echo json_encode($output);
+
+?>
+

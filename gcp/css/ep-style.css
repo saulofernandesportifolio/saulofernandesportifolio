@@ -1,0 +1,733 @@
+@import url(genericons/genericons.css);
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, main,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	vertical-align: baseline;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	-ms-box-sizing: border-box;
+	box-sizing: border-box;
+	
+}
+/* HTML5 display-role reset for older browsers */
+main, article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+time {
+	display: inline;
+}
+
+/*****
+ ***** Grids **********/
+.grid {
+    padding: 0 20px;
+    display: block;
+    float: left;
+    position: relative;
+}
+
+.grid-1 {
+    width: 100%;
+}
+
+.grid-1-3 {
+    width: 33.3%;
+}
+
+.grid-2-3 {
+    width: 66.7%;
+}
+
+.grid-1-4{
+    width: 25%;
+}
+
+.grid-2-4, .grid-1-2 {
+    width: 50%;
+}
+
+.grid-3-4 {
+    width: 75%;
+}
+
+.grid-1-5 {
+    width: 20%;
+}
+
+.grid-2-5 {
+    width: 40%;
+}
+
+.grid-3-5 {
+    width: 60%;
+}
+
+.grid-4-5 {
+    width: 80%;
+}
+
+
+.grid-1-8 {
+    width: 12.5%;
+}
+
+.grid-1-8 {
+    width: 12.5%;
+}
+
+.grid-2-8 {
+    width: 25%;
+}
+
+.grid-3-8 {
+    width: 37.5%;
+}
+
+.grid-4-8 {
+    width: 50%;
+}
+
+.grid-5-8 {
+    width: 62.5%;
+}
+
+.grid-6-8 {
+    width: 75%;
+}
+
+.grid-7-8 {
+    width: 87.5%;
+}
+
+.grid-1-10 {
+    width: 10%;
+}
+
+.grid-2-10 {
+    width: 20%;
+}
+.grid-3-10 {
+    width: 30%;
+}
+.grid-4-10 {
+    width: 40%;
+}
+.grid-5-10 {
+    width: 50%;
+}
+.grid-6-10 {
+    width: 60%;
+}
+.grid-7-10 {
+    width: 70%;
+}
+
+.grid-8-10 {
+    width: 80%;
+}
+
+.grid-9-10 {
+    width: 90%;
+}
+
+.grid img {
+	max-width: 100%;
+	height: auto;
+}
+
+/*****
+ ***** Mixins *****/
+ .transition(@time: 0.2s, @style: ease-in-out){
+ 	-webkit-transition: @time @style all;
+ 	-moz-transition: @time @style all;
+ 	-ms-transition: @time @style all;
+ 	-o-transition: @time @style all;
+ 	transition: @time @style all;
+ }
+
+
+/*****
+ ***** Variaveis Globais *****
+
+
+@wrap-standart: 960px;
+@wrap-large: 1200px;
+@wrap-small: 720px;
+@wrap-mobile: 100%;
+@bg-color: #fff;
+@first-color: #589252;
+@second-color: #696;
+@third-color: #c52;
+@fourty-color: #693;
+
+@sans: "Oswald", "Gill Sans Std", "Myriad Pro", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+@serif: georgia, times, serif;
+
+ ***********************************/
+
+
+/*****
+ ***** Estilo padrao da pagina *****/
+
+body {
+	background-color: #fff;
+	margin-bottom: 30px;
+	margin-top: 30px;
+	font-family: georgia, times, serif;
+	font-size: 18px;
+	color: #444;
+}
+
+a {
+	text-decoration: none;
+	border-bottom: 1px dotted;
+	color: #589252;
+}
+
+a:hover, a:focus {
+	border-bottom-style: solid;
+	color: #c52;
+}
+
+address {
+	font-size: 13px;
+	font-style: normal;
+	color: #777;
+	line-height: 1em;
+	margin-bottom: 15px;
+}
+
+address p {
+	margin: 5px 0;
+}
+
+form {
+	display: table;
+	margin: 15px 0;
+}
+
+form label {
+	font-weight: normal;
+	display: block;
+	width: 100%;
+	float: left;
+	margin: 15px 0 0px 0;
+	font-family: "Oswald", "Gill Sans Std", "Myriad Pro", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+	line-height: 1em;
+}
+
+form input[type=text],
+form input[type=email],
+form input[type=password],
+form input[type=tel],
+form input[type=search],
+form textarea {
+	width: 100%;
+	background-color: #fff;
+	display: block;
+	height: 30px;
+	margin: 15px 0;
+	padding: 5px 10px;
+	line-height: 16px;
+	font-family: serif;
+	font-size: 18px;
+	border: 1px solid lighten(#589252, 10%);
+	outline: none;
+	.transition();
+	float: left;
+}
+
+form input[type=text]:focus,
+form input[type=email]:focus,
+form input[type=password]:focus,
+form input[type=tel]:focus,
+form input[type=search]:focus,
+form textarea:focus {
+	border-color: #589252;
+	box-shadow: 0 0 0px 3px rgba(0, 112, 66, 0.15);
+}
+
+form input[type=text],
+form input[type=password],
+form input[type=email],
+form input[type=file],
+form input[type=search] {
+	border: 1px solid #ddd;
+	width: 20em;
+	height: 2em;
+	line-height: 2em;
+	padding: 2px;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+form input[type=text]:focus,
+form input[type=password]:focus,
+form input[type=email]:focus,
+form input[type=file]:focus,
+form input[type=search]:focus {
+	border-color: #589252;
+	outline: 3px solid rgba(82,146,88, 0.2);
+}
+
+form textarea {
+	height: 120px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: "Oswald", "Gill Sans Std", "Myriad Pro", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+	line-height: 1.1em;
+	margin: 15px 0;
+	color: #589252;
+	font-weight: normal;
+}
+
+h1 {
+	font-size: 48px;
+}
+
+h2 {
+	font-size: 36px;
+}
+
+h3 {
+	font-size: 30px;
+}
+
+h4 {
+	font-size: 24px;
+}
+
+h5 {
+	font-size: 18px;
+}
+
+h6 {
+	font-size: 16px;
+}
+
+p {
+	line-height: 1.3em;
+	margin: 15px 0;
+}
+
+q {
+  quotes: "“" "”" "‘" "’";
+  display: inline-block;
+}
+
+q p {
+	display: inline;
+}
+
+q:before {
+    content: open-quote;
+}
+q:after {
+    content: close-quote;
+}
+
+.btn, 
+input[type=submit],
+input[type=button],
+input[type=reset] {
+	background-color: #eee;
+	display: inline-block;
+	height: 45px;
+	margin: 15px 5px 15px 0;
+	padding: 0 2em;
+	font-size: 16px;
+	font-weight: normal;
+	font-family: "Oswald", "Gill Sans Std", "Myriad Pro", Tahoma, Verdana, Helvetica, Arial, sans-serif;
+	line-height: 42px;
+	text-transform: uppercase;
+	color: #777;
+	border: none;
+	border-bottom: 4px solid;
+	cursor: pointer;
+	border-color: #ddd;
+	position: relative;
+	outline: none;
+}
+
+.btn:hover, 
+input[type=submit]:hover,
+input[type=button]:hover,
+input[type=reset]:hover,
+.btn:focus, 
+input[type=submit]:focus,
+input[type=button]:focus,
+input[type=reset]:focus {
+	border: none;
+	border-bottom: none;
+	border-top: 4px solid;
+	border-color: #ddd;
+	margin-top: 10px;
+	bottom: -5px;
+	color: #555
+}
+
+.btn.btn-primary, 
+input[type=submit],
+input[type=button].btn-primary,
+input[type=reset].btn-primary,
+.btn.btn-primary:hover, 
+input[type=submit]:hover,
+input[type=button].btn-primary:hover,
+input[type=reset].btn-primary:hover,
+.btn.btn-primary:focus, 
+input[type=submit]:focus,
+input[type=button].btn-primary:focus,
+input[type=reset].btn-primary:focus {
+	background-color: #39a;
+	border-color: #277b83;
+	color: #fff;
+}
+
+.btn.btn-success, 
+input[type=submit].btn-success,
+input[type=button].btn-success,
+input[type=reset].btn-success,
+.btn.btn-success:hover, 
+input[type=submit].btn-success:hover,
+input[type=button].btn-success:hover,
+input[type=reset].btn-success:hover,
+.btn.btn-success:focus, 
+input[type=submit].btn-success:focus,
+input[type=button].btn-success:focus,
+input[type=reset].btn-success:focus {
+	background-color: #559944;
+	border-color: #447d3a;
+	color: #fff;
+}
+
+/* Use the following CSS code if you want to use data attributes for inserting your icons */
+.btn:before, 
+input[type=submit]:before,
+input[type=button]:before,
+input[type=reset]:before {
+	display: inline-block;
+	-webkit-font-smoothing: antialiased;
+	font-family: 'Genericons';
+	vertical-align: middle;
+	font-size: 2em;
+	margin-left: -0.5em;
+	margin-right: 0.25em;
+}
+
+.citation {
+	display: table;
+	width: auto;
+	padding: 60px 10%;
+	text-align: center;
+	float: left;
+	position: relative;
+}
+
+.citation q {
+	font-size: 36px;
+	font-style: italic;
+	position: relative;
+}
+
+.citation q:before {
+	content: "\201C";
+	position: absolute;
+	left: -60px;
+	top: -30px;
+	font-size: 240px;
+	color: #eee;
+	z-index: -1;
+}
+
+.clearfix {
+	float: left;
+	clear: left;
+}
+
+.float-left, .alignleft {
+	float: left;
+}
+
+.alignleft {
+	margin-top: 0.3em;
+	margin-right: 30px;
+	margin-bottom: 30px;
+}
+
+.float-right, .alignright {
+	float: right;
+}
+
+.alignright {
+	margin-top: 0.3em;
+	margin-left: 30px;
+	margin-bottom: 30px;
+}
+
+.aligncenter {
+	display: table;
+	clear: left;
+	margin: 0 auto;
+}
+
+.footer {
+	width: 100%;
+	float: left;
+	clear: both;
+}
+
+form.form-vertical {
+	float: left;
+	margin: 0 15px;
+}
+
+.intro {
+	display: table;
+	width: 100%;
+	padding: 30px 0;
+	margin: 30px 0;
+	border-top: 2px solid #696;
+	border-bottom: 2px solid #696;
+	text-align: center;
+}
+
+ul {
+	padding-left: 2em;
+	list-style: square;
+	line-height: 1.4em;
+}
+
+ul li {
+	margin: 8px 0 8px 0;
+}
+
+.menu li {
+	display: block;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
+
+.menu li a {
+	display: block;
+	padding: 0 10px;
+	line-height: 2.4em;
+}
+
+.page-header {
+	display: table;
+	float: left;
+	width: 100%;
+	border-bottom: 2px solid #589252;
+	border-top: 2px solid #589252;
+	margin: 15px 0;
+	padding: 0 15px;
+}
+
+.page-header * {
+	line-height: 36px;
+}
+
+.page-header h1, h2 {
+	font-size: 36px;
+}
+
+.pagination-menu {
+	width: 100%;
+	float: left;
+	text-align: center;
+}
+
+.pagination-menu * {
+	padding: 0 10px;
+	border-right: 1px solid #ccc;
+	border-bottom: none;
+	text-align: center;
+	display: inline-block;
+}
+
+.pagination-menu a:hover,
+.pagination-menu a:focus {
+	border-bottom: none;
+}
+
+.pagination-menu .next {
+	border-right: none;
+}
+
+.panel {
+	border: 2px solid #ddd;
+	padding: 30px;
+}
+
+.panel .title {
+	width: 100%;
+	font-size: 18px;
+	color: #777;
+	margin: -15px 0 20px -15px;
+	padding-bottom: 8px;
+	float: left;
+	line-height: 1.5em;
+	text-align: center;
+}
+
+.section-vertical {
+	display: table;
+	width: 100%;
+	float: left;
+}
+
+.section-header {
+	width: 100%;
+	display: table;
+	border-bottom: 2px solid #589252;
+	float: left;
+	vertical-align: middle;
+	margin-bottom: 30px;
+}
+
+.section-vertical .section-header * {
+	line-height: 36px;
+}
+
+.section-vertical .section-header h1,
+.section-vertical .section-header h2 {
+	font-size: 36px;
+}
+
+.separator-bottom {
+	margin-bottom: 30px;
+	padding-bottom: 15px;
+	border-bottom: 2px solid #589252;
+}
+
+.separator-top {
+	margin-top: 30px;
+	padding-top: 15px;
+	border-top: 2px solid #589252;
+}
+
+.topnav {
+	display: table;
+	width: 100%;
+	float: left;
+	margin: 20px 0;
+	margin-bottom: 80px;
+}
+
+.topnav .brand {
+	display: block;
+	height: 50px;
+	border: none;
+	float: left;
+	margin-right: 20px;
+	padding: 10px;
+	vertical-align: middle;
+	text-align: center;
+}
+
+.topnav .brand img {
+	height: 50px;
+	width: auto;
+	margin-top: -10px;
+}
+
+.topnav form.form-vertical input {
+	margin-top: 9px;
+	margin-bottom: 9px;
+}
+
+.topnav .menu li a {
+	color: #777;
+	border-bottom: 2px solid #fff;
+	border-top: 2px solid #fff;
+	line-height: 30px;
+	margin: 7px 0;
+	.transition();
+}
+
+.topnav .menu li a:hover,
+.topnav .menu li a:focus {
+	color: #589252;
+	border-color: #589252;
+}
+
+.widget {
+	margin-bottom: 30px;
+	float: left;
+	clear: left;
+}
+
+.widget ul {
+	display: table;
+}
+
+.widget ul li {
+	display: block;
+	float: left;
+	clear: left;
+	list-style: none;
+	line-height: 1.6em;
+	margin: 0;
+	padding: 0;
+}
+
+.widget ul li a {
+	display: block;
+	border: none;
+}
+
+.wrap {
+	margin: 0px 3em;
+}
+
+@media screen and (min-width: 1281px) {
+}
+
+@media screen and (min-width: 1001px) and (max-width: 1280px) {
+}
+
+@media screen and (min-width: 721px) and (max-width: 1000px) {
+	.grid {
+		width: 100%;
+	}
+}
+
+@media screen and (max-width: 720px) {
+	.grid {
+		width: 100%;
+	}
+}

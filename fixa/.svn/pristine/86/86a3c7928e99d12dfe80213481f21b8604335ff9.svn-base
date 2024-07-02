@@ -1,0 +1,162 @@
+<?php
+  
+  require_once '../fixa/site/classes/cripto.php';
+
+  $cripto = new cripto();
+
+?>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/datatables.min.js"></script>
+
+<!--lib export-->
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_page.css" />
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_table.css" />
+<link rel="stylesheet" type="text/css" media="screen"  href="css/datatablecss/datatables.min.css">
+<link rel="stylesheet" type="text/css" media="screen"  href="css/datatablecss/buttons.dataTables.min.css">
+
+<div id="margem_temp" style="margin-top: 60px;"></div>
+
+
+<script type="text/javascript">
+$(document).ready(function() {
+  
+  //$('#jsontable').dataTable( {
+   //     "ajax": 'arrays.txt'
+   // } );
+
+  var oTable = $('#tabela3').dataTable({
+        "oLanguage": {
+        "sProcessing": "Aguarde enquanto os dados s&atilde;o carregados ...",
+        "sLengthMenu": "Mostrar _MENU_ registros por pagina",
+        "sZeroRecords": "Nenhum registro encontrado",
+        "sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",
+        "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+        "sInfoFiltered": "",
+        "sSearch": "Procurar",
+        "oPaginate": {
+           "sFirst":    " Primeiro ",
+           "sPrevious": " Anterior ",
+           "sNext":     " Próximo ",
+           "sLast":     " Anterior "
+        }
+      }, 
+      "processing": true,
+      "dom": 'lBfrtip',
+      "buttons": [
+            {
+                extend: 'collection',
+                text: 'Export',
+                buttons: [
+                    'excel',
+                    'csv'
+                ]
+            }
+        ]     
+  });  //Initialize the datatable
+
+  $(window).load(function(){
+    var user = $(this).attr('id');
+   
+    $.ajax({
+        url: 'sql_form_pre_tramitacao.php?method=fetchdata',
+        dataType: 'json',
+        type:'post',
+        success: function(s){
+        //console.log(s);
+            oTable.fnClearTable();
+              for(var i = 0; i < s.length; i++) {
+                           oTable.fnAddData([
+                                      s[i][0],
+                                      s[i][1],
+                                      s[i][2],
+                                      s[i][3],
+                                      s[i][4],
+                                      s[i][5],
+                                      createFormatData(s[i][6]),
+                                      s[i][7],
+                                      s[i][8],
+                                      s[i][9],
+                                      s[i][10],
+                                      s[i][11],
+                                      s[i][12],
+                                      s[i][13],
+                                      s[i][14],
+                                      createFormatData(s[i][15]),
+                                      s[i][16],
+                                      s[i][17],
+                                      createFormatData(s[i][18]),
+                                      s[i][19],
+                                      s[i][20]
+                               ]);                    
+                      } // End For
+                      
+        },
+        error: function(e){
+           //console.log(e.responseText); 
+        }
+      });
+  });
+
+  
+
+});
+</script>
+
+
+<h2 class="titulo_table_result">Pré-Tramitação</h2>
+<table border="0" id="tabela3"  width="auto" class="display table_tramitacao">
+        <thead>
+            <tr>
+               <th>Data</th>
+               <th>Analista</th>
+               <th>Siscom</th>
+               <th>Categ. Prod.</th>
+               <th>Devolução</th>
+               <th>Canal Entrada</th>
+               <th>Data Receb. da Solicitação</th>
+               <th>Nº Pac. Siscom</th>
+               <th>Prod.</th>
+               <th>Tipo Solicitação</th>
+               <th>Serviços</th>
+               <th>Cnpj</th>
+               <th>Razão Social</th>
+               <th>Qtde Acessos</th>
+               <th>Nº GS</th>
+               <th>Data Abert. Gestão</th>
+               <th>Motivo Devolução</th>
+               <th>Área Devolução</th>
+               <th>Data Devolução</th>
+               <th>Status</th>
+               <th>Obs</th>
+            </tr>
+        </thead>
+        <!--<tfoot>
+            <tr>
+               <th>Data</th>
+               <th>Analista</th>
+               <th>Siscom</th>
+               <th>Categ. Prod.</th>
+               <th>Devolução</th>
+               <th>Canal Entrada</th>
+               <th>Data Receb. da Solicitação</th>
+               <th>Nº Pac. Siscom</th>
+               <th>Prod.</th>
+               <th>Tipo Solicitação</th>
+               <th>Serviços</th>
+               <th>Cnpj</th>
+               <th>Razão Social</th>
+               <th>Qtde Acessos</th>
+               <th>Nº GS</th>
+               <th>Data Abert. Gestão</th>
+               <th>Motivo Devolução</th>
+               <th>Área Devolução</th>
+               <th>Data Devolução</th>
+               <th>Status</th>
+               <th>Obs</th>
+            </tr>
+        </tfoot>-->
+    </table>
+</div>
+   

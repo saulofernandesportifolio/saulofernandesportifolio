@@ -1,0 +1,1 @@
+<img src="img/Logo_Empreza_3.jpg">

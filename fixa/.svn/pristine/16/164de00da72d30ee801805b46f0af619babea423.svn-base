@@ -1,0 +1,29 @@
+<div id="main-container">
+    <!-- HEADER -->
+    <div id="menu_options">
+		<ul class="header-menu horizontal-list">
+			<li  class="menu_li" onClick="document.location.href='principal.php?t=forms/home.php'">Home</li>
+			<li  class="menu_li" onClick="document.location.href='principal.php?id=<?php echo $id_usuario?>&t=forms/form_upload_base.php'">Upload de base</li>
+		    <li  class="menu_li" onClick="document.location.href='principal.php?t=forms/formusuariospesquisa.php'">Usuários</li>
+			<li  class="menu_li" onClick="document.location.href='principal.php?t=forms/form_distribuicao.php'">Distribuição</li>
+			<li  class="menu_li">Operador
+				<ul>
+			      <li style="width:155px;" onClick="document.location.href='principal.php?id=<?php echo $id_usuario?>&t=forms/form_operador.php'">Formulário Pré-Tramitação</li>
+			    </ul>
+			</li>
+		</ul>
+	</div>
+	<div id="menu_usuario">
+		<ul class="header-menu horizontal-list" >
+			<li  class="menu_li" id="usuario"><?php echo $nome . ' - ' . $perfil ?>
+					<ul>
+				      <li onClick="document.location.href='principal.php?id=<?php echo $id_usuario?>&t=forms/formalterasenha.php'">Alterar Senha
+				      </li>
+					   <li  onClick="document.location.href='logout.php'">Logout</li>
+				    </ul>
+				</li>
+			</ul>
+	</div>
+</div>
+
+

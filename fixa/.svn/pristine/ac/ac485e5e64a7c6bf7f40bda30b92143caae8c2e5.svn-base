@@ -1,0 +1,81 @@
+<?php
+require_once '../fixa/site/classes/cripto.php';
+require_once '../fixa/site/classes/SolicitacaoGcom.php';
+require_once '../fixa/site/classes/Produto.php';
+include("../fixa/bd.php");
+$tempo = 0;
+set_time_limit($tempo);
+date_default_timezone_set("Brazil/East");
+$data_cadastro=date("Y-m-d H:i:s");
+?>
+
+<?php
+     
+    $cripto = new cripto();
+    //parametros
+    $id_usuario     = $_POST['id_usuario']; 
+    $id_usuario     = $cripto->decodificar($id_usuario);
+    $id_solicitacao = $_POST['id_solicitacao'];
+    $revisao        = $_POST['revisao'];
+
+    $SolicitacaoGcomOperador = new SolicitacaoGcom();
+    $SolicitacaoGcomOperador->data_receb_documento  = $SolicitacaoGcomOperador->buscaDataRecebimentoSolicitacao($id_solicitacao,$id_usuario,$revisao);
+    $SolicitacaoGcomOperador->id_solicitacao = $id_solicitacao;
+    $SolicitacaoGcomOperador->revisao = $revisao;
+    $SolicitacaoGcomOperador->id_usuario_Gcom = $id_usuario;
+?>
+
+<?php
+ //constroi dados de acordo com inputs do usuario
+    $SolicitacaoGcomOperador->constroiSolicitacaoGcom($SolicitacaoGcomOperador, $_POST['n_gs'], $_POST['tipo_entrada'], $_POST['contrato_mae'], $_POST['data_assinatura_doc'], $_POST['n_documento'], $_POST['sistema_validacao'], $_POST['n_vantive'], $_POST['produto'], $_POST['data_tratativa'], $_POST['nome_solicitante'], $_POST['numero_wcd'], $_POST['razao_social'], $_POST['cnpj'], $_POST['plano_solicitado'], $_POST['qtde_acesso'], $_POST['data_finalizacao'], $data_cadastro);
+
+     //valida campos obrigatórios
+     $retornoValidacaoItensObrigatorios = $SolicitacaoGcomOperador->validaCamposObrigatorios($SolicitacaoGcomOperador);
+
+     if($retornoValidacaoItensObrigatorios == 1)
+     {
+          echo" <script> 
+              alert('Por favor preencher todos os campos obrigatórios !');
+              history.back();
+            </script>
+            "; 
+            exit();               
+      }
+
+    //insere dados em variavel para proc
+    $dadosProc = '&'. $SolicitacaoGcomOperador->id_usuario_Gcom  
+               . '&'. $SolicitacaoGcomOperador->data_receb_documento
+               . '&'. $SolicitacaoGcomOperador->tipo_entrada
+               . '&'. $SolicitacaoGcomOperador->id_contrato_mae
+               . '&'. $SolicitacaoGcomOperador->data_assinatura_doc 
+               . '&'. $SolicitacaoGcomOperador->numero_documento        
+               . '&'. $SolicitacaoGcomOperador->id_sistema_validacao  
+               . '&'. $SolicitacaoGcomOperador->n_vantive       
+               . '&'. $SolicitacaoGcomOperador->id_produto           
+               . '&'. $SolicitacaoGcomOperador->data_tratativa    
+               . '&'. $SolicitacaoGcomOperador->nome_solicitante    
+               . '&'. $SolicitacaoGcomOperador->n_gestao_servicos        
+               . '&'. $SolicitacaoGcomOperador->numero_wcd         
+               . '&'. $SolicitacaoGcomOperador->razao_social       
+               . '&'. $SolicitacaoGcomOperador->cnpj                
+               . '&'. $SolicitacaoGcomOperador->plano_solicitado        
+               . '&'. $SolicitacaoGcomOperador->qtde_acesso          
+               . '&'. $SolicitacaoGcomOperador->data_finalizacao
+               . '&'. $SolicitacaoGcomOperador->reg_dt_entrada
+               . '&'. $SolicitacaoGcomOperador->revisao
+               . '&'. $SolicitacaoGcomOperador->id_solicitacao;   
+ 
+ 
+    $sql_exec="CALL solicitacao_gcom('$dadosProc');";
+
+    $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+  echo" <script> 
+    alert('Solicitação cadastrada com sucesso!');
+      document.location.replace('principal.php?t=views/home.php');
+    </script>
+    ";
+                                      
+    exit();
+   
+?>

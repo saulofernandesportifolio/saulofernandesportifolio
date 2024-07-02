@@ -1,0 +1,41 @@
+﻿
+<div id="fieldset" class="bradius">
+	<form action="principal.php?&id=<?php echo $id_usuario ?>&t=controles/sql_formusuariosedita.php"  method="POST">
+		<input type="hidden" value="0" id="conterro" />
+		<legend align="center">
+			<h3 align="center">Editar Usuário</h3>
+		</legend>
+		<div class="divformservico">
+		  <p align="center">
+			  	<strong>Operador</strong>:
+			  	<label>
+				    <select name="operador" id="select" >
+					      <?php
+							include("../fixa/bd.php");
+							$sql_operador = "SELECT * FROM usuario WHERE id_status = 2 ORDER BY nome";
+									
+									$acao_operador = mysql_query($sql_operador) or die (mysql_error());
+									
+									while($linha_operador = mysql_fetch_assoc($acao_operador))
+									{
+										$login_operador 	= $linha_operador["id_usuario"];
+										$nome_operador	 	= $linha_operador["nome"];
+										echo "<option value='$login_operador'";
+										echo ">$nome_operador</option>";
+									}
+
+							?>
+				    </select>
+			    </label>
+		    </p>
+			 <input name="bt_enviar" id="bt_enviar" type="submit" value="Salvar" class="sb2 bradius" />
+			 <input type="reset" value="Limpar" class="sb2 bradius"/>
+			 <input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" onClick="window.location='principal.php?t=forms/home.php'"/>
+	 	</div>
+
+	</form>
+</div>
+
+</body>
+</html>
+

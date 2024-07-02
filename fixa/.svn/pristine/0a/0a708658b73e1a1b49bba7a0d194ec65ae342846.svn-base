@@ -1,0 +1,98 @@
+<?php
+
+include("../fixa/bd.php");
+
+ini_set ( 'mysql.connect_timeout' ,  '60' ); 
+ini_set ( 'default_socket_timeout' ,  '60' );
+ini_set('memory_limit', '-1'); 
+
+function f_inserir_dados($dados=array(), $info, $id)
+{
+	try{
+		if($info == 2)
+		{
+			//popula tabela siscom_vendas
+			$sql_insere =
+				"INSERT INTO siscom_vendas(
+					pacote,
+					data,
+					hora,
+					cnpj_cpf_cliente,
+					razao_social,
+					segmento,
+					gerente_vendas,
+					servico,
+					status,
+					produto,
+					qtd,
+					importacao_usuario,
+					importacao_data     
+			    )VALUES(
+					 $dados[0],
+					'$dados[1]',
+					'$dados[2]',
+					'$dados[3]',
+					'$dados[4]',
+					'$dados[5]',
+					'$dados[6]',
+					'$dados[7]',
+					'$dados[8]',
+					'$dados[9]',
+					 $dados[10],
+					 $id,
+					 CURDATE() 
+			    )";
+		}
+		elseif ($info == 3) 
+		{
+			//popula tabela siscom_servicos
+			$sql_insere =
+				"INSERT INTO siscom_servico(
+					cliente_especial,
+					data,
+					hora,
+					cnpj_cpf_cliente,
+					codigo_cliente,
+					razao_social_cliente,
+					servico,
+					evento,
+					gerente_negocio,
+					escritorio_gn,
+					gn_responsavel_canal,
+					nro_solicitacao,
+					status,
+					acessos,
+					importacao_usuario,
+					importacao_data     
+			    )VALUES(
+					'$dados[0]',
+					'$dados[1]',
+					'$dados[2]',
+					'$dados[3]',
+					 $dados[4],
+					'$dados[5]',
+					'$dados[6]',
+					'$dados[7]',
+					'$dados[8]',
+					'$dados[9]',
+					'$dados[10]',
+					 $dados[11],
+					'$dados[12]',
+					 $dados[13],
+					 $id,
+					 CURDATE() 
+			    )";
+		}
+	                 
+		$acao_insere= mysql_query($sql_insere) or die (mysql_error());
+
+	}catch(Exception $e) {
+    	//echo 'Exceção capturada: ',  $e->getMessage(), "\n";
+    	echo 'Ocorreu um erro no processamento do arquivo \n';
+        echo 'Verifique as instruções de envio e tente novamente \n';
+        echo 'Se o erro persistir informe o ocorrido ao Administrador do site'; 
+	}
+	
+}
+
+?>

@@ -1,0 +1,44 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../fixa/bd.php");
+
+$data_cadastro=date("Y-m-d H:i:s");
+
+$sup = $_POST['sup'];
+$op = $_POST['op'];
+$solicitacoesArray = $_POST['sm'];
+
+$nSolicitacoes = count($solicitacoesArray); 
+
+if($nSolicitacoes == 0)
+{
+	exit();
+}else{
+	//atualiza informaçoes na tabela de usuario x solicitacao
+	for($item = 0; $item < $nSolicitacoes; $item++) {
+
+		//verifica se solicitação ja foi distribuida
+		$sql_check_siscom = mysql_query("SELECT id_solicitacao FROM usuario_solicitacao WHERE id_solicitacao = $solicitacoesArray[$item]");
+
+		if(mysql_affected_rows() == 0){
+
+			//distribui solicitacao para usuario
+			$sql_insere="INSERT INTO usuario_solicitacao(id_usuario, id_solicitacao, id_supervisor, reg_data) 
+						VALUES('$op', '$solicitacoesArray[$item]', '$sup', '$data_cadastro')";
+
+	
+			$acao_insere= mysql_query($sql_insere) or die (mysql_error());
+
+			//atualiza tabela solicitacao_fases - pre tramitacao
+			$sql_atualiza_status_fase_edicao = "INSERT INTO solicitacao_fases(id_solicitacao, pre_tramitacao, id_usuario_resp) 
+												VALUES($solicitacoesArray[$item], 'Com operador', '$op')";
+
+  	  	 	$acao_atualiza_status_fase_edicao = mysql_query($sql_atualiza_status_fase_edicao) or die (mysql_error());
+
+		}
+	}
+						
+}
+
+?>

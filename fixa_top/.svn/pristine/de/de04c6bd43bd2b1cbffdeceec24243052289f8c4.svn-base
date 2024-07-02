@@ -1,0 +1,295 @@
+<div id="div_form_tramitacao" class="bradius wrapper" style="margin-left: 25%;" >
+	<form 
+		action="principal.php?t=Controller/AprovacaoController.php" method="POST">
+		<fieldset id="fieldset_style">
+			<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" name="id_usuario" id="id_usuario"></input>
+			<input type="hidden" value="insereSolicitacaoAprovacao" name="opcao" id="opcao"></input>
+			<h2>Aprovação</h2> 
+			<table id="form_tramitacao">
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Siscom</label>
+							<input 
+								type="text" 
+								id="siscom"  
+								name="siscom"
+								size= "50"
+								required
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data Entrada Siscom</label>
+							<input 
+								type="text"
+								id="data_entrada_siscom"
+								name="data_entrada_siscom" 
+								onblur = "validaData(this)";
+								class="campoData" 
+								required
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Canal de entrada*</label>
+							<select 
+								name="canal_entrada" 
+								id="canal_entrada" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+								<option></option>
+								<?php 
+						         
+						         	$canal_entrada=mysql_query("SELECT * FROM canal_entrada WHERE id_canal_entrada IN (4,5,14)");
+
+						         while($rowce=mysql_fetch_array($canal_entrada)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowce['id_canal_entrada']; ?>">
+						   			<?php echo $rowce['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Produto*</label>
+							<select 
+								name="produto" 
+								id="produto" 
+								class="txt2comboboxpadrao bradius"
+								required
+							>
+								<option></option>
+								<?php 
+									
+						         	$produto=mysql_query("SELECT id_produto, UPPER(descricao) descricao FROM produto ORDER BY DESCRICAO");
+
+									while($rowp=mysql_fetch_array($produto)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowp['id_produto']; ?>">
+						   			<?php echo $rowp['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					
+					<td>
+						<div class="div_forms">
+							<label>Serviço*</label>
+							<select 
+								name="servico" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+								<option></option>
+								<?php 
+									
+						         		$servicos=mysql_query("SELECT id_servicos, UPPER(descricao) as descricao FROM servicos order by descricao");
+
+							         
+
+									while($rowserv=mysql_fetch_array($servicos)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowserv['id_servicos']; ?>">
+						   			<?php echo $rowserv['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Complemento Serviço</label>
+							<input 
+								type="text" 
+								id="complemento_servico"  
+								name="complemento_servico"
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Quantidade de acessos*</label>
+							<input 
+								type="text" 
+								id="qtd_acessos"  
+								name="qtd_acessos"
+								onblur="validaIntFields(this)";
+								required
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data Recebimento Aprovação</label>
+							<input 
+								type="text" 
+								id="data_recebimento_pos"  
+								name="data_recebimento_pos"
+								required
+								class="campoData" 
+								onblur = "validaData(this)";
+							/> 
+						</div>
+					</td>		
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>CNPJ*</label>
+							<input 
+								type="text" 
+								id="cnpj"  
+								name="cnpj"
+								required
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Razão Social*</label>
+							<input 
+								type="text" 
+								id="razao_social"  
+								name="razao_social"
+								size= "100"
+								required
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Oportunidade</label>
+							<input 
+								type="text"
+								id="oportunidade"
+								name="oportunidade" 
+								required
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Proposta</label>
+							<input 
+								type="text"
+								id="proposta"
+								name="proposta" 
+								required
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data Finalizado</label>
+							<input 
+								type="text" 
+								id="data_finalizado"  
+								name="data_finalizado"
+								required
+								class="campoData" 
+								onblur = "validaData(this)";
+							/> 
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Observações</label>
+							<input 
+								type="text" 
+								id="obs"  
+								class="txt bradius" 
+								name="obs"
+							/> 
+						</div>
+					</td>		
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Status*</label>
+							<select 
+								name="status_solicitacao_aprovacao" 
+								id="status_solicitacao_aprovacao" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+								<option></option>
+								<?php 
+						         	
+									$statuss=mysql_query("SELECT * FROM status_solicitacao WHERE id_status_solicitacao IN(9,24,23) ORDER BY descricao");
+							        
+							         		
+									while($rowss=mysql_fetch_array($statuss)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowss['id_status_solicitacao']; ?>">
+						   			<?php echo $rowss['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+		     				</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Motivo devolução</label>
+							<select 
+								name="motivo_devolucao" 
+								id="motivo_devolucao" 
+								class="txt2comboboxpadrao bradius"
+								>
+								<option value=""></option>
+								<?php 
+
+									$devolucao=mysql_query("SELECT * FROM motivo_devolucao WHERE id_motivo_devolucao IN(97,98,99,100,101,102) ORDER BY descricao");
+							        
+									while($rowmd=mysql_fetch_array($devolucao)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowmd['descricao']; ?>">
+						   			<?php echo $rowmd['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+					  		</select>
+						</div>
+					</td>
+				</tr>
+			</table>
+			<br/>
+			<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Salvar" class="sb2 bradius" />
+	 		<input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" id="cancelar" onclick="history.back();" />
+	 	</fieldset>
+	</form>
+</div>
+
+  
+    

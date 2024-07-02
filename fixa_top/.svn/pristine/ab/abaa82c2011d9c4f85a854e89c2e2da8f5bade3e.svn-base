@@ -1,0 +1,145 @@
+<?php 
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/app/Model/UploadBase.php");
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/app/Model/SiscomVenda.php");
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/app/Model/SiscomServico.php");
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/bd.php");
+
+$id_usuario= isset($_POST['id_usuario']) ? $_POST['id_usuario'] : ''; ;
+$id_usuario = $cripto->decodificar($id_usuario);
+$id_base = isset($_POST['base']) ? $_POST['base'] : ''; ;
+
+if (!empty($opcao))
+{ 
+    switch ($opcao)
+    { 
+        case 'importarBase': 
+        { 
+          echo importBase($id_usuario, $id_base, $cripto); 
+          break; 
+        }
+    } 
+} 
+
+
+function importBase($id_usuario, $id_base, $cripto)
+{
+
+            $file = $_FILES['file']['tmp_name'];
+            
+                require_once '../fixa_top/app/Model/PHPExcel/IOFactory.php';
+                $objPHPExcel = PHPExcel_IOFactory::load($file);
+                $objPHPExcel->setActiveSheetIndex(0);
+                
+              
+                foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+
+                    $ultimaLinha        = $worksheet->getHighestRow(); 
+                    $ultimaColuna       = $worksheet->getHighestColumn(); // e.g 'F'
+                    $ultimaColunaIndex  = PHPExcel_Cell::columnIndexFromString($ultimaColuna);
+                   
+                    $getData = $objPHPExcel->getActiveSheet();
+
+                    // navegar na linha
+                    for($linha=1; $linha<=$ultimaLinha; $linha++){
+                       
+                       //armazenar dados de cada linha
+                       $dados = array();
+                       
+                        // navegar nas colunas da respectiva linha
+                        for($coluna=0; $coluna<=$ultimaColunaIndex; $coluna++){
+                            //todo:valida coluna em branco
+                                if($linha>1){
+                                    //valida se a coluna excel é do tipo date                               
+                                    if(PHPExcel_Shared_Date::isDateTime($objPHPExcel->getActiveSheet()->getCellByColumnAndRow($coluna, $linha)))
+                                    {   
+                                        $dados[$coluna] = gmdate("Y/m/d",  PHPExcel_Shared_Date::ExcelToPHP($objPHPExcel->getActiveSheet()->getCellByColumnAndRow($coluna, $linha)->getValue()));
+                                    }else{
+                                        // armazena os dados de cada coluna
+                                        $dados[$coluna] = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($coluna, $linha)->getValue();
+                                    }
+                                }
+                        }
+                        
+                        if($linha>1)
+                        {
+                            //valida registro unico de cada tabela
+                            if($id_base == 1)
+                            {
+
+                                $uploadBase = new UploadBase(1, 'Siscom Vendas');
+
+                                $solicitacaoNova = $uploadBase->validaSolicitacaoImportada('Siscom Vendas', $dados[15], $dados[8]);    
+                                $id = $dados[15];
+
+                            }
+                            else if($id_base == 2)
+                            {
+                                $uploadBase = new UploadBase(2, 'Siscom Serviço');
+
+                                $solicitacaoNova = $uploadBase->validaSolicitacaoImportada('Siscom Servicos',$dados[11], $dados[12]);    
+                                $id = $dados[11];
+                            }
+                            
+                            //verifica se item ja existe ou nao
+                            if($solicitacaoNova)
+                            {
+                                //nao permite entrada de ids igual a 0
+                                if($id > 0)
+                                {
+                                    if($id_base == 1)
+                                    {
+                                        $siscomVenda = new SiscomVenda(
+                                                $dados[0], //cnpj
+                                                $dados[1], //razaoSocial
+                                                $dados[4], //gerenteNegocio
+                                                $dados[5], //escritorioGn
+                                                $dados[8], //status
+                                                $dados[15], //siscom
+                                                $dados[2], //produtoDescricao
+                                                $dados[3], //quantidade
+                                                $dados[9], //motivoCancIndisp
+                                                $dados[12], //numOrdem
+                                                $dados[7],  //numPedido
+                                                $dados[13], //dataEmissao
+                                                $dados[14], //motivoCritica
+                                                $dados[16]  //tipoReplica
+                                                );
+
+                                        //inseri linha no bd
+                                        $siscomVenda->enviaSolicitacaoBase($siscomVenda, $id_usuario);
+                                    }
+                                    else if($id_base == 2)
+                                    {
+                                        $siscomServico = new SiscomServico(
+                                                $dados[3], //cnpj, 
+                                                $dados[5], //razaoSocial, 
+                                                $dados[8], //gerenteNegocio, 
+                                                $dados[9], //escritorioGn, 
+                                                $dados[10], //responsavelGnCanal, 
+                                                $dados[12], //status, 
+                                                $dados[0], //clienteEspecial, 
+                                                $dados[1], //dataSiscom, 
+                                                $dados[4], //codigoCliente, 
+                                                $dados[6], //descricao, 
+                                                $dados[7], //evento, 
+                                                $dados[11] //nroSolicitacao
+                                                );
+
+                                        //inseri linha no bd
+                                        $siscomServico->enviaSolicitacaoBase($siscomServico, $id_usuario);
+                                    }
+                                }
+                            }
+                        }                       
+                    }   
+                }
+
+                //se arquivo todo foi carregado dados serao inseridos na tabela de gs
+                echo"
+                   <script type=\"text/javascript\">
+                    alert('Arquivo carregado com sucesso!');
+                          document.location.href='principal.php?id=" . $cripto->codificar($id_usuario) . "&t=View/home.php'
+                    </script>
+                ";
+                exit();
+}

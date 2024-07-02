@@ -1,0 +1,351 @@
+@charset "utf-8";
+/* CSS Document */
+
+
+
+/*font do body*/
+body,input,select{
+font:13px Verdana;
+}
+
+/*div controle conteudo da pgina*/
+.divctl
+{
+width:98.5%;
+height: auto;
+position: absolute;
+top: 0;
+left: 0;
+right:0;
+z-index: 0;
+border: transparent;
+}
+
+
+/*Definicao fieldset*/
+#fieldset{
+margin-top: 2px;
+margin-left:0px;
+margin-bottom:10px;
+padding-bottom: 10px;
+background: transparent; 
+height:92px;
+width:auto;
+border:1px solid silver;
+z-index: 0;
+}
+
+/*div controle textos form servico*/
+.divformservico{
+width:306px;
+height: auto;
+position: absolute;
+top: 200px;
+left: 220px;
+right:0;
+z-index: 0;
+border: transparent;   
+}
+
+
+/*div controle textos form carrega*/
+.divformcarrega{
+width:800px;
+height: auto;
+position: absolute;
+top: 200px;
+left: 300px;
+right:0;
+z-index: 0;
+border: transparent; 
+ 
+}
+
+
+/*controle login */
+#login{
+	width:300px;
+	margin:0 auto;
+	position:relative;
+	top:200px;
+	border:1px solid silver;
+	padding:15px;
+    background:#ffffff;
+    z-index: 0;
+}
+
+/*controle filtro */
+#filtro{
+	width:300px;
+	margin:0 auto;
+	position:relative;
+	top:80px;
+	border:1px solid silver;
+	padding:15px;
+    background:#ffffff;
+    z-index: 0;
+}
+
+
+/*controle logo*/
+.logo{
+	width:200px;
+	height:58px;
+	margin:0 auto;
+	padding:7px;
+	position:relative;
+	top:10px;
+}
+
+
+/*controle logo*/
+.logo2{
+	width:200px;
+	height:58px;
+	margin:0 auto;
+	padding:7px;
+	position:absolute;
+	top:18px;
+    left: 6px;
+   
+}
+
+/*controle logo*/
+.barratopo{
+	width:80%;
+	height:20px;
+	margin:0 auto;
+	padding:7px;
+	position:absolute;
+	top:50px;
+    left: 220px;
+    background:#E7E4D1;
+   	border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+   
+}
+
+
+
+/*centralizar */
+.acomodar{
+	margin:0 auto;
+	width:250px;
+}
+
+/*controle do form login*/
+.form  label{
+	display:block;
+	padding-top:5px;
+}
+
+
+/* classe para textos*/
+.txt{
+	border:none;
+	height:25px;
+	width:250px;
+	border:thin solid #f1f1f1;
+}
+.txt:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos para as form*/
+
+/*tratamanro para campo numero*/
+.txt2num{
+	border:none;
+	height:25px;
+	width:40px;
+	border:thin solid #f1f1f1;
+}
+.txt2num:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+
+}
+
+
+/* classe para textos combobox pequeno para as form*/
+.txt2comboboxpequeno{
+	border:none;
+	height:25px;
+	width:100px;
+	border:thin solid #f1f1f1;
+    
+  }
+
+.txt2comboboxpequeno:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+
+
+/* classe para textos combobox padrao para as form*/
+.txt2comboboxpadrao{
+	border:none;
+	height:25px;
+	width:300px;
+	border:thin solid #f1f1f1;
+}
+
+.txt2comboboxpadrao:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos combobox grande para as form*/
+.txt2comboboxgrande{
+	border:none;
+	height:25px;
+	width:500px;
+	border:thin solid #f1f1f1;
+}
+
+.txt2comboboxgrande:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+
+/* classe para textos textarea grande para as form*/
+.txt2textarea{
+	border:none;
+	height:80px;
+	width:500px;
+	border:thin solid #f1f1f1;
+}
+
+.txt2textarea:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos data para as form*/
+.txt2data{
+	border:none;
+	height:25px;
+	width:150px;
+	border:thin solid #f1f1f1;
+    margin:0 auto;
+}
+
+.txt2data:focus{
+	border:thin solid #678b97;
+	box-shadow:0 2px 10px #678b97;
+	-webkit-box-shadow:0 2px 10px #678b97;
+	-moz-box-shadow:0 2px 10px #678b97;
+}
+
+/* classe para textos para as form*/
+
+/*classe para formato do boto login*/
+.sb{
+	display:block;
+	border:none;
+	width:250px;
+	height:40px;
+	margin-top:10px;
+	cursor:pointer;
+	font:400 18px Oswald;
+	color:#fff;
+    background:#a0873c;
+}
+.sb:hover{
+	background:#678b97;
+	color:#fff;
+}
+
+/*classe para formato do boto form*/
+.sb2{
+	/*display:block;*/
+	border:none;
+	width:100px;
+	height:25px;
+	margin-top:1px;
+	cursor:pointer;
+	font:600 13px Oswald;
+	color:#fff;
+    background:#a0873c;
+}
+.sb2:hover{
+	background:#678b97;
+	color:#fff;
+}
+
+/* classe para textos*/
+
+/*Classes de herana*/
+.bradius{
+	border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+    
+      
+}
+
+/*Classes de herana - desativado
+.bradius{
+     border-radius:6px;
+	-webkit-border-radius:6px;
+	-moz-border-radius:6px;
+    behavior:url(css/ie-css3.htc);
+}*/
+
+
+.fleft{
+	float:left;
+}
+.fright{
+	float:right;
+}
+/*Mltiplos Estilos*/
+.txt,.txt:focus,.sb,.sb:hover,#cadastrar:hover,#cadastrar{
+	transition:all 0.5s linear;
+	-webkit-transition:all 0.5s linear;
+	-moz-transition:all 0.5s linear;
+}
+
+/*configuraes de campo*/
+.visivel { 
+    display:inline; 
+    } 
+.invisivel {
+    display:none;
+     }
+
+/*tratamento imagen da home*/
+
+#imghome{
+ width: 60.5%;   
+ height: auto;
+    
+}
+
+.divrel{
+margin-top: 20px; 
+ margin-left:300px;
+ margin-bottom: auto;
+ width: 600px;
+ height:0 auto;    
+ background: #EBE8E8;
+ padding-left: 70px;   
+    
+    
+}

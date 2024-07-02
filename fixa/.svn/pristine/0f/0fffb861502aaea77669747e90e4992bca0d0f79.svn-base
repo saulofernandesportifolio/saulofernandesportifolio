@@ -1,0 +1,86 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+    include("../fixa/bd.php");
+
+    $tempo = 0;
+
+    set_time_limit($tempo);
+    date_default_timezone_set("Brazil/East");
+
+    $data_cadastro=date("Y-m-d H:i:s");
+
+    include("../fixa/site/funcoes/f_geral.php");
+    require_once '../fixa/site/classes/cripto.php';
+
+    $cripto = new cripto();
+
+    $id_usuario_tramitacao= $_GET['id'];
+    $id_solicitacao =  $_GET['ids'];
+
+    $id_usuario_tramitacao = $cripto->decodificar($id_usuario_tramitacao);
+
+
+    //valida campos obrigatórios
+    if($_POST['devolucao'] == "Sim"){
+         if(
+          empty($_POST['status_solicitacao_tramitacao']) ||
+          empty($_POST['aprovacao'])                     
+          ) 
+          {
+            echo" <script> 
+                    alert('Por favor preencher todos os campos obrigatórios !');
+                    history.back();
+                  </script>
+                  "; 
+                  exit();   
+          }
+    }else{
+      if(
+          empty($_POST['status_solicitacao_tramitacao']) ||
+          empty($_POST['aprovacao'])                     ||
+          empty($_POST['data_encerramento'])
+      ){
+            echo" <script> 
+                    alert('Por favor preencher todos os campos obrigatórios !');
+                    history.back();
+                  </script>
+                  "; 
+                  exit();   
+          }
+    }
+
+   
+     //formata campos data
+     $data_encerramento = formataDataBD($_POST['data_encerramento']);
+    
+
+    //valida se inputs variaveis foram ativados
+    if (isset($_POST['data_devolucao'])){$data_devolucao = formataDataBD($_POST['data_devolucao']);}else{$data_devolucao = '';}
+
+    //insere dados em variavel para proc
+    $dadosProc = '&'. $id_solicitacao
+               . '&'. $id_usuario_tramitacao 
+               . '&'. $data_encerramento
+               . '&'. $_POST['status_solicitacao_tramitacao']
+               . '&'. $data_devolucao
+               . '&'. $_POST['devolucao']
+               . '&'. $_POST['aprovacao']
+               . '&'. $data_cadastro
+               . '&'. $_POST['n_oport_proposta']
+               . '&'. $_POST['obs'];
+   
+  
+    $sql_exec="CALL solicitacao_tramitacao('$dadosProc');";
+
+    $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+   
+      echo" <script> 
+        alert('Solicitação cadastrada com sucesso!');
+          document.location.replace('principal.php?t=views/home.php');
+        </script>
+        ";                                       
+    exit();
+   
+?>

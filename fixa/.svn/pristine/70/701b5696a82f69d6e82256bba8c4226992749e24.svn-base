@@ -1,0 +1,199 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+    //setup default
+    include("../fixa/bd.php");
+
+    $tempo = 0;
+
+    set_time_limit($tempo);
+    date_default_timezone_set("Brazil/East");
+
+    $data_cadastro=date("Y-m-d H:i:s");
+
+    include("../fixa/site/funcoes/f_geral.php");
+    require_once '../fixa/site/classes/cripto.php';
+
+    $cripto = new cripto();
+
+    $id_usuario= $_GET['id'];
+
+    $id_usuario = $cripto->decodificar($id_usuario);
+
+    $acao = $_GET['acao'];
+
+    //parametros
+    if($acao == "ef"){
+      $ids = $_GET['ids'];
+    }else{
+        if(isset($_POST['siscom'])){
+          $ids = $_POST['siscom'];
+        }else if(isset($_POST['n_pact_siscom'])){
+          $ids = $_POST['n_pact_siscom'];
+        }    
+    }
+
+
+    //valida campos obrigatórios
+    if(
+        empty($_POST['cat_prod'])             ||
+        empty($_POST['canal_entrada'])        ||
+        empty($_POST['tipo_solicitacao'] )    ||
+        ($_POST['n_gs'] == "")                ||
+        empty($_POST['data_abertura_gestao']) ||
+        empty($_POST['status_solicitacao'])   ||
+        empty($_POST['aprovacao'])
+    ) 
+    {
+      echo" <script> 
+              alert('Por favor preencher todos os campos obrigatórios !');
+              history.back();
+            </script>
+            "; 
+            exit();   
+    }
+
+    if ($acao == "nf") {
+      //valida siscom
+      $query_valida_siscom = mysql_query("SELECT siscom FROM pre_tramitacao WHERE siscom != 0 AND siscom = '{$ids}'");
+
+      //verifica na base se valor ja foi inserido
+      if(mysql_affected_rows() > 0){
+        echo" <script> 
+                alert('Número do Siscom já cadastrado na base!');
+                history.back();
+              </script>
+              "; 
+            exit();   
+      }
+
+      //valida gestao servicos
+      $query_valida_gs = mysql_query("SELECT n_gestao_servicos FROM pre_tramitacao WHERE n_gestao_servicos != 0 and n_gestao_servicos = '{$_POST['n_gs']}'");
+
+      //passar nsiscom como parametro para validar se usuario alterou nsiscom, se for igual nao passa pela validação abaixo 
+      if(mysql_affected_rows() > 0){
+        echo" <script> 
+                alert('Número do GS já cadastrado na base!');
+                history.back();
+              </script>
+              "; 
+            exit();   
+      }
+    }
+
+     //formata campos data
+     $data_abertura_gestao = formataDataBD($_POST['data_abertura_gestao']);
+    
+
+    //valida se inputs variaveis foram ativados
+    //campos devolucao sao obrigatorios se houver devolucao 
+    if (isset($_POST['motivo_devolucao']))
+    {
+          $motivo_devolucao = $_POST['motivo_devolucao'];
+          if(empty($motivo_devolucao)){
+             echo" <script> 
+              alert('Campo Motivo Devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+        $motivo_devolucao = '';
+    }
+
+    if (isset($_POST['area_devolucao']))
+    {
+          $area_devolucao = $_POST['area_devolucao'];
+          if(empty($area_devolucao)){
+             echo" <script> 
+              alert('Campo Area Devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+        $area_devolucao = '';
+    }
+    if (isset($_POST['data_devolucao'])){
+      $data_devolucao = formataDataBD($_POST['data_devolucao']);
+      if(empty($data_devolucao)){
+             echo" <script> 
+              alert('Campo Data Devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+      $data_devolucao = '';
+    }
+
+    if(isset($_POST['produto'])){
+      $produto = $_POST['produto'];
+
+      if(empty($produto)){
+        echo" <script> 
+              alert('Por favor preencher todos os campos obrigatórios !');
+              history.back();
+            </script>
+            "; 
+            exit();   
+      }
+    }else{
+      $produto = 'Não iniciado';
+    }
+
+    //check if record is from siscom services or siscom sales
+      $query_valida_solicitacao = mysql_query("SELECT nro_solicitacao FROM siscom_servico WHERE nro_solicitacao = $ids");
+
+      if(mysql_affected_rows() > 0){
+        $fonte = 'siscom_servico';
+      }else{
+        $fonte = 'siscom_venda';
+      }
+
+    //insere dados em variavel para proc
+    $dadosProc = '&'. $fonte
+               . '&'. $_POST['cat_prod']
+               . '&'. $_POST['canal_entrada']
+               . '&'. $produto   
+               . '&'. $_POST['tipo_solicitacao']
+               . '&'. $_POST['n_gs']
+               . '&'. $data_abertura_gestao
+               . '&'. $_POST['status_solicitacao']
+               . '&'. $_POST['obs']
+               . '&'. $motivo_devolucao
+               . '&'. $area_devolucao
+               . '&'. $data_devolucao
+               . '&'. $_POST['devolucao']
+               . '&'. $_POST['aprovacao']
+               . '&'. $data_cadastro;
+
+
+    if ($acao == "nf") {
+        $sql_exec="CALL solicitacao_pretramitacao('$dadosProc', 'nf', $id_usuario, $ids);";
+    } else if($acao == "ef"){
+      $sql_exec="CALL solicitacao_pretramitacao('$dadosProc', 'ef', $id_usuario, $ids);";
+    }
+
+    $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+    if ($acao == "nf") {
+      echo" <script> 
+        alert('Solicitação cadastrada com sucesso!');
+          document.location.replace('principal.php?t=views/home.php');
+        </script>
+        ";
+    } else if($acao == "ef"){
+      echo" <script> 
+        alert('Solicitação editada com sucesso!');
+          document.location.replace('principal.php?t=views/home.php');
+        </script>
+        ";
+    }                                        
+    exit();
+   
+?>
+
+

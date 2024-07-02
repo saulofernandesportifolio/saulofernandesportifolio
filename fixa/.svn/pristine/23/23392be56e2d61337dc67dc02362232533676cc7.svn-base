@@ -1,0 +1,63 @@
+
+<?php
+$id_usuario= (int) $_GET['id'];
+$sql_serv = "SELECT * FROM usuario WHERE id_usuario = $id_usuario";
+
+$acao_serv=mysql_query($sql_serv,$conecta);
+
+$linha = mysql_fetch_array($acao_serv);
+
+?>
+<div id="fieldset" class="bradius">
+	<form 
+		action="principal.php?&id=<?php echo $id_usuario ?>&t=controles/sql_formuploadbase.php" 
+		method="POST"	
+		enctype="multipart/form-data"
+	>
+		<legend align="center">
+			<h3 text-align="center">Importar base de dados</h3>
+		</legend>
+		<div class="divformservico"
+			<label>Base:</label>
+			<p>
+				<select name="base" id="base" class="txt2comboboxpadrao bradius">
+			   		<option value="4">Selecione....</option>
+			   		<option value="1">Gestao Servicos</option>
+			   		<option value="2">Siscom Vendas</option>
+			   		<option value="3">Siscom Servicos</option>
+			  	</select>
+			</p>
+
+			<label>Arquivo:</label> 
+			<p>
+				<input 
+					type="file" 
+					id="file"  
+					class="txt bradius" 
+					name="file"
+					size= "50" 
+				/>
+				 <input 
+				 	name="submit" 
+				 	id="submit" 
+				 	type="submit" 
+				 	value="Importar" 
+				 	class="sb2 bradius" 
+			 	/>
+			 	<input 
+			 		name="cancelar" 
+			 		type="button" 
+			 		value="Cancelar" 
+			 		class="sb2 bradius" 
+			 		onClick="window.location='principal.php?t=forms/home.php'"
+		 		/>
+	 		</p>
+		 </div>
+	</form>
+</div>
+
+</body>
+</html>
+
+  
+    

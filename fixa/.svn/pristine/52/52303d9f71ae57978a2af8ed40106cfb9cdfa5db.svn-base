@@ -1,0 +1,51 @@
+
+<div id="table_tramitacao_itens_op" style="display: none;">
+		<table class="tabelas_dashboard">
+		<caption><h2 style="color: #3b5998;">Itens a preencher</h2></caption>
+			<thead>
+                <tr>
+                    <th>Fase</th>
+                    <th>Solicitação</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query("SELECT 
+												sf.id_solicitacao AS solicitacao,
+												'Tramitacão' AS fase,
+												sf.tramitacao
+											FROM 
+												solicitacao_fases sf
+											WHERE 
+												sf.id_usuario_resp = $id_usuario AND
+												sf.tramitacao = 'Com operador' AND
+												sf.pre_tramitacao = 'Concluído'
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){                   
+				        ?>          
+			         <tr>
+			            <td class="colunas-centralizados">
+			              <a id="td">
+			               <?php echo $linha['fase']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados">
+				            <a id="solicitacao_tramitacao_itens_op" href="principal.php?&id=<?php echo $cripto->codificar($id_usuario)?>&ids=<?php echo $linha['solicitacao']?>&t=views/form_tramitacao.php">
+			              			<?php echo $linha['solicitacao']; ?>
+			              	</a>
+			            </td>
+			            <td><?php echo $linha['tramitacao']; ?></td>
+			          </tr>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>

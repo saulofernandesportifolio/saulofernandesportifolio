@@ -1,0 +1,340 @@
+
+<?php
+
+include("../fixa/bd.php");
+  
+require_once '../fixa/site/classes/cripto.php';
+
+?>
+<script type="text/javascript">
+	$(document).ready(function() {
+	});
+</script>
+<div id="div_form_intragov" class="bradius wrapper" style="display: none;" >
+	<form 
+		action="principal.php?&id=<?php echo $cripto->codificar($id_usuario) ?>&t=controles/sql_form_intragov.php" 
+		method="POST"	
+	>
+		<fieldset id="fieldset_style">
+			<h2>Intragov</h2> 
+			<table id="form_intragov">
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Data da solicitação*</label>
+							<input 
+								type="text"
+								id="data_solicitacao"
+								name="data_solicitacao"
+								class="campoData" 
+								onblur = "validaData(this)";
+								size= "50"
+								required
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Devolução</label><br/>
+							<label class="radio-inline">
+							  	<input 
+							  		style="width: 24px;" 
+							  		type="radio" 
+							  		name="devolucao" 
+							  		id="devolucao_n" 
+							  		value="Não"
+							  		checked="true" 
+						  		> Não
+							</label>
+							<label class="radio-inline">
+							  	<input 
+							  		style="width: 24px;" 
+							  		type="radio" 
+							  		name="devolucao" 
+							  		id="devolucao_s" 
+							  		value="Sim"
+						  		> Sim
+							</label>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Canal de entrada*</label>
+							<select 
+								name="canal_entrada" 
+								id="canal_entrada" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+
+								<?php 
+						         
+						         	$canal_entrada=mysql_query("SELECT * FROM canal_entrada WHERE id_canal_entrada IN (9,4,3,10,18)");
+
+						         while($rowce=mysql_fetch_array($canal_entrada)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowce['id_canal_entrada']; ?>">
+						   			<?php echo $rowce['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Produto Intragov*</label>
+							<select 
+								name="produtoIntragov" 
+								id="produtoIntragov" 
+								class="txt2comboboxpadrao bradius"
+								required
+							>
+								<?php 
+						
+						         	$produto=mysql_query("SELECT * FROM produto WHERE id_produto IN(10)");
+
+									while($rowp=mysql_fetch_array($produto)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowp['id_produto']; ?>">
+						   			<?php echo $rowp['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+						  	</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Serviço Intragov*</label>
+							<select 
+								name="servicoIntragov" 
+								id="servicoIntragov" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+								<?php 
+						         	$servico=mysql_query("SELECT * FROM servicos WHERE id_servicos IN (2,22,23,4,24,25,26,27,28,29,8,30,31,14,32,33) ORDER BY descricao");
+
+									while($rowso=mysql_fetch_array($servico)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowso['id_servicos']; ?>">
+						   			<?php echo $rowso['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+					  		</select>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Quantidade de acessos*</label>
+							<input 
+								type="text" 
+								id="qtd_acessos"  
+								name="qtd_acessos"
+								pattern="\d+"
+								size= "50"
+								required
+							/>
+						</div>
+					</td>	
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Motivo Cancelamento</label>
+							<i class="fa fa-exclamation" title="Quando escolher o item Cancelamento no campo 'Serviço' preencher este campo"></i>
+							<input 
+								type="text" 
+								id="motivo_cancelamento"  
+								name="motivo_cancelamento"
+								size= "50"
+								disabled="true" 
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>CNPJ*</label>
+							<input 
+								type="text" 
+								id="cnpj"  
+								name="cnpj"
+								size= "50"
+								required
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Razão Social*</label>
+							<input 
+								type="text" 
+								id="razao_social"  
+								name="razao_social"
+								size= "50"
+								required
+							/>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Número gestão de serviços*</label>
+							<input 
+								type="text" 
+								id="n_gs"  
+								name="n_gs"
+								placeholder="Caso não haja, favor preencher como 0"
+								pattern="\d+"
+								size= "50"
+								required
+							/>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Data abertura gestão*</label>
+							<input 
+								type="text"
+								id="data_abert_gestao"
+								name="data_abert_gestao" 
+								class="campoData"
+								onblur = "validaData(this)";
+								size= "50"
+								required
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Motivo devolução</label>
+							<select 
+								name="motivo_devolucao" 
+								id="motivo_devolucao" 
+								class="txt2comboboxpadrao bradius"
+								disabled="true" 
+								>
+								<option value=""></option>
+								<?php 
+
+									$devolucao=mysql_query("SELECT * FROM motivo_devolucao 
+										WHERE id_motivo_devolucao 
+										IN (1,47,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,23,24,25,26,27,29,
+										32,33,48,35,36,39,40) 
+										ORDER BY descricao");
+							        
+									while($rowmd=mysql_fetch_array($devolucao)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowmd['id_motivo_devolucao']; ?>">
+						   			<?php echo $rowmd['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+					  		</select>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<div class="div_forms">
+							<label>Área Solicitante*</label>
+							<select 
+								type="text" 
+								id="area_solicitante"  
+								class="txt2comboboxpadrao bradius" 
+								name="area_solicitante"
+								required
+							>
+								<option value="COMERCIAL">COMERCIAL</option>
+								<option value="MKT">MKT</option>
+								<option value="SISTEMAS">SISTEMAS</option>
+								<option value="AG. TELEFONICA">AG. TELEFÔNICA</option>
+							</select> 
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Data de devolução</label>
+							<input 
+								type="text"
+								id="data_devolucao"
+								name="data_devolucao" 
+								disabled="true"
+								class="campoData" 
+								onblur = "validaData(this)";
+								size= "50"
+							>
+						</div>
+					</td>
+				</tr>
+				<tr>	
+					<td>
+						<div class="div_forms">
+							<label>Data de encerramento*</label>
+							<input 
+								type="text"
+								id="data_encerramento"
+								name="data_encerramento" 
+								class="campoData" 
+								onblur = "validaData(this)";
+								size= "50"
+								required 
+							>
+						</div>
+					</td>
+					<td>
+						<div class="div_forms">
+							<label>Status*</label>
+							<select 
+								name="status_solicitacao_intragov" 
+								id="status_solicitacao_intragov" 
+								class="txt2comboboxpadrao bradius"
+								required
+								>
+								<?php 
+						         	
+									
+						         	$statuss=mysql_query("SELECT * FROM status_solicitacao 
+											WHERE id_status_solicitacao IN(1,2,3,4,5,8,15)");
+						         	
+
+									while($rowss=mysql_fetch_array($statuss)){
+					                     
+					        	?>
+					        	<option value="<?php echo $rowss['id_status_solicitacao']; ?>">
+						   			<?php echo $rowss['descricao']; ?>
+						   		</option>
+						   		<?php 
+			          				}
+			     				?>
+		     				</select>
+						</div>
+					</td>		
+				</tr>
+			</table>
+			<br/>
+			<input name="bt_enviar_form" id="bt_enviar_form" type="submit" value="Salvar" class="sb2 bradius" />
+	 		<input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" id="cancelar"/>
+	 	</fieldset>
+	</form>
+</div>
+
+  
+    

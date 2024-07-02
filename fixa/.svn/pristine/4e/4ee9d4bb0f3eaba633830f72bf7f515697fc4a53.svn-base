@@ -1,0 +1,61 @@
+<?php
+
+require_once('../fixa/bd.php');
+
+$query = mysql_query("SELECT 	
+						data_hora,
+						usuario,      
+						siscom,                         
+						canal_entrada,               
+						produto,              
+						tipo_solicitacao,            
+						complemento_tipo_solicitacao,                    
+						cnpj,                           
+						razao_social,                   
+						qtd_acessos,                    
+						n_gestao_servicos,              
+						motivo_devolucao,            
+						obs,                            
+						data_entrada_siscom,            
+						oportunidade,                   
+						proposta,                       
+						contrato_mae,                   
+						data_recebimento_pos,           
+						data_finalizado,                
+						status,
+						revisao                   
+					FROM 
+						v_geral_pos_tramitacao
+					WHERE data_hora <> '' ");
+
+while($fetch = mysql_fetch_array($query))
+{
+	$output[] = array (
+				$fetch[0], 	//data_hora,
+				$fetch[1], 	//usuario,      
+				$fetch[2], 	//siscom,                         
+				$fetch[3], 	//canal_entrada,               
+				$fetch[4], 	//produto,              
+				$fetch[5], 	//tipo_solicitacao,            
+				$fetch[6], 	//complemento_tipo_solicitacao,                    
+				$fetch[7], 	//cnpj,                           
+				$fetch[8], 	//razao_social,                   
+				$fetch[9], 	//qtd_acessos,                    
+				$fetch[10],	//n_gestao_servicos,              
+				$fetch[11],	//motivo_devolucao,            
+				$fetch[12],	//obs,                            
+				 $fetch[13],	//data_entrada_siscom,            
+				$fetch[14],	//oportunidade,                   
+				$fetch[15],	//proposta,                       
+				$fetch[16],	//contrato_mae,                   
+				 $fetch[17],	//data_recebimento_pos,           
+				 $fetch[18],	//data_finalizado,                
+				$fetch[19], 	//status 
+				$fetch[20]    //revisao
+	);
+}
+
+echo json_encode($output);
+
+?>
+

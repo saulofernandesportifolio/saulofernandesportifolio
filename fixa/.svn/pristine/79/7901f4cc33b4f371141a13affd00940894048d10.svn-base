@@ -1,0 +1,258 @@
+<?php
+
+class SolicitacaoPreTramitacao {
+	 public $id_usuario; 
+     public $siscom; 
+     public $cat_prod; 
+     public $devolucao; 
+     public $canal_entrada;
+     public $data_receb;
+     public $n_pact_siscom;
+     public $produto;
+     public $tipo_solicitacao;
+     public $servicos;
+     public $cnpj;
+     public $razao_social;
+     public $qtd_acessos;
+     public $n_gs;
+     public $data_abertura_gestao;
+     public $area_devolucao;
+     public $motivo_devolucao;
+     public $data_devolucao;
+     public $status_solicitacao;
+     public $obs;
+     public $aprovacao;
+     public $data_entrada_siscom;
+     public $descricao_motivo_devolucao;
+
+     //construtor solicitacoes manuais	
+	  function constroiSolicitacaoManual(SolicitacaoPreTramitacao $solicitacao, $id_usuario, $siscom, $cat_prod, $devolucao, $canal_entrada, $data_receb, $produto, $tipo_solicitacao, $servicos, $cnpj, $razao_social, $qtd_acessos, $n_gs, $data_abertura_gestao, $status_solicitacao, $obs, $aprovacao) 
+	  {
+	    	$solicitacao->id_usuario 			        = $id_usuario;
+	    	$solicitacao->siscom 				        = $siscom;
+	    	$solicitacao->cat_prod 				        = $cat_prod; 
+     		$solicitacao->devolucao 			        = $devolucao; 
+     		$solicitacao->canal_entrada 		        = $canal_entrada;
+     		$solicitacao->data_receb 			        = $data_receb;
+       		$solicitacao->produto 				        = $produto;
+     		$solicitacao->tipo_solicitacao 		        = $tipo_solicitacao;
+     		$solicitacao->servicos 				        = $servicos;
+     		$solicitacao->cnpj 					        = $cnpj;
+     		$solicitacao->razao_social 			        = $razao_social;
+     		$solicitacao->qtd_acessos 			        = $qtd_acessos;
+     		$solicitacao->n_gs 					        = $n_gs;
+     		$solicitacao->data_abertura_gestao 	        = $data_abertura_gestao;
+     		$solicitacao->status_solicitacao 	        = $status_solicitacao;
+     		$solicitacao->obs 					        = $obs;
+     		$solicitacao->aprovacao 			        = $aprovacao;
+
+     		return $solicitacao;
+	  }
+
+	  //construtor solicitacoes importadas
+	  function constroiSolicitacaoSiscom(SolicitacaoPreTramitacao $solicitacao, $cat_prod, $canal_entrada, $tipo_solicitacao, $n_gs, $data_abertura_gestao, $status_solicitacao, $aprovacao, $obs, $devolucao)
+	  {
+	    	$solicitacao->cat_prod 				= $cat_prod; 
+     		$solicitacao->canal_entrada 		= $canal_entrada;
+      		$solicitacao->tipo_solicitacao 		= $tipo_solicitacao;
+     		$solicitacao->n_gs 					= $n_gs;
+     		$solicitacao->data_abertura_gestao 	= $data_abertura_gestao;
+     		$solicitacao->status_solicitacao	= $status_solicitacao;
+     		$solicitacao->aprovacao 			= $aprovacao;
+     		$solicitacao->obs 					= $obs;
+     		$solicitacao->devolucao             = $devolucao;	
+
+     		return $solicitacao;
+	  }
+
+	  function mostraObjeto() 
+	  { 
+        print "id_usuario "    		. $this->id_usuario 			. "<br/>";
+		print "siscom " 	   		. $this->siscom 				. "<br/>";
+		print "cat_prod " 	   		. $this->cat_prod 				. "<br/>";
+		print "devolucao "     		. $this->devolucao 				. "<br/>";
+		print "canal_entrada " 		. $this->canal_entrada 			. "<br/>";
+		print "data_receb "    		. $this->data_receb 			. "<br/>";
+		print "n_pact_siscom " 		. $this->n_pact_siscom 			. "<br/>";
+		print "produto" 			. $this->produto 				. "<br/>";
+		print "tipo_solicitacao" 	. $this->tipo_solicitacao 		. "<br/>";
+		print "servicos" 			. $this->servicos 				. "<br/>";
+		print "cnpj" 				. $this->cnpj 					. "<br/>";
+		print "razao_social" 		. $this->razao_social 			. "<br/>";
+		print "qtd_acessos" 		. $this->qtd_acessos 			. "<br/>";
+		print "n_gs" 				. $this->n_gs 					. "<br/>";
+		print "data_abertura_gestao". $this->data_abertura_gestao	. "<br/>";
+		print "area_devolucao" 		. $this->area_devolucao 		. "<br/>";
+		print "motivo_devolucao" 	. $this->motivo_devolucao 		. "<br/>";
+		print "data_devolucao" 		. $this->data_devolucao 		. "<br/>";
+		print "status_solicitacao" 	. $this->status_solicitacao		. "<br/>";
+		print "obs" 				. $this->obs 					. "<br/>";
+		print "aprovacao" 			. $this->aprovacao				. "<br/>";
+		print "data entrada siscom" . $this->data_entrada_siscom;
+      }
+
+      function validaInputsObrigatorios(SolicitacaoPreTramitacao $solicitacao, $form)
+      {
+      		if($form == 'Manual')
+      		{
+		  		//valida campos obrigatórios
+		        if(
+		            ($solicitacao->siscom == "")               	||
+		            empty($solicitacao->cat_prod)             	||
+		            empty($solicitacao->canal_entrada)        	||
+		            empty($solicitacao->data_receb)    			||
+		            empty($solicitacao->produto)				||
+		            empty($solicitacao->tipo_solicitacao)		||
+		            empty($solicitacao->servicos)				||
+		            empty($solicitacao->cnpj)					|| 
+		            empty($solicitacao->razao_social)			||
+	            	empty($solicitacao->qtd_acessos)			||
+		            ($solicitacao->n_gs == "")                	||
+		            empty($solicitacao->data_abertura_gestao)	||
+		            empty($solicitacao->status_solicitacao)		||
+		            empty($solicitacao->aprovacao)			          
+		        ) 
+		        {
+		          return true;   
+		        }
+	        }
+	        else if($form == 'Import')
+	        {
+	        	if(
+	                empty($solicitacao->cat_prod)             ||
+	                empty($solicitacao->canal_entrada)        ||
+	                empty($solicitacao->tipo_solicitacao)     ||
+	                ($solicitacao->n_gs == "")                ||
+	                empty($solicitacao->data_abertura_gestao) ||
+	                empty($solicitacao->status_solicitacao)   ||
+	                empty($solicitacao->aprovacao)		
+            	)
+            	{
+            		return true;
+            	} 
+	        }
+	   }
+
+	   function validaSiscom($siscom)
+	   {
+		   //valida siscom
+	        $query_valida_siscom = mysql_query("SELECT siscom FROM pre_tramitacao WHERE siscom != 0 AND siscom = '{$siscom}'");
+
+	        //verifica na base se valor ja foi inserido
+	        if(mysql_affected_rows() > 0)
+	        {
+	         	return true;  
+	        }
+        }
+
+        function validaGs($ngs)
+        {
+	        //valida gestao servicos
+	        $query_valida_gs = mysql_query("SELECT n_gestao_servicos FROM pre_tramitacao WHERE n_gestao_servicos != 0 and n_gestao_servicos = '{$ngs}'");
+
+	        //valida numero do gs 
+	        if(mysql_affected_rows() > 0)
+	        {
+	         	return true; 
+	        }
+        }
+
+        function validaItensDevolucao($motivo_devolucao, $descricao_motivo_devolucao, $area_devolucao, $data_devolucao)
+        {
+        	//se for devolucao nenhum dos campos pode estar em branco(se 1 estiver mostrara erro ao usuario)
+              if(empty($motivo_devolucao) || empty($descricao_motivo_devolucao) || empty($area_devolucao) || empty($data_devolucao))
+              {
+              	return true;
+              }
+        }
+
+
+        function buscaIdServicoByDescricao($servico)
+        {
+        	$buscarIdServico=mysql_query("SELECT id_servicos FROM servicos WHERE descricao LIKE '%$servico%'");
+            if(mysql_affected_rows() > 0)
+            {
+                while($linhaServico=mysql_fetch_array($buscarIdServico))
+                {
+                    $servico = $linhaServico['id_servicos'];
+                }
+
+                return $servico;
+            }
+
+        }
+
+        function buscaIdProdutoByDescricao($produto)
+        {
+        	$buscarIdProduto=mysql_query("SELECT id_produto FROM produto WHERE descricao LIKE '%$produto%'");
+            if(mysql_affected_rows() > 0)
+            {
+                
+                while($linhaProduto=mysql_fetch_array($buscarIdProduto))
+                {
+                    $produto = $linhaProduto['id_produto'];
+          		}
+
+                return $produto;
+            }
+
+        }
+
+        /***** Métodos para as solicitacoes que entraram via bases de Siscom Vendas e Siscom Servicos *****/
+
+        //busca data que o supervisor distribuiu para o operador
+        function buscaDataRecebimentoSolicitacao($ids, $id_usuario)
+        {
+	       	$busca_data_receb_solicitacao = mysql_query("SELECT date_format(reg_data,'%d/%m/%Y %H:%i:%s') AS reg_data FROM usuario_solicitacao WHERE id_solicitacao = $ids AND id_usuario = $id_usuario");
+
+       	  	if(mysql_affected_rows() > 0)
+          	{
+	            while($linhaSolicitacao=mysql_fetch_array($busca_data_receb_solicitacao))
+	            { 
+	                $data_receb_solicitacao  = $linhaSolicitacao['reg_data'];
+	            }
+
+	            return $data_receb_solicitacao;
+            } 
+        }
+
+        function buscaDadosSiscomServico(SolicitacaoPreTramitacao $solicitacao, $ids)
+        {
+        	$buscarsolicitacaoSiscomServico=mysql_query("SELECT * FROM siscom_servico WHERE nro_solicitacao = $ids");
+                
+                if(mysql_affected_rows() > 0)
+                {
+	                  while($linha=mysql_fetch_array($buscarsolicitacaoSiscomServico))
+	                  {      
+	                    $solicitacao->data_entrada_siscom = $linha['data'];
+	                    $solicitacao->cnpj       		  = $linha['cnpj_cpf_cliente'];
+	                    $solicitacao->razao_social        = $linha['razao_social_cliente'];
+	                    $solicitacao->servicos            = $linha['evento'];
+	                    $solicitacao->qtd_acessos         = $linha['acessos'];
+	                  }
+                }
+
+                return $solicitacao;
+        }
+
+        function buscaDadosSiscomVendas(SolicitacaoPreTramitacao $solicitacao, $ids)
+        {
+        	$buscarSolicitacaoSiscomVendas=mysql_query("SELECT * FROM siscom_vendas WHERE pacote = $ids");
+
+                if(mysql_affected_rows() > 0)
+                {
+                    while($linha=mysql_fetch_array($buscarSolicitacaoSiscomVendas))
+                    {      
+                      	$solicitacao->data_entrada_siscom 	= $linha['data'];   
+                        $solicitacao->cnpj  				= $linha['cnpj_cpf_cliente'];      
+                        $solicitacao->razao_social      	= $linha['razao_social'];      
+                        $solicitacao->servicos			    = $linha['servico'];      
+                        $solicitacao->produto				= $linha['produto'];      
+                        $solicitacao->qtd_acessos       	= $linha['qtd'];
+                    }
+                }
+
+                return $solicitacao; 
+        }
+ }
+?>

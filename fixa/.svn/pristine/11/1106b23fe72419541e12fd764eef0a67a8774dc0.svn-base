@@ -1,0 +1,45 @@
+<div id="t_i_gcom">
+		<table id="tabela_itens_processo_gcom" class="tabelas_dashboard">
+		<caption class="textoParagrafo"><h2 style="color: #7b682e;">Itens a preencher</h2></caption>
+			<thead>
+                <tr>
+                    <th class="textoParagrafo">Nº GS</th>
+                    <th class="textoParagrafo">Data Recebimento</th>
+                    <th class="textoParagrafo">Revisão</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query("SELECT 
+												sf.id_gestao_servicos,
+												date_format(sf.data_ultima_acao,'%d/%m/%Y %H:%i:%s') AS data_hora,
+												sf.revisao
+											FROM 
+												solicitacao_fases sf 
+											WHERE 
+												sf.id_usuario_resp = $id_usuario AND
+												sf.gcom = 'Com operador'
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){                   
+				        ?>          
+			         <tr>
+			            <td class="colunas-centralizados">
+			               		<a id="solicitacao_pos_tramitacao_itens_op" href="principal.php?&rev=<?php echo $linha['revisao']?>&id=<?php echo $cripto->codificar($id_usuario)?>&idgs=<?php echo $linha['id_gestao_servicos']?>&t=views/form_gcom.php">
+			              			<?php echo $linha['id_gestao_servicos']; ?>
+		              			</a>
+			            </td>
+			            <td><?php echo $linha['data_hora']; ?></td>
+			            <td><?php echo $linha['revisao']; ?></td>
+			          </tr>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>

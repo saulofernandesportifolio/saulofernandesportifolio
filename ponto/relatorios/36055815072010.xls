@@ -1,0 +1,104 @@
+        <html xmlns:o="urn:schemas-microsoft-com:office:office"
+               xmlns:x="urn:schemas-microsoft-com:office:excel"
+                xmlns="http://www.w3.org/TR/REC-html40">
+
+                <head>
+                <meta http-equiv=Content-Type content="text/html; charset=us-ascii">
+                <meta name=ProgId content=Excel.Sheet>
+                <!--[if gte mso 9]><xml>
+                 <o:DocumentProperties>
+                  <o:LastAuthor>Sriram</o:LastAuthor>
+                  <o:LastSaved>2005-01-02T07:46:23Z</o:LastSaved>
+                  <o:Version>10.2625</o:Version>
+                 </o:DocumentProperties>
+                 <o:OfficeDocumentSettings>
+                  <o:DownloadComponents/>
+                 </o:OfficeDocumentSettings>
+                </xml><![endif]-->
+                <style>
+                <!--table
+                    {mso-displayed-decimal-separator:"\.";
+                    mso-displayed-thousand-separator:"\,";}
+                @page
+                    {margin:1.0in .75in 1.0in .75in;
+                    mso-header-margin:.5in;
+                    mso-footer-margin:.5in;}
+                tr
+                    {mso-height-source:auto;}
+                col
+                    {mso-width-source:auto;}
+                br
+                    {mso-data-placement:same-cell;}
+                .style0
+                    {mso-number-format:General;
+                    text-align:general;
+                    vertical-align:bottom;
+                    white-space:nowrap;
+                    mso-rotate:0;
+                    mso-background-source:auto;
+                    mso-pattern:auto;
+                    color:windowtext;
+                    font-size:10.0pt;
+                    font-weight:400;
+                    font-style:normal;
+                    text-decoration:none;
+                    font-family:Arial;
+                    mso-generic-font-family:auto;
+                    mso-font-charset:0;
+                    border:none;
+                    mso-protection:locked visible;
+                    mso-style-name:Normal;
+                    mso-style-id:0;}
+                td
+                    {mso-style-parent:style0;
+                    padding-top:1px;
+                    padding-right:1px;
+                    padding-left:1px;
+                    mso-ignore:padding;
+                    color:windowtext;
+                    font-size:10.0pt;
+                    font-weight:400;
+                    font-style:normal;
+                    text-decoration:none;
+                    font-family:Arial;
+                    mso-generic-font-family:auto;
+                    mso-font-charset:0;
+                    mso-number-format:General;
+                    text-align:general;
+                    vertical-align:bottom;
+                    border:none;
+                    mso-background-source:auto;
+                    mso-pattern:auto;
+                    mso-protection:locked visible;
+                    white-space:nowrap;
+                    mso-rotate:0;}
+                .xl24
+                    {mso-style-parent:style0;
+                    white-space:normal;}
+                -->
+                </style>
+                <!--[if gte mso 9]><xml>
+                 <x:ExcelWorkbook>
+                  <x:ExcelWorksheets>
+                   <x:ExcelWorksheet>
+                    <x:Name>RELATORIO</x:Name>
+                    <x:WorksheetOptions>
+                     <x:Selected/>
+                     <x:ProtectContents>False</x:ProtectContents>
+                     <x:ProtectObjects>False</x:ProtectObjects>
+                     <x:ProtectScenarios>False</x:ProtectScenarios>
+                    </x:WorksheetOptions>
+                   </x:ExcelWorksheet>
+                  </x:ExcelWorksheets>
+                  <x:WindowHeight>10005</x:WindowHeight>
+                  <x:WindowWidth>10005</x:WindowWidth>
+                  <x:WindowTopX>120</x:WindowTopX>
+                  <x:WindowTopY>135</x:WindowTopY>
+                  <x:ProtectStructure>False</x:ProtectStructure>
+                  <x:ProtectWindows>False</x:ProtectWindows>
+                 </x:ExcelWorkbook>
+                </xml><![endif]-->
+                </head>
+
+                <body link=blue vlink=purple>
+                <table x:str border=0 cellpadding=0 cellspacing=0 style='border-collapse: collapse;table-layout:fixed;'><tr><td class=xl24 width=64 >USUARIO</td><td class=xl24 width=64 >NOME</td><td class=xl24 width=64 >DATA</td><td class=xl24 width=64 >DIA</td><td class=xl24 width=64 >HORA ENTRADA</td><td class=xl24 width=64 >INICIO INTERVALO</td><td class=xl24 width=64 >FINAL INTERVALO</td><td class=xl24 width=64 >HORA SAIDA</td><td class=xl24 width=64 >FALTAS</td><td class=xl24 width=64 >CLASSIFICACAO</td><td class=xl24 width=64 >USUARIO MODIFICACAO</td><td class=xl24 width=64 >OBSERVACAO</td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >08/06/2010</td><td class=xl24 width=64 >Terca-feira</td><td class=xl24 width=64 >14:02:00</td><td class=xl24 width=64 >16:05:00</td><td class=xl24 width=64 >16:20:00</td><td class=xl24 width=64 >20:01:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >09/06/2010</td><td class=xl24 width=64 >Quarta-feira</td><td class=xl24 width=64 >13:51:00</td><td class=xl24 width=64 >15:45:00</td><td class=xl24 width=64 >15:56:00</td><td class=xl24 width=64 >19:59:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >10/06/2010</td><td class=xl24 width=64 >Quinta-feira</td><td class=xl24 width=64 >14:05:00</td><td class=xl24 width=64 >15:53:00</td><td class=xl24 width=64 >16:00:00</td><td class=xl24 width=64 >19:59:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >11/06/2010</td><td class=xl24 width=64 >Sexta-feira</td><td class=xl24 width=64 >13:03:00</td><td class=xl24 width=64 >15:47:00</td><td class=xl24 width=64 >15:57:00</td><td class=xl24 width=64 >19:04:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >12/06/2010</td><td class=xl24 width=64 >Sabado</td><td class=xl24 width=64 >07:44:00</td><td class=xl24 width=64 >11:28:00</td><td class=xl24 width=64 >11:41:00</td><td class=xl24 width=64 >13:57:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >14/06/2010</td><td class=xl24 width=64 >Segunda-feira</td><td class=xl24 width=64 >13:16:00</td><td class=xl24 width=64 >17:44:00</td><td class=xl24 width=64 >17:59:00</td><td class=xl24 width=64 >19:57:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 >rrosa</td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >15/06/2010</td><td class=xl24 width=64 >Terca-feira</td><td class=xl24 width=64 >13:03:00</td><td class=xl24 width=64 >16:06:00</td><td class=xl24 width=64 >16:21:00</td><td class=xl24 width=64 >18:59:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >16/06/2010</td><td class=xl24 width=64 >Quarta-feira</td><td class=xl24 width=64 >14:07:00</td><td class=xl24 width=64 >16:59:00</td><td class=xl24 width=64 >17:12:00</td><td class=xl24 width=64 >20:02:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >17/06/2010</td><td class=xl24 width=64 >Quinta-feira</td><td class=xl24 width=64 >13:33:00</td><td class=xl24 width=64 >16:45:00</td><td class=xl24 width=64 >16:59:00</td><td class=xl24 width=64 >19:58:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >18/06/2010</td><td class=xl24 width=64 >Sexta-feira</td><td class=xl24 width=64 >13:06:00</td><td class=xl24 width=64 >18:47:00</td><td class=xl24 width=64 >18:59:00</td><td class=xl24 width=64 >19:30:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >19/06/2010</td><td class=xl24 width=64 >Sabado</td><td class=xl24 width=64 >07:45:00</td><td class=xl24 width=64 >12:01:00</td><td class=xl24 width=64 >12:17:00</td><td class=xl24 width=64 >14:00:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >21/06/2010</td><td class=xl24 width=64 >Segunda-feira</td><td class=xl24 width=64 >14:01:00</td><td class=xl24 width=64 >17:17:00</td><td class=xl24 width=64 >17:29:00</td><td class=xl24 width=64 >20:00:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >22/06/2010</td><td class=xl24 width=64 >Terca-feira</td><td class=xl24 width=64 >13:03:00</td><td class=xl24 width=64 >17:55:00</td><td class=xl24 width=64 >18:06:00</td><td class=xl24 width=64 >19:59:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >23/06/2010</td><td class=xl24 width=64 >Quarta-feira</td><td class=xl24 width=64 >13:03:00</td><td class=xl24 width=64 >17:06:00</td><td class=xl24 width=64 >17:18:00</td><td class=xl24 width=64 >19:05:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >24/06/2010</td><td class=xl24 width=64 >Quinta-feira</td><td class=xl24 width=64 >13:03:00</td><td class=xl24 width=64 >17:18:00</td><td class=xl24 width=64 >17:18:00</td><td class=xl24 width=64 >18:08:00</td><td class=xl24 width=64 >01:00:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >25/06/2010</td><td class=xl24 width=64 >Sexta-feira</td><td class=xl24 width=64 >10:47:00</td><td class=xl24 width=64 >12:26:00</td><td class=xl24 width=64 >12:42:00</td><td class=xl24 width=64 >22:51:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Jessica B. Amaral</td><td class=xl24 width=64 >26/06/2010</td><td class=xl24 width=64 >Sabado</td><td class=xl24 width=64 >08:44:00</td><td class=xl24 width=64 >16:05:00</td><td class=xl24 width=64 >16:15:00</td><td class=xl24 width=64 >17:28:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >28/06/2010</td><td class=xl24 width=64 >Segunda-feira</td><td class=xl24 width=64 >13:02:00</td><td class=xl24 width=64 >19:55:00</td><td class=xl24 width=64 >19:58:00</td><td class=xl24 width=64 >20:16:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >29/06/2010</td><td class=xl24 width=64 >Terca-feira</td><td class=xl24 width=64 >13:54:00</td><td class=xl24 width=64 >18:13:00</td><td class=xl24 width=64 >19:05:00</td><td class=xl24 width=64 >23:27:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr><tr><td class=xl24 width=64 >360558</td><td class=xl24 width=64 >Luisa da Silva Machado</td><td class=xl24 width=64 >30/06/2010</td><td class=xl24 width=64 >Quarta-feira</td><td class=xl24 width=64 >13:36:00</td><td class=xl24 width=64 >15:32:00</td><td class=xl24 width=64 >15:43:00</td><td class=xl24 width=64 >19:58:00</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td></tr></table></body></html>

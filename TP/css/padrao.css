@@ -1,0 +1,190 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* <- PRINCIPAL */
+/* imagem de fundo */
+body#logar{
+	background-image:url(../../tp/img/background.JPG);
+}
+/* caixa que envolve o conteudo da página */
+div#caixa{	
+	position:absolute;
+	margin-left:55px;
+	width:640px;
+	height:470px;
+	border:0px;
+	border-color:rgb(0,0,204);
+	border-style:solid;
+	float:left;
+	margin-top:80px;
+    position: relative;
+	}
+/* conteudo da página */
+div#conteudo{
+	position:absolute;
+	margin-left:20px;
+	width:660px;
+	height:271px;
+	border:0px;
+	border-style:solid;
+	float:left;
+	margin-top:20px;
+    padding: 20px 170px 20px 30px;
+}
+/*  PRINCIPAL -> */
+
+
+/* <- MENU */
+div#menu{
+	position: relative;
+	width:125px;
+	height:500px;
+	margin:0;
+	border:0px;
+	border-style:solid;
+	float:left;
+}
+
+img#img_menu{
+	width:130px;
+	height:125px;	
+}
+/* MENU -> */
+
+/* <- TABELA DO CONTEUDO */
+/* TD que informa cor/font/tamanho da letra */
+td#t_td{
+	font:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	color:rgb(0,0,0);
+	text-align:left;
+}
+td#t_td1{
+	font:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	color:rgb(0,0,0);
+	text-align:center;
+}
+
+table{
+	font:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	color:rgb(0,0,0);
+	background-color:EDEDED;
+	width:600px;
+	
+}
+/* TABELA DO CONTEUDO -> */
+#table_conteudo tr.oculto{
+    visibility: hidden;
+    
+}
+
+/* <- PADRÃO DOS CAMPOS DO FORMULÁRIO */
+.botao_padrao{
+	width:150;
+}
+.combobox_padrao{
+	width:155;
+	font:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	color:rgb(0,0,0);
+}
+.combobox_tam_auto{
+	width:auto;
+	font:Verdana, Geneva, sans-serif;
+	font-size:11px;
+	color:rgb(0,0,0);
+
+}
+.combobox_padrao_grande{
+	width:470;
+	font:Verdana, Geneva, sans-serif;
+	font-size:14px;
+	color:rgb(0,0,0);
+}
+
+.textbox_padrao_razaosocial{
+	width:480px;
+}
+
+.textbox_padrao{
+	width:150px;
+}
+/* PADRÃO DOS CAMPOS DO FORMULÁRIO -> */
+
+/* <- USAR EM TITULOS */
+p#p_padrao{
+	font-weight:bold;
+	font:Verdana, Geneva, sans-serif;
+	font-size:14px;
+  
+}
+/* USAR EM TITULOS -> */
+
+/* <- LOGIN */
+div#principal_login{
+	width:100%;
+	border:0px;
+	border-style:solid;
+	float:center;
+	padding-left:25%;
+}
+div#banner{
+	width:620px;
+    height: auto;
+	border:0px;
+	border-style:solid;
+	float:center;
+	position:fixed;
+ 
+}
+table#login_esquerda{
+	width:230px;
+	background-color:d6ca98;
+	
+}
+div#login_esquerda{
+	padding-left:12px;
+	border:0px;
+	border-style:solid;
+	width:300px;
+	height:130px;
+	float:left;
+	background-image:url(../../tp/img/fundo_login.jpg);
+    position: relative;
+    background-repeat: no-repeat;
+}
+table#login{
+	background-color:d6ca98;
+}	
+
+div#login_direita{
+
+	border:0px;
+	border-style:solid;
+	width:300px;
+	float:right;
+	height:150px;
+	background-color:d6ca98;
+    padding-left: 5px;
+}
+/* LOGIN -> */
+
+/*<------- div home noticias*/
+.divrolagem { 
+/* define barra de rolagem automatica quando o  
+conteudo ultrapassar o limite em x ou y */ 
+        /*overflow: false;  
+/* define o limite maximo da autura do div */ 
+        height:190px; 
+/* define o limite maximo da largura do div */ 
+        width:400px;
+		border:1px;
+	    border-color:rgb(0,0,0);
+	    border-style:solid;
+      
+        
+	} 
+[code]	
+/*----- div home noticias */

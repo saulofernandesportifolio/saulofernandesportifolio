@@ -1,0 +1,81 @@
+
+<?php
+
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+
+$sql_serv = "SELECT * FROM usuario WHERE id_usuario = $id_usuario";
+
+$acao_serv=mysql_query($sql_serv,$conecta);
+
+$linha = mysql_fetch_array($acao_serv);
+
+?>
+<div id="wrapper" class="bradius">
+	<form 
+		action="principal.php?&id=<?php echo $cripto->codificar($id_usuario)?>&t=controles/sql_formuploadbase.php" 
+		method="POST"	
+		enctype="multipart/form-data"
+		onsubmit="showLoader()"
+	>
+		<fieldset>
+			<h2>Importar base de dados</h2>
+			<br/>
+			<div> 
+				<select name="base" id="base" class="txt2comboboxpadrao bradius" required>
+					<option value="" disabled selected hidden>Escolha a base</option>
+			   		<option value="1">Gestao Servicos</option>
+			   		<option value="2">Siscom Vendas</option>
+			   		<option value="3">Siscom Servicos</option>
+			  	</select>
+			</div>
+			<div>
+				<input 
+					type="file" 
+					id="file"  
+					class="txt bradius" 
+					name="file"
+					size= "50"
+					placeholder = "Arquivo"
+					required 
+				/>
+			</div>
+			<div>
+			<p>Orientações de envio:</p>
+			<p>1. Carregue um arquivo no formato xlsx(Excel).</p>
+			<p>2. O arquivo não deve ter colunas com dados com cabeçalho em branco.</p>
+			<p>3. O arquivo deve ter somente uma planilha.</p>
+			<p>4. Não apague o cabeçalho.</p>
+			</div>
+			<div>
+				 <input 
+				 	name="submit" 
+				 	id="submitData" 
+				 	type="submit" 
+				 	value="Importar" 
+				 	class="sb2 bradius" 
+			 	/>
+			 	<input 
+			 		name="cancelar" 
+			 		type="button" 
+			 		value="Cancelar" 
+			 		class="sb2 bradius" 
+			 		onClick="window.location='principal.php?t=forms/home.php'"
+		 		/>
+		 		<br/>
+		 		<img id="loader" src="../fixa/images/loading.gif"/>
+			</div>
+	 	</fieldset>
+	</form>
+</div>
+
+</body>
+</html>
+
+  
+    

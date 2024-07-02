@@ -1,0 +1,163 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/app/Model/Tramitacao.php");
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/app/Model/Servico.php");
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/app/Model/Produto.php");
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/bd.php");
+
+
+if (!empty($opcao))
+{ 
+    switch ($opcao)
+    { 
+        case 'insereSolicitacaoTramitacao': 
+        { 
+          $operador            =  isset($_POST['id_usuario']) ? $_POST['id_usuario'] : '';
+          $revisao             =  isset($_POST['revisao']) ? $_POST['revisao'] : '';  
+          $id_solicitacao      =  isset($_POST['id_solicitacao']) ? $_POST['id_solicitacao'] : '';
+          $complemento_servico =  isset($_POST['complemento_servico']) ? $_POST['complemento_servico'] : '';
+          $qtd_acessos         =  isset($_POST['qtd_acessos']) ? $_POST['qtd_acessos'] : ''; 
+          $n_oport_proposta    =  isset($_POST['n_oport_proposta']) ? $_POST['n_oport_proposta'] : ''; 
+          $data_encerramento   =  isset($_POST['data_encerramento']) ? $_POST['data_encerramento'] : '';
+          $status_solicitacao  =  isset($_POST['status_solicitacao_tramitacao']) ? $_POST['status_solicitacao_tramitacao'] : '';
+          $obs                 =  isset($_POST['obs']) ? $_POST['obs'] : '';
+          $areaDevolucao       =  isset($_POST['areaDevolucao']) ? $_POST['areaDevolucao'] : '';
+          $fonte               =  isset($_POST['fonte']) ? $_POST['fonte'] : '';
+
+          echo insertNewTramitacaoRequest($cripto, $operador, $revisao, $id_solicitacao, $complemento_servico, $qtd_acessos, $n_oport_proposta, $data_encerramento, $status_solicitacao, $obs, $areaDevolucao, $fonte); 
+          break; 
+        }
+        case 'insereSolicitacaoTramitacaoManual':
+        {
+          $operador         =  isset($_POST['id_usuario']) ? $_POST['id_usuario'] : ''; 
+          $siscom             =  isset($_POST['siscom']) ? $_POST['siscom'] : '';
+          $data_entrada_siscom    =  isset($_POST['data_entrada_siscom']) ? $_POST['data_entrada_siscom'] : ''; 
+          $canal_entrada          =  isset($_POST['canal_entrada']) ? $_POST['canal_entrada'] : ''; 
+          $servico            =  isset($_POST['servico']) ? $_POST['servico'] : '';
+          $complemento_servico    =  isset($_POST['complemento_servico']) ? $_POST['complemento_servico'] : '';
+          $qtd_acessos          =  isset($_POST['qtd_acessos']) ? $_POST['qtd_acessos'] : ''; 
+          $cnpj             =  isset($_POST['cnpj_cpf']) ? $_POST['cnpj_cpf'] : ''; 
+          $razao_social         =  isset($_POST['razao_social']) ? $_POST['razao_social'] : '';
+          $data_encerramento      =  isset($_POST['data_encerramento']) ? $_POST['data_encerramento'] : '';
+          $status_solicitacao     =  isset($_POST['status_solicitacao_tramitacao']) ? $_POST['status_solicitacao_tramitacao'] : '';
+          $n_oport_proposta       =  isset($_POST['n_oport_proposta']) ? $_POST['n_oport_proposta'] : ''; 
+          $produto            =  isset($_POST['produto']) ? $_POST['produto'] : '';
+          $devolucao          =  isset($_POST['devolucao']) ? $_POST['devolucao'] : '';
+          $areaDevolucao        =  isset($_POST['areaDevolucao']) ? $_POST['areaDevolucao'] : '';
+          $obs              =  isset($_POST['obs']) ? $_POST['obs'] : '';
+          $revisao              =  1;
+
+          echo insertNewTramitacaoRequestManual($cripto, $operador, $siscom, $produto, $data_entrada_siscom, $canal_entrada, $servico, $complemento_servico, $qtd_acessos, $cnpj, $razao_social, $data_encerramento, $status_solicitacao, $n_oport_proposta,$devolucao, $areaDevolucao, $obs, $revisao); 
+          break;
+        }
+    } 
+}
+
+
+function insertNewTramitacaoRequest(Cripto $cripto, $operador, $revisao, $id_solicitacao, $complemento_servico, $qtd_acessos, $n_oport_proposta, $data_encerramento, $status_solicitacao, $obs, $areaDevolucao, $fonte)
+{
+
+      $operador = $cripto->decodificar($operador);
+
+    	//cria solicitacao
+    	$tramitacao = new Tramitacao($operador, $id_solicitacao, $revisao, '', 14, '', '', $complemento_servico, $qtd_acessos,'', '', $data_encerramento, $n_oport_proposta, $status_solicitacao, $obs); 
+
+      
+    $idproduto = "";
+    $descricaoServico = "";
+
+    //completa objeto com dados vindos da base de vendas e servicos  
+    if($fonte == "siscom_servico")
+    {
+        $tramitacao = $tramitacao->buscaDadosSiscomServico($tramitacao, $id_solicitacao, $revisao);
+
+        $Servico = new Servico();
+        $Servico = $Servico->buscaServicoByDescricao($Servico, $tramitacao->servico);
+
+        $descricaoServico = $Servico->servico_descricao;
+    }
+    else if($fonte == "siscom_vendas")
+    {
+        $buscarSolicitacaoSiscomVendas=mysql_query("SELECT * FROM siscom_vendas WHERE siscom = '$id_solicitacao' AND revisao = $revisao");
+
+        if(mysql_affected_rows() > 0)
+        {
+          $tramitacao = $tramitacao->buscaDadosSiscomVendas($tramitacao, $id_solicitacao, $revisao);
+        }
+    }
+
+    $Produto = new Produto();
+    $Produto = $Produto->buscaProdutoByDescricao($Produto, $tramitacao->produto);
+
+
+    $tramitacao->produto = $Produto->id_produto;
+    $tramitacao->servico = $descricaoServico;
+     
+    	//valida campos obrigatórios
+        if($tramitacao->validaCamposObrigatorios($tramitacao) == 1)
+        {
+                echo" <script> 
+                        alert('Por favor preencher todos os campos obrigatórios !');
+                        history.back();
+                      </script>
+                      "; 
+                      exit();   
+        }
+
+         //envia para o banco
+        if($tramitacao->enviaDadosBase($tramitacao)==1)
+        {
+        	 echo" <script> 
+    	        alert('Solicitação cadastrada com sucesso!');
+    	           document.location.href='principal.php?id=" . $operador . "&t=View/home.php'
+    	        </script>
+    	        ";                                       
+        	exit();
+
+        };
+}
+
+
+
+function insertNewTramitacaoRequestManual(Cripto $cripto, $operador, $siscom, $produto, $data_entrada_siscom, $canal_entrada, $servico, $complemento_servico, $qtd_acessos, $cnpj, $razao_social, $data_encerramento, $status_solicitacao, $n_oport_proposta, $devolucao, $areaDevolucao, $obs, $revisao)
+{
+  $operador = $cripto->decodificar($operador);
+  //cria solicitacao
+  $tramitacao = new Tramitacao($operador, $siscom, $revisao, $data_entrada_siscom, $canal_entrada, $produto,$servico,$complemento_servico,$qtd_acessos,$cnpj, $razao_social, $data_encerramento,$n_oport_proposta,$status_solicitacao, $obs); 
+
+  if($devolucao == 'Sim' && $areaDevolucao == "") 
+  {
+            echo" <script> 
+                    alert('Campo area de devolucao deve ser preenchido !');
+                    history.back();
+                  </script>
+                  "; 
+                  exit();   
+    }else{
+      $tramitacao->devolucao    = $devolucao;
+      $tramitacao->areaDevolucao  = $areaDevolucao;
+    }
+ 
+  //valida campos obrigatórios
+    if($tramitacao->validaCamposObrigatoriosManual($tramitacao) == 1)
+    {
+            echo" <script> 
+                    alert('Por favor preencher todos os campos obrigatórios !');
+                    history.back();
+                  </script>
+                  "; 
+                  exit();   
+    }
+
+     //envia para o banco
+    if($tramitacao->enviaDadosBaseManual($tramitacao)==1)
+    {
+       echo" <script> 
+          alert('Solicitação cadastrada com sucesso!');
+             document.location.href='principal.php?id=" . $operador . "&t=View/home.php'
+          </script>
+          ";                                       
+      exit();
+
+    };
+}  
+?>

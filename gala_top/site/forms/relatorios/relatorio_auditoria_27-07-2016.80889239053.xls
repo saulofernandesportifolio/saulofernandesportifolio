@@ -1,0 +1,104 @@
+        <html xmlns:o="urn:schemas-microsoft-com:office:office"
+               xmlns:x="urn:schemas-microsoft-com:office:excel"
+                xmlns="http://www.w3.org/TR/REC-html40">
+
+                <head>
+                <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+                <meta name=ProgId content=Excel.Sheet>
+                <!--[if gte mso 9]><xml>
+                 <o:DocumentProperties>
+                  <o:LastAuthor>Sriram</o:LastAuthor>
+                  <o:LastSaved>2005-01-02T07:46:23Z</o:LastSaved>
+                  <o:Version>10.2625</o:Version>
+                 </o:DocumentProperties>
+                 <o:OfficeDocumentSettings>
+                  <o:DownloadComponents/>
+                 </o:OfficeDocumentSettings>
+                </xml><![endif]-->
+                <style>
+                <!--table
+                    {mso-displayed-decimal-separator:"\.";
+                    mso-displayed-thousand-separator:"\,";}
+                @page
+                    {margin:1.0in .75in 1.0in .75in;
+                    mso-header-margin:.5in;
+                    mso-footer-margin:.5in;}
+                tr
+                    {mso-height-source:auto;}
+                col
+                    {mso-width-source:auto;}
+                br
+                    {mso-data-placement:same-cell;}
+                .style0
+                    {mso-number-format:General;
+                    text-align:general;
+                    vertical-align:bottom;
+                    white-space:nowrap;
+                    mso-rotate:0;
+                    mso-background-source:auto;
+                    mso-pattern:auto;
+                    color:windowtext;
+                    font-size:8pt;
+                    font-weight:400;
+                    font-style:normal;
+                    text-decoration:none;
+                    font-family:Calibri;
+                    mso-generic-font-family:auto;
+                    mso-font-charset:0;
+                    border:none;
+                    mso-protection:locked visible;
+                    mso-style-name:Normal;
+                    mso-style-id:0;}
+                td
+                    {mso-style-parent:style0;
+                    padding-top:1px;
+                    padding-right:1px;
+                    padding-left:1px;
+                    mso-ignore:padding;
+                    color:windowtext;
+                    font-size:8pt;
+                    font-weight:400;
+                    font-style:normal;
+                    text-decoration:none;
+                    font-family:Calibri;
+                    mso-generic-font-family:auto;
+                    mso-font-charset:0;
+                    mso-number-format:General;
+                    text-align:general;
+                    vertical-align:bottom;
+                    border:none;
+                    mso-background-source:auto;
+                    mso-pattern:auto;
+                    mso-protection:locked visible;
+                    white-space:nowrap;
+                    mso-rotate:0;}
+                .xl24
+                    {mso-style-parent:style0;
+                    white-space:normal;}
+                -->
+                </style>
+                <!--[if gte mso 9]><xml>
+                 <x:ExcelWorkbook>
+                  <x:ExcelWorksheets>
+                   <x:ExcelWorksheet>
+                    <x:Name>RELATORIO</x:Name>
+                    <x:WorksheetOptions>
+                     <x:Selected/>
+                     <x:ProtectContents>False</x:ProtectContents>
+                     <x:ProtectObjects>False</x:ProtectObjects>
+                     <x:ProtectScenarios>False</x:ProtectScenarios>
+                    </x:WorksheetOptions>
+                   </x:ExcelWorksheet>
+                  </x:ExcelWorksheets>
+                  <x:WindowHeight>10005</x:WindowHeight>
+                  <x:WindowWidth>10005</x:WindowWidth>
+                  <x:WindowTopX>120</x:WindowTopX>
+                  <x:WindowTopY>135</x:WindowTopY>
+                  <x:ProtectStructure>False</x:ProtectStructure>
+                  <x:ProtectWindows>False</x:ProtectWindows>
+                 </x:ExcelWorkbook>
+                </xml><![endif]-->
+                </head>
+
+                <body link=blue vlink=purple>
+                <table x:str border=0 cellpadding=0 cellspacing=0 style='border-collapse: collapse;table-layout:fixed;'><tr><td class=xl24 width=64 >COTA&Ccedil;&Atilde;O</td><td class=xl24 width=64 >REGIONAL</td><td class=xl24 width=64 >UF</td><td class=xl24 width=64 >TIPO</td><td class=xl24 width=64 >REVIS&Atilde;O</td><td class=xl24 width=64 >CLIENTE</td><td class=xl24 width=64 >CRIADO EM</td><td class=xl24 width=64 >STATUS VIVOCORP</td><td class=xl24 width=64 >SUB-STATUS VIVOCORP</td><td class=xl24 width=64 >STATUS GALA</td><td class=xl24 width=64 >DISC STATUS GALA</td><td class=xl24 width=64 >OPERADOR</td><td class=xl24 width=64 >DATA INCLUS&Atilde;O GALA</td><td class=xl24 width=64 >DATA TRATAMENTO</td><td class=xl24 width=64 >HORA TRATAMENTO</td><td class=xl24 width=64 >TIPO SERVI&Ccedil;OS</td><td class=xl24 width=64 >ALTAS</td><td class=xl24 width=64 >PORTAB.</td><td class=xl24 width=64 >MIGRACOES</td><td class=xl24 width=64 >TROCAS</td><td class=xl24 width=64 >TT</td><td class=xl24 width=64 >BACKUP</td><td class=xl24 width=64 >M_2_M</td><td class=xl24 width=64 >FIXA</td><td class=xl24 width=64 >PRE POS</td><td class=xl24 width=64 >MIGRACAO TROCA</td><td class=xl24 width=64 >TOTAL LINHAS</td><td class=xl24 width=64 >SETOR</td><td class=xl24 width=64 >TURNO</td><td class=xl24 width=64 >DIA</td><td class=xl24 width=64 >TEMPO</td><td class=xl24 width=64 >TIPO PROCESSO</td><td class=xl24 width=64 >TIPO DE LINHA</td><td class=xl24 width=64 >SLA DIAS</td><td class=xl24 width=64 >PRAZO_DIAS</td><td class=xl24 width=64 >CRIADO EM2</td><td class=xl24 width=64 >VISAO</td><td class=xl24 width=64 >VENCIMENTO</td><td class=xl24 width=64 >OFENSOR</td><td class=xl24 width=64 >COLABORADOR</td><td class=xl24 width=64 >TURNO_OP</td><td class=xl24 width=64 >TIPO DE ERRO</td><td class=xl24 width=64 >DESCRI&Ccedil;&Atilde;O ERRO</td></tr></table></body></html>

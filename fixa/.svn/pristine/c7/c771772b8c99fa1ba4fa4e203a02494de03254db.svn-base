@@ -1,0 +1,137 @@
+<?php
+// Verifica se foi feita alguma busca
+// Caso contrario, redireciona o visitante pra home
+
+include("../fixa/bd.php");
+
+ // Salva o que foi buscado em uma variável
+$pedido = $_GET['pedido'];
+
+?>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$("#cancelar").on('click', function(){
+			 window.history.back();
+	    });
+	});
+</script>
+
+<div id="t_consulta_solicitacao" style="margin-left: 24%; ">
+		<table class="tabelas_dashboard">
+		<caption>
+			<h2>Histórico</h2>
+		</caption>
+			<thead>
+                <tr>
+                    <th>Data</th>
+                    <th>Operador</th>
+                    <th>Nº Solicitação</th>
+                    <th>Nº GS</th>
+                    <th>Fase</th>
+                    <th>Revisão</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			     
+			       
+			     	$buscarHistorico=mysql_query("SELECT DISTINCT
+														U.nome AS operador,
+														PTH.id_solicitacao,
+														PTH.n_gestao_servicos,
+														DATE_FORMAT( PTH.reg_dt_entrada , '%d/%c/%Y %H:%i:%s' ) as data,
+														'Pre-Tramitacão' AS fase,
+														pth.revisao
+													FROM pre_tramitacao_historico PTH
+														LEFT JOIN usuario U
+															ON PTH.id_usuario_pre = U.id_usuario
+																WHERE pth.id_solicitacao =  $pedido
+													UNION
+													SELECT DISTINCT
+														U.nome AS operador,
+														th.id_solicitacao,
+														th.n_gestao_servicos,
+														DATE_FORMAT( th.reg_dt_entrada , '%d/%c/%Y %H:%i:%s' ) as data,
+														'Tramitação' AS fase,
+														th.revisao
+													FROM tramitacao_historico th
+														LEFT JOIN usuario U
+															ON th.id_usuario_tramitacao = U.id_usuario
+																WHERE th.id_solicitacao = $pedido
+													UNION
+													SELECT DISTINCT
+														U.nome AS operador,
+														th.id_solicitacao,
+														th.n_gestao_servicos,
+														DATE_FORMAT( th.reg_dt_entrada , '%d/%c/%Y %H:%i:%s' ) as data,
+														'Pós-Tramitação' AS fase,
+														th.revisao
+													FROM pos_tramitacao_historico th
+														LEFT JOIN usuario U
+															ON th.id_usuario_pos_tramitacao = U.id_usuario
+																WHERE th.id_solicitacao = $pedido
+												");
+			     	
+			     	if(mysql_affected_rows() > 0)
+			     	{
+				     	while($linhash=mysql_fetch_array($buscarHistorico))
+				     	{ 
+
+				        	if($linhash['fase'] == 'Pre-Tramitacão'){
+				        		$form = 'pt';
+				        		$id_pedido = $linhash['id_solicitacao'];
+				        	}else if($linhash['fase'] == 'Tramitação'){
+				        		$form = 't';
+				        		$id_pedido = $linhash['id_solicitacao'];
+				        	}else if($linhash['fase'] == 'Intragov'){
+				        		$form = 'i';
+				        		$id_pedido = $linhash['n_gestao_servicos'];
+				        	}else if($linhash['fase'] == 'Gcom'){
+				        		$form = 'g';
+				        		$id_pedido = $linhash['n_gestao_servicos'];
+				        	}
+				        ?>          
+				         <tr>
+				         	<td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhash['data'];  ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhash['operador']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhash['id_solicitacao']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhash['n_gestao_servicos']; ?>
+				              </a>
+				            </td>
+				              <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhash['fase']; ?>
+				              </a>
+				            </td>
+				              <td class="colunas-centralizados">
+				              <a id="td" href="principal.php?&id=<?php echo $cripto->codificar($id_pedido)?>&form=<?php echo $form?>&t=views/v_form_dados.php">
+				                <?php echo $linhash['revisao']; ?>
+				              </a>
+				            </td>
+				          </tr>
+			     <?php 
+		     			}
+	     			}
+		          ?>
+           </tbody>
+		</table>
+		<br/>
+		<br/>
+			<input id="cancelar" name="cancelar" type="button" value="Voltar" class="sb2 bradius"/>
+
+	</div>

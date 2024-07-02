@@ -1,0 +1,37 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../fixa/bd.php");
+
+$tempo = 0;
+
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario_logado = $_GET['idl'];
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+
+set_time_limit($tempo);
+
+$sql_insere="UPDATE 
+                usuario 
+              SET 
+              	id_status  = '2',
+              	data_desativado = ''
+              WHERE 
+              	id_usuario = '$id_usuario' ";
+                 
+$acao_insere= mysql_query($sql_insere) or die (mysql_error());
+ 
+        
+echo" <script> 
+	      alert('Usu\u00E1rio ativado com sucesso!');
+	      document.location.href='principal.php?id=" . $id_usuario_logado . "&t=views/home.php'
+      </script>
+      ";                                        
+    exit();
+    
+?>

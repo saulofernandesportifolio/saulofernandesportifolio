@@ -1,0 +1,67 @@
+<?php
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/app/Model/Aprovacao.php");
+include($_SERVER['DOCUMENT_ROOT']."/fixa_top/bd.php");
+
+
+$operador     		              =  isset($_POST['id_usuario']) ? $_POST['id_usuario'] : ''; 
+$siscom        			            =  isset($_POST['siscom']) ? $_POST['siscom'] : '';
+$data_entrada_siscom            =  isset($_POST['data_entrada_siscom']) ? $_POST['data_entrada_siscom'] : ''; 
+$canal_entrada                  =  isset($_POST['canal_entrada']) ? $_POST['canal_entrada'] : '';
+$produto                        =  isset($_POST['produto']) ? $_POST['produto'] : ''; 
+$servico        		            =  isset($_POST['servico']) ? $_POST['servico'] : '';
+$complemento_servico            =  isset($_POST['complemento_servico']) ? $_POST['complemento_servico'] : '';
+$qtd_acessos        	          =  isset($_POST['qtd_acessos']) ? $_POST['qtd_acessos'] : '';
+$data_recebimento_pos           =  isset($_POST['data_recebimento_pos']) ? $_POST['data_recebimento_pos'] : '';
+$cnpj        			              =  isset($_POST['cnpj']) ? $_POST['cnpj'] : ''; 
+$razao_social        	          =  isset($_POST['razao_social']) ? $_POST['razao_social'] : '';
+$oportunidade                   =  isset($_POST['oportunidade']) ? $_POST['oportunidade'] : '';
+$proposta                       =  isset($_POST['proposta']) ? $_POST['proposta'] : '';
+$data_finalizado                =  isset($_POST['data_finalizado']) ? $_POST['data_finalizado'] : '';
+$obs                            =  isset($_POST['obs']) ? $_POST['obs'] : '';
+$status_solicitacao_aprovacao   =  isset($_POST['status_solicitacao_aprovacao']) ? $_POST['status_solicitacao_aprovacao'] : '';
+$motivo_devolucao       	      =  isset($_POST['motivo_devolucao']) ? $_POST['motivo_devolucao'] : '';
+
+if (!empty($opcao))
+{ 
+    switch ($opcao)
+    { 
+        case 'insereSolicitacaoAprovacao': 
+        { 
+          echo insertNewAprovacaoRequest($cripto, $operador, $siscom, $data_entrada_siscom, $canal_entrada, $produto, $servico, $complemento_servico, $qtd_acessos, $data_recebimento_pos, $cnpj, $razao_social, $oportunidade, $proposta, $data_finalizado, $obs, $status_solicitacao_aprovacao,$motivo_devolucao); 
+          break; 
+        }
+    } 
+}
+
+
+function insertNewAprovacaoRequest(Cripto $cripto, $operador, $siscom, $data_entrada_siscom, $canal_entrada, $produto, $servico, $complemento_servico, $qtd_acessos, $data_recebimento_pos, $cnpj, $razao_social, $oportunidade, $proposta, $data_finalizado, $obs, $status_solicitacao_aprovacao,$motivo_devolucao)
+{
+	$operador = $cripto->decodificar($operador);
+  
+	//cria solicitacao
+	$aprovacao = new Aprovacao($operador, $siscom, $data_entrada_siscom, $canal_entrada, $produto, $servico, $complemento_servico, $qtd_acessos, $data_recebimento_pos, $cnpj, $razao_social, $oportunidade, $proposta, $data_finalizado, $obs, $status_solicitacao_aprovacao,$motivo_devolucao); 
+ 
+	//valida campos obrigatórios
+    if($aprovacao->validaCamposObrigatorios($aprovacao) == 1)
+    {
+            echo" <script> 
+                    alert('Por favor preencher todos os campos obrigatórios !');
+                    history.back();
+                  </script>
+                  "; 
+                  exit();   
+    }
+
+     //envia para o banco
+    if($aprovacao->enviaDadosBase($aprovacao)==1)
+    {
+    	 echo" <script> 
+	        alert('Solicitação cadastrada com sucesso!');
+	           document.location.href='principal.php?id=" . $operador . "&t=View/home.php'
+	        </script>
+	        ";                                       
+    	exit();
+
+    };
+} 
+?>

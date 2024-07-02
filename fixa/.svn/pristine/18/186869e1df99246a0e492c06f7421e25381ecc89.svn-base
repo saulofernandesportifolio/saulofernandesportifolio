@@ -1,0 +1,41 @@
+<?php
+include("../fixa/bd.php");
+require_once '../fixa/site/classes/cripto.php';
+?>
+
+<?php
+$cripto = new cripto();
+//parametros
+$id_usuario = $_GET['id']; 
+$id_usuario = $cripto->decodificar($id_usuario);
+?>
+<body>
+    <label>Nº GS:</label>
+        <input class="inputsTextTabelas" type="text" id="n_gs"></input>
+    <label>Nº Solicitação:</label>
+        <input class="inputsTextTabelas" type="text" id="n_solicitacao"></input>
+        <a href="#" class="estiloLupa" id="estiloLupaConsultaSolicitacoes"><i class="fa fa-search"></a></i>
+   <br/>
+   <div id="wrapper">
+    <table id="keywords" cellspacing="0" cellpadding="0">
+        <thead>
+          <tr>
+            <th><span>Data</span><i class="fa fa-sort"></i></th>
+            <th><span>Operador</span><i class="fa fa-sort"></i></th>
+            <th><span>CPF</span><i class="fa fa-sort"></i></th>  
+            <th><span>Nº Solic.</span><i class="fa fa-sort"></i></th>
+            <th><span>Nº GS.</span><i class="fa fa-sort"></i></th>
+            <th><span>Fase</span><i class="fa fa-sort"></i></th>
+            <th><span>Status</span><i class="fa fa-sort"></i></th>
+            <th><span>Cnpj</span><i class="fa fa-sort"></i></th>
+            <th><span>Razão Social</span><i class="fa fa-sort"></i></th>
+            <th><span>Qtde Acessos</span><i class="fa fa-sort"></i></th>
+            <th><span>Revisão</span><i class="fa fa-sort"></i></th>
+          </tr>
+        </thead>
+        <tbody id="rowSolicitacoes">
+        </tbody>
+    </table>
+   </div> 
+</body>
+

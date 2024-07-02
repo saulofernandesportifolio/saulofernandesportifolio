@@ -1,0 +1,51 @@
+<div id="t_i_intragov">
+		<table id="tabela_itens_processo_intragov" class="tabelas_dashboard">
+		<caption class="textoParagrafo"><h2 style="color: #7b682e;">Itens a preencher</h2></caption>
+			<thead>
+                <tr>
+                	<th class="textoParagrafo">Nº Solicitação</th>
+                    <th class="textoParagrafo">Data Recebimento</th>
+                    <th class="textoParagrafo">Revisão</th>
+                    <th class="textoParagrafo">Ação</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query("SELECT 
+												sf.id_solicitacao,
+												sf.id_gestao_servicos,
+												date_format(sf.data_ultima_acao,'%d/%m/%Y %H:%i:%s') AS data_hora,
+												sf.revisao
+											FROM 
+												solicitacao_fases sf 
+											WHERE 
+												sf.id_usuario_resp = $id_usuario AND
+												sf.intragov = 'Com operador'
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){                   
+				        ?>          
+			         <tr>
+			            <td><?php echo $linha['id_solicitacao']; ?></td>
+			            <td><?php echo $linha['data_hora']; ?></td>
+			            <td><?php echo $linha['revisao']; ?></td>
+			            <td>
+				          	<form action="principal.php?t=views/form_intragov.php" method="post">
+			        			<input type="hidden" value="<?php echo $linha['revisao']?>" name="revisao" id="revisao"></input>
+			        			<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" name="id_usuario" id="id_usuario"></input>
+			        			<input type="hidden" value="<?php echo $linha['id_solicitacao']?>" name="id_solicitacao" id="id_solicitacao"></input>
+					  			<input type="submit" value="Preencher" class="ItensDistribuidos">
+							</form>
+						</td>
+			          </tr>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>

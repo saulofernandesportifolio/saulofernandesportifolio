@@ -1,0 +1,122 @@
+
+
+
+
+
+
+
+
+
+
+<html lang="pt">
+<head>
+<base href="http://10.128.184.64:8001/CustomerCare/login.jsp">
+<title>inVIVO - CustomerCare 10.3.7</title>
+<link rel="stylesheet" href='/CustomerCare/css/login.css'>
+<script language="javascript"
+	src='/CustomerCare/js/validation.js'></script>
+<script language="javascript">
+		if (top.frames.length > 0) { 
+			top.frames.location.replace(document.URL); // assures that this page is never loaded inside a frameset
+		}
+		function greeting(){
+			var browser=navigator.appName;
+			var b_version=navigator.appVersion;
+			var version=parseFloat(b_version);
+			if (browser != "Microsoft Internet Explorer"){
+				document.getElementById('browser').style.display = 'block';
+			}else if (browser == "Microsoft Internet Explorer" && version < 4){
+				document.getElementById('browser').style.display = 'block';
+			}else{
+				document.getElementById('browser').style.display = 'none';
+			}
+		}
+	</script>
+</head>
+
+<body>
+<div>
+<table width="100%" height="100%">
+	<tr>
+		<td><form name="loginForm" method="post" action="/CustomerCare/action/authenticate" onsubmit="return noEntry(fields);">
+			<input type='hidden' name='nextMethodKey' value='authenticate'>
+
+			<input type='hidden' name='nextMethodKey' value='authenticate'>
+			<table border="0" align="center" cellpadding="0" cellspacing="0" id="fundo_login">
+				<tr>
+					<td id="assinatura">© Portugal Telecom Inovação, S.A.</td>
+				</tr>
+				<tr>
+					<td align="center" valign="bottom" background="images/login_logos.gif">
+						<table cellpadding="0" cellspacing="0" border="0" id="boxlogin">
+							
+								
+								
+									<tr>
+										<td colspan="2" id="msgerro">
+											<b>SCA_002 - Username/Password inválidos</b>
+										</td>
+									</tr>
+								
+							
+							<tr>
+								<td colspan="2" height="10"></td>
+							</tr>
+							<tr>
+								<td id="loginbox_top" colspan="2">Login</td>
+							</tr>
+							<tr>
+								<td>
+									<table id="miolo">
+										<tr>
+											<td class="texto_login">Usuário:</Td>
+											<td><input type="text" name="userId" value=""></td>
+										</tr>
+										<tr>
+											<td class="texto_login">Senha:</Td>
+											<td><input type="password" name="passwd" value=""></Td>
+										</tr>
+										<tr>
+											<td colspan="2" align="center"><input type="submit" value="Ok" class="botao"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+							<tr>
+								<td id="loginbox_botton">&nbsp;</td>
+							</tr>
+						</table>
+						<div id="browser">Homologado para utilização no Microsoft Internet Explorer 6.</div>
+					</td>
+				</tr>
+			</table>
+			<input type='hidden' name='nextMethodKey' value='authenticate'/></form>
+<script type="text/javascript" language="JavaScript">
+  <!--
+  var focusControl = document.forms["loginForm"].elements["userId"];
+
+  if (focusControl.type != "hidden") {
+     focusControl.focus();
+  }
+  // -->
+</script>
+
+			<script type="text/javascript" language="JavaScript">
+  <!--
+  var focusControl = document.forms["loginForm"].elements["userId"];
+
+  if (focusControl.type != "hidden") {
+     focusControl.focus();
+  }
+  // -->
+</script></td>
+	</tr>
+</table>
+</div>
+<script language="javascript">
+		var fields=new Array();
+		fields[0]=document.loginForm.userId;
+		fields[1]=document.loginForm.passwd;
+	</script>
+</body>
+</html>

@@ -1,0 +1,28 @@
+<?php
+
+  function arrumadata($string) {
+      if($string == ''){
+      $data= substr($string,8,2)."".substr($string,5,2)."".substr($string,0,4);   
+          
+      }else{
+          
+      $data= substr($string,8,2)."/".substr($string,5,2)."/".substr($string,0,4);   
+      }
+
+      return $data;
+  }
+
+
+  function arrumadatahora($string2) {
+      
+      if($string2 == ''){
+      $data2=  substr($string2,8,2)."".substr($string2,5,2)."".substr($string2,0,4)." ".substr($string2,10,9);
+         }else{
+          
+        $data2= substr($string2,8,2)."/".substr($string2,5,2)."/".substr($string2,0,4)." ".substr($string2,10,9);
+          
+         }
+      return $data2;
+  }
+
+?>

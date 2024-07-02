@@ -1,0 +1,90 @@
+<p align="center">
+	<?php
+		$cripto = new cripto();
+		$id_usuario= $_GET['id'];
+		$id_usuario = $cripto->decodificar($id_usuario);
+
+		//get info of user
+		$buscarPerfil=mysql_query("SELECT * FROM usuario WHERE id_usuario = $id_usuario");  
+
+		if(mysql_affected_rows() > 0)
+		{
+			while($linha=mysql_fetch_array($buscarPerfil))
+			{ 
+				$id_perfil = $linha['id_perfil'];
+			}
+		}
+
+		
+	?>
+
+	<?php if($id_perfil == 6 || $id_perfil == 12){?>
+	<div class="tela_principal_dasbboard">
+			<div id="t_m_d">
+				      	 <?php 
+					     	$buscarItens=mysql_query("SELECT 
+														IFNULL(count(id_solicitacao),0) AS quantidade,
+														'Tramitação' AS fase,
+														tramitacao AS status 
+													FROM 
+														solicitacao_fases 
+													WHERE 
+														tramitacao = 'Com operador' AND 
+														id_usuario_resp = $id_usuario
+													UNION
+					     							SELECT 
+														IFNULL(count(id_solicitacao),0) AS quantidade,
+														'Aprovação' AS fase,
+														aprovacao AS status  
+													FROM 
+														solicitacao_fases 
+													WHERE 
+														aprovacao = 'Com operador' AND 
+														id_usuario_resp = $id_usuario
+							");
+
+					     	if(mysql_affected_rows() > 0)
+					     	{
+									while($linha=mysql_fetch_array($buscarItens))
+									{                   
+						        ?>          
+						         
+						        <p class="textoParagrafo">
+						        	<?php if($id_perfil == 6)
+						        	{?>
+							        	<?php if ($linha['fase'] == 'Tramitação'){?>
+								        	Número de solicitações de tramitação a serem preenchidas: <?php echo $linha['quantidade']; ?>
+								        	<form>
+									        	<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" id="id_usuario_tramitacao"></input>
+									        	<input type="hidden" value="tramitacao" id="solicitacao_pendentes_tramitacao"></input>
+									        	<input id="form_tramitacao_itens_preencher_operador" type="button" value="Visualizar" class="sb2 bradius"/>
+						        			<form/>
+						        	<?php 
+						        			}
+						   				} 
+						        	?>
+						        </p>
+						        <p class="textoParagrafo">
+						        	<?php if($id_perfil == 12){?>
+							        	<?php if ($linha['fase'] ==  'Aprovação'){?>
+								        	Número de solicitações de aprovação a serem preenchidas:<?php echo $linha['quantidade']; ?>
+								        	<form>
+									        	<input type="hidden" value="<?php echo $cripto->codificar($id_usuario)?>" id="id_usuario_aprovacao"></input><br/>
+									        	<input type="hidden" value="aprovacao" id="solicitacao_pendentes_aprovacao"></input>
+									        	<input id="form_aprovacao_itens_preencher_operador" type="button" value="Visualizar" class="sb2 bradius"/>
+						        			<form/> 
+						        	<?php 
+						        			}
+					        			}
+						        	?>
+						        </p>
+					     <?php 
+						          }
+					       }
+					     ?>
+		           </tbody>
+				</table>
+			</div>
+		</div>
+	<?php }?>
+</p>

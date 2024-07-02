@@ -1,0 +1,252 @@
+@charset "utf-8";
+/* CSS Document */
+
+body#logar{
+	background-image:url(../img/background.JPG)
+}
+div#divprincipal{
+	position:absolute;
+	width:590px;
+	height:500px;
+	margin:0 auto;
+	margin:auto;
+	border:0px;
+	border-style:solid;
+	left: 50%;
+	margin-left:-300px;
+	}
+
+div#banner{
+	position:relative;
+	height:120px;
+    width:573px;
+	border:0px;
+	border-style:solid;
+}
+
+div#divconteudo{
+	border:0px;
+	width:575px;
+	background-color:rgb(255,255,255);
+	border-style:solid;
+	font:Verdana, Geneva, sans-serif;
+	font-size:13px;
+	padding-top:20px;
+}
+/* login*/
+table#login{
+	text-align:center;
+	border:1px;
+	border-style:solid;
+	color:rgb(255,255,255);
+}
+div#login1{
+	border:0px;
+	width:263px;
+	height:130px;
+	border-style:solid;
+	font:Verdana, Geneva, sans-serif;
+	font-size:15px;
+	position:relative;
+	float:left;
+	text-align:center;
+	background-image:url(../img/fundo_login.jpg);
+	background-repeat:no-repeat;
+	
+}
+div#login2{
+	border:0px;
+	width:250px;
+	height:260px;
+	background-color:rgb(255,255,255);
+	border-style:solid;
+	font:Verdana, Geneva, sans-serif;
+	font-size:15px;
+	position:relative;
+	float:right;
+	color:rgb(0,0,0)
+		
+}
+/******** LOGIN ********/
+
+div#principal{
+	position: absolute;
+	width:860px;
+	height:500px;
+	border:0px;
+	border-style:solid;
+	float:left;
+	}
+div#menu{
+	position: relative;
+	width:125px;
+	height:500px;
+	margin:0;
+	border:0px;
+	border-style:solid;
+	float:left;
+}
+div#caixa{	
+	/*background-image:url(../img/fundo_caixa.gif);*/
+	/*background-color:#EDEDED;*/
+	position:absolute;
+	margin-left:55px;
+	width:640px;
+	height:470px;
+	border:0px;
+	border-color:rgb(0,0,204);
+	border-style:solid;
+	float:left;
+	margin-top:80px;
+	}
+div#conteudo{
+	position:absolute;
+	margin-left:20px;
+	width:600px;
+	height:400px;
+	border:0px;
+	border-color:rgb(0,255,102);
+	border-style:solid;
+	float:left;
+	margin-top:20px;
+}
+div#principalpn{
+	position: absolute;
+	width:860px;
+	height:500px;
+	border:0px;
+	border-style:solid;
+	float:left;
+	}
+div#caixa_pn{	
+	/*background-image:url(../img/fundo_caixa.gif);*/
+	background-color:#EDEDED;
+	position:absolute;
+	margin-left:55px;
+	width:750px;
+	height:750px;
+	border:0px;
+	border-color:rgb(0,0,204);
+	border-style:solid;
+	float:left;
+	margin-top:0px;
+	}
+div#conteudo_pn{
+	position:absolute;
+	margin-left:20px;
+	width:720px;
+	height:300px;
+	border:0px;
+	border-color:rgb(0,255,102);
+	border-style:solid;
+	float:left;
+	margin-top:10px;
+}
+div#conteudont{
+	position:absolute;
+	margin-left:40px;
+	width:800px;
+	height:400px;
+	border:0px;
+	border-color:rgb(0,255,102);
+	border-style:solid;
+	float:left;
+	margin-top:20px;
+}
+
+img#img_menu{
+	width:130px;
+	height:125px;	
+}
+td#t_td{
+	font:Verdana, Geneva, sans-serif;
+	font-size:16px;
+	/*color:rgb(0,0,204);*/
+	text-align:left;
+}
+
+p#p_padrao{
+	font:Verdana, Geneva, sans-serif;
+	font-size:16px;
+	color:rgb(0,0,0);
+	font-stretch:expanded;
+}
+table#table_conteudo{
+	font:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:rgb(0,0,0);
+	background-color:"ededed";
+}
+.botao_padrao{
+	width:150;
+	
+}
+.botao_padraopn{
+	width:150;
+	
+}
+.botao_padrao2{
+	width:150;
+	left:auto;
+
+	
+}
+.negrito{
+	font:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:rgb(0,0,0);
+	font-weight:bold;
+}
+.combo_padrao{
+	width:150;
+	font:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:rgb(0,0,0);
+}
+.combo_padrao_banco{
+	width:470;
+	font:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:rgb(0,0,0);
+	
+}
+.combo_padrao_bancopn{
+	width:495;
+	font:Verdana, Geneva, sans-serif;
+	font-size:12px;
+	color:rgb(0,0,0);
+	
+}
+.input{
+	width:150px;
+}
+
+.carregar{
+	width:400px;
+}
+
+p#p_padrao{
+	 font-weight:bold;
+	 font:Verdana, Geneva, sans-serif;
+	font-size:14px;
+}
+
+.divrolagem { 
+/* define barra de rolagem automatica quando o  
+conteudo ultrapassar o limite em x ou y */ 
+        /*overflow: false;  
+/* define o limite maximo da autura do div */ 
+        height:190px; 
+/* define o limite maximo da largura do div */ 
+        width:400px;
+		border:1px;
+	    border-color:rgb(0,0,0);
+	    border-style:solid;
+	
+	} 
+[code]
+
+table
+{
+	background-color:"EDEDED";
+}

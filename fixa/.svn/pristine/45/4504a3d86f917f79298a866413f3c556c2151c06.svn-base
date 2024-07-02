@@ -1,0 +1,61 @@
+<?php
+
+require_once('../fixa/bd.php');
+
+$query = mysql_query("SELECT 
+						reg_dt_entrada			,
+						operador    	        ,
+						id_solicitacao			,
+						data_receb_documento	,
+						tipo_entrada      		,
+						contrato_mae      		,
+						data_assinatura_doc     ,
+						numero_documento        ,
+ 						sistema_validacao 		,
+						n_vantive               ,
+						produto            		,
+						data_trativa            ,
+						nome_solicitante        ,
+						n_gestao_servicos       ,
+						numero_wcd              ,
+						razao_social            ,
+						cnpj                    ,
+						plano_solicitado        ,
+						qtde_acesso             ,  
+						data_finalizacao        ,
+						revisao       
+					FROM 
+						v_geral_gcom
+					WHERE reg_dt_entrada <> '' ");
+
+while($fetch = mysql_fetch_array($query))
+{
+	$output[] = array (
+			$fetch[0]	, // id_solicitacao	
+			$fetch[1]	, // reg_dt_entrada			
+			$fetch[2]	, //operador    	       
+			$fetch[3]	, //data_receb_documento	
+			$fetch[4]	, //tipo_entrada      		
+			$fetch[5]	, //contrato_mae      		
+			$fetch[6]	, //data_assinatura_doc    
+			$fetch[7]	, //numero_documento       
+ 			$fetch[8]	, //sistema_validacao 		
+			$fetch[9]	, //n_vantive              
+			$fetch[10]	, //produto            		
+			$fetch[11]	, //data_trativa           
+			$fetch[12]	, //nome_solicitante       
+			$fetch[13]	, //n_gestao_servicos      
+			$fetch[14]	, //numero_wcd             
+			$fetch[15]	, //razao_social           
+			$fetch[16]	, //cnpj                   
+			$fetch[17]	, //plano_solicitado       
+			$fetch[18]	, //qtde_acesso            
+			$fetch[19]	, //data_finalizacao
+			$fetch[20]        
+	);
+}
+
+echo json_encode($output);
+
+?>
+

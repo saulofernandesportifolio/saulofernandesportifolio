@@ -1,0 +1,300 @@
+*{padding:0px; margin:0px}
+/* Resluções */
+@media (min-width: 240px) {
+    .box{width: auto; /*background:#333;*/ height:100px}
+
+}
+
+@media (min-width: 270px) {
+    .box{width: auto; /*background:#6C0;*/ height:100px}
+
+}
+
+@media (min-width: 480px) {
+    .box{width: auto; /*background:##90F;*/ height:100px}
+    .combo{ margin-top:10px; margin-left:90px; }
+
+}
+
+@media (min-width: 768px) {
+    .box{width: auto; /*background:#F00;*/ height:100px}
+    .combo{ margin-top:10px; margin-left:110px; }
+
+}
+
+@media (min-width: 1024px) {
+    .box{width: auto; /*background:#C00;*/ height:100px}
+    .combo{ margin-top:10px; margin-left:110px; }
+}
+
+body,a,li,div,.btn,.form-control{
+    font-family: 'Arial';
+    font-color: #fff;
+    font-size: 13px;
+
+
+}
+
+body{
+    /*background-image: url("img/vivo77.jpg");
+    height: 20%;
+    width:20% ;*/
+}
+
+.form-control{
+    font-family: 'Arial';
+    font-color: #fff;
+    font-size: 11px;
+    height: 26px;
+
+}
+
+label,input{
+    font-family: 'Arial';
+    font-color: #fff;
+    font-size: 11px;
+}
+
+th,table {
+    font-family: 'Arial';
+    font-color: #fff;
+    font-size: 11px;
+    text-align: center;
+    position: relative;
+    top: 0px;
+}
+
+td {
+    font-family: 'Arial';
+    font-color: #fff;
+    font-size: 11px;
+    text-align: center;
+    position: relative;
+    top: 5px;
+}
+
+
+
+.btn{
+    font-family: 'Arial';
+    font-color: #fff;
+    font-size: 11px;
+    align:center;
+    padding-top:3px;
+    height: 25px;
+}
+
+.fa-btn {
+    margin-right: 6px;
+
+}
+
+/* barra de menu principal */
+.navbar-default {
+
+    /*background:-webkit-linear-gradient(180deg, rgb(139, 170, 201) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-o-linear-gradient(180deg, rgb(139, 170, 201) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-moz-linear-gradient(180deg, rgb(139, 170, 201) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:linear-gradient(180deg, rgb(139, 170, 201) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);*/
+    background-color: #337ab7;
+    font-family: 'Arial';
+    font-size: 14px;
+
+}
+
+/* elemento que tem o nome "MeuSite" */
+.navbar-default .navbar-brand,
+.navbar-default .navbar-brand>a:focus{
+    color: #fff;
+}
+
+/* item de menu quando tiver selecionado */
+.navbar-default .navbar-toggle{
+    color: #fff;
+
+}
+
+/* item de menu quando tiver selecionado */
+.navbar-default .navbar-nav>.active>a,
+.navbar-default .navbar-nav>.active>a:hover,
+.navbar-default .navbar-nav>.active>a:focus {
+    color: #fff;
+    /*background:-webkit-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-o-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-moz-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);*/
+    background-color: #337ab7;
+}
+
+/* item de menu */
+.navbar-default .navbar-nav>li>a {
+    color: #fff;
+}
+
+/* mouse over no item de menu */
+.navbar-default .navbar-nav>li>a:hover,
+.navbar-default .navbar-nav>li>a:focus {
+    color: #fff;
+    background-color: transparent;
+}
+
+/* item de menu dropdown quando tiver aberto */
+.navbar-default .navbar-nav>.open>a,
+.navbar-default .navbar-nav>.open>a:hover,
+.navbar-default .navbar-nav>.open>a:focus {
+    color: #fff;
+   /* background:-webkit-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-o-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-moz-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);*/
+    background-color: #337ab7;
+}
+
+.sr-only{
+
+    color: #fff;
+
+}
+.imagem{
+
+    margin-top: -13px;
+    margin-left: -80px;
+
+}
+
+
+.imagem2{
+    position: relative;
+    align-content: center;
+
+}
+
+
+.nomeportal{
+
+    margin-top: -30px;
+    margin-left: 100px;
+    color: #fff;
+    font-family: 'Arial';
+    font-size: 14px;
+
+}
+
+.panel{
+
+   /* background:-webkit-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-o-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-moz-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);*/
+    background-color: #337ab7;
+}
+
+.panel-body{
+
+    background-color: #fff;
+}
+.panel-heading{
+    color:#fff;
+
+}
+
+
+.panel1{
+   /* background:-webkit-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-o-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:-moz-linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);
+    background:linear-gradient(180deg, rgb(110, 159, 207) 0%, rgb(5, 5, 94) 48%, rgb(65, 109, 153) 96%, rgb(38, 96, 153) 96%, rgb(106, 132, 255) 100%);*/
+    height: 20px;
+    background-color: #337ab7;
+}
+.panel-heading1{
+    color:#fff;
+    margin-top: -15px;
+    padding-left: 20px;
+}
+
+.panel2{
+
+    background-color: #f0ad4e;
+    height: 20px;
+}
+
+.panel-heading2{
+    color:#fff;
+    margin-top: -15px;
+    padding-left: 20px;
+
+}
+
+
+.margem-top-20{
+
+    margin-top:20px;
+}
+
+.titulo-erro{
+
+    font-weght:bolder;
+    /*color:black;*/
+    margin-left: 2px;
+
+}
+
+.desc-erro{
+
+    font-weght:bolder;
+    margin-left: 20px;
+
+}
+.img3{
+
+    margin-top: auto;
+    margin-right: auto;
+    position: relative;
+
+}
+.img3home{
+
+    margin-top: auto;
+    margin-right: auto;
+    position: relative;
+
+}
+textarea{
+
+    height: 400px;
+
+}
+
+#esconder{
+    display:none;
+}
+
+.aumentar_input_dow{
+
+    width: 89%;
+}
+
+.campo_calendar{
+
+    height: 30px;
+}
+.imagem22{
+    position: relative;
+    align: right;
+    margin-top: 20px;
+
+}
+
+.imagem_sinal{
+    position: relative;
+    margin-left: 0px;
+    margin-top:  -8px;
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg);
+
+}
+

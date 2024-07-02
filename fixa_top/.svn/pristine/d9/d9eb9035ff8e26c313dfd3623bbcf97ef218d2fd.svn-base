@@ -1,0 +1,30 @@
+
+$(document).ready(function() {
+
+    //se novo usuario for supervisor entao deve escolher coordenador
+    $("#perfil").change(function() {
+
+        var perfil = $('#perfil').val();
+
+        if(perfil != 3)
+        {
+	        $.getJSON('app/Controller/UsuariosController.php?opcao=buscaSuperior&perfil=' + perfil, function(dados) {
+	            if (dados.length > 0) {
+	                var option = '<option>Selecione o supervisor</option>';
+	                $.each(dados, function(i, obj) {
+	                    option += '<option value="' + obj[0] + '">' + obj[1] + '</option>';
+	                })
+	            } else {
+	                Reset();
+	            }
+	            $('#supervisor').html(option).show();
+	        }).error(function() { 
+	            var option = '<option>N\u00e3o encontrado</option>';
+	            $('#supervisor').html(option).show();
+	        })
+	    }else{
+	    	 var option = '<option value="2">Luis Carlos Silva</option>';
+	    	 $('#supervisor').html(option).show();
+	    }
+    })
+});

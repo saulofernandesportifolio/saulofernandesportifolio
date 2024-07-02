@@ -1,0 +1,268 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+    //setup default
+    include("../fixa/bd.php");
+
+    $tempo = 0;
+
+    set_time_limit($tempo);
+    date_default_timezone_set("Brazil/East");
+
+    $data_cadastro=date("Y-m-d H:i:s");
+
+    include("../fixa/site/funcoes/f_geral.php");
+  
+    require_once '../fixa/site/classes/cripto.php';
+
+    $cripto = new cripto();
+
+    //parametros
+    $id_usuario = $_GET['id']; 
+    $id_usuario = $cripto->decodificar($id_usuario);
+    $ids        = $_GET['ids']; 
+    $acao       = $_GET['acao'];
+    $fonte      = $_GET['f'];
+
+    //pega data recebimento da solicitacao(data em que supervisor distribui para o mesmo)
+    $busca_data_receb_solicitacao = mysql_query("SELECT date_format(reg_data,'%d/%m/%Y %H:%i:%s') AS reg_data FROM usuario_solicitacao WHERE id_solicitacao = $ids AND id_usuario = $id_usuario");
+
+    while($linhaSolicitacao=mysql_fetch_array($busca_data_receb_solicitacao)){ 
+        $data_receb_solicitacao  = $linhaSolicitacao['reg_data'];
+    }
+
+
+    //valida campos obrigatórios
+    if(
+        empty($_POST['cat_prod'])    ||
+        empty($_POST['canal_entrada'])        ||
+        empty($_POST['tipo_solicitacao'] )    ||
+        ($_POST['n_gs'] == "")                ||
+        empty($_POST['data_abertura_gestao']) ||
+        empty($_POST['status_solicitacao'])   ||
+        empty($_POST['aprovacao'])
+    ) 
+    {
+      echo" <script> 
+              alert('Por favor preencher todos os campos obrigatórios !');
+              history.back();
+            </script>
+            "; 
+            exit();   
+    }
+
+
+     //busca valores automaticamente preenchidos
+    if($fonte == "siscom_servico"){
+       $buscarsolicitacaoSiscomServico=mysql_query("SELECT * FROM siscom_servico WHERE nro_solicitacao = $ids");
+        
+        if(mysql_affected_rows() > 0){
+          while($linha=mysql_fetch_array($buscarsolicitacaoSiscomServico)){      
+            $cliente_especial       = $linha['cliente_especial'];
+            $data                   = $linha['data'];
+            $hora                   = $linha['hora'];
+            $cnpj_cpf_cliente       = $linha['cnpj_cpf_cliente'];
+            $codigo_cliente         = $linha['codigo_cliente'];
+            $razao_social           = $linha['razao_social_cliente'];
+            $servico                = $linha['evento'];
+            $gerente_negocio        = $linha['gerente_negocio'];
+            $escritorio_gn          = $linha['escritorio_gn'];
+            $gn_responsavel_canal   = $linha['gn_responsavel_canal'];
+            $status                 = $linha['status'];
+            $qtd_acessos            = $linha['acessos'];
+            $produto                = $_POST['produto'];
+          }
+        }
+
+        //busca id do servico de acordo com descricao do mesmo(from siscom-servico)
+        $buscarIdServico=mysql_query("SELECT id_servicos FROM servicos WHERE descricao LIKE '%$servico%'");
+        if(mysql_affected_rows() > 0){
+            while($linhaServico=mysql_fetch_array($buscarIdServico)){
+                $servico = $linhaServico['id_servicos'];
+            }
+        }else{
+          $servico = "";
+        }
+
+    }else if($fonte == "siscom_vendas"){
+        $buscarSolicitacaoSiscomVendas=mysql_query("SELECT * FROM siscom_vendas WHERE pacote = $ids");
+
+        if(mysql_affected_rows() > 0){
+            while($linha=mysql_fetch_array($buscarSolicitacaoSiscomVendas)){      
+                $data              = $linha['data'];      
+                $hora              = $linha['hora'];      
+                $cnpj_cpf_cliente  = $linha['cnpj_cpf_cliente'];      
+                $razao_social      = $linha['razao_social'];      
+                $segmento          = $linha['segmento'];      
+                $gerente_vendas    = $linha['gerente_vendas'];      
+                $servico           = $linha['servico'];      
+                $status            = $linha['status'];      
+                $produto           = $linha['produto'];      
+                $qtd_acessos       = $linha['qtd'];
+            }
+        }
+
+        //busca id do servico de acordo com descricao do mesmo(from siscom-servico)
+        $buscarIdServico=mysql_query("SELECT id_servicos FROM servicos WHERE descricao LIKE '%$servico%'");
+        if(mysql_affected_rows() > 0){
+            while($linhaServico=mysql_fetch_array($buscarIdServico)){
+                $servico = $linhaServico['id_servicos'];
+            }
+        }else{
+          $servico = "";
+        }
+
+        //busca id do servico de acordo com descricao do mesmo(from siscom-servico)
+        $buscarIdProduto=mysql_query("SELECT id_produto FROM produto WHERE descricao LIKE '%$produto%'");
+        if(mysql_affected_rows() > 0){
+            while($linhaProduto=mysql_fetch_array($buscarIdProduto)){
+                $produto = $linhaProduto['id_produto'];
+            }
+        }else{
+          $produto = "";
+        }
+    }
+
+
+    if ($acao == "nf") {
+        //valida siscom
+        $query_valida_siscom = mysql_query("SELECT siscom FROM pre_tramitacao WHERE siscom != 0 AND siscom = '{$ids}'");
+
+        //verifica na base se valor ja foi inserido
+        if(mysql_affected_rows() > 0){
+          echo" <script> 
+                  alert('Solicitacão já cadastrado na base!');
+                  history.back();
+                </script>
+                "; 
+              exit();   
+        }
+
+        //valida gestao servicos
+        $query_valida_gs = mysql_query("SELECT n_gestao_servicos FROM pre_tramitacao WHERE n_gestao_servicos != 0 and n_gestao_servicos = '{$_POST['n_gs']}'");
+
+        //valida numero do gs 
+        if(mysql_affected_rows() > 0){
+          echo" <script> 
+                  alert('Número do GS já cadastrado na base!');
+                  history.back();
+                </script>
+                "; 
+              exit();   
+        }
+    }
+
+     //formata campos data
+     $data_abertura_gestao = formataDataBD($_POST['data_abertura_gestao']);
+     $data = formataDataBD($data);
+
+    //valida se inputs variaveis foram ativados
+    //campos devolucao sao obrigatorios se houver devolucao 
+    if (isset($_POST['motivo_devolucao']))
+    {
+          $motivo_devolucao = $_POST['motivo_devolucao'];
+          if(empty($motivo_devolucao)){
+             echo" <script> 
+              alert('Campo Motivo Devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+        $motivo_devolucao = '';
+    }
+
+    if (isset($_POST['descricao_motivo_devolucao']))
+    {
+          $descricao_motivo_devolucao = $_POST['descricao_motivo_devolucao'];
+          if(empty($descricao_motivo_devolucao)){
+             echo" <script> 
+              alert('Campo Descrição do motivo de devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+        $descricao_motivo_devolucao = '';
+    }
+
+    if (isset($_POST['area_devolucao']))
+    {
+          $area_devolucao = $_POST['area_devolucao'];
+          if(empty($area_devolucao)){
+             echo" <script> 
+              alert('Campo Area Devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+        $area_devolucao = '';
+    }
+
+    if (isset($_POST['data_devolucao'])){
+      $data_devolucao = formataDataBD($_POST['data_devolucao']);
+      if(empty($data_devolucao)){
+             echo" <script> 
+              alert('Campo Data Devolução deve ser preenchido !');
+              history.back();
+            </script>
+            "; 
+            exit();  
+          }
+    }else{
+      $data_devolucao = '';
+    }
+ 
+    $dadosProc =   '&'. $id_usuario
+                 . '&'. $ids
+                 . '&'. $_POST['cat_prod']
+                 . '&'. $_POST['canal_entrada']
+                 . '&'. $data_receb_solicitacao
+                 . '&'. $produto 
+                 . '&'. $_POST['tipo_solicitacao']
+                 . '&'. $servico  
+                 . '&'. $cnpj_cpf_cliente
+                 . '&'. $razao_social
+                 . '&'. $qtd_acessos
+                 . '&'. $_POST['n_gs']
+                 . '&'. $data_abertura_gestao
+                 . '&'. $_POST['status_solicitacao']
+                 . '&'. $_POST['obs']
+                 . '&'. $motivo_devolucao
+                 . '&'. $area_devolucao
+                 . '&'. $data_devolucao
+                 . '&'. $_POST['devolucao']
+                 . '&'. $_POST['aprovacao']
+                 . '&'. $data_cadastro
+                 . '&'. $data
+                 . '&'. $descricao_motivo_devolucao;
+
+    if ($acao == "nf") {
+        $sql_exec="CALL solicitacao_pretramitacao('$dadosProc');";
+    } else if($acao == "ef"){
+      $sql_exec="CALL solicitacao_pretramitacao('$dadosProc');";
+    }
+
+    $acao_exec= mysql_query($sql_exec) or die (mysql_error());
+
+    if ($acao == "nf") {
+      echo" <script> 
+        alert('Solicitação cadastrada com sucesso!');
+          document.location.replace('principal.php?t=views/home.php');
+        </script>
+        ";
+    } else if($acao == "ef"){
+      echo" <script> 
+        alert('Solicitação editada com sucesso!');
+          document.location.replace('principal.php?t=views/home.php');
+        </script>
+        ";
+    }                                        
+    exit();
+   
+?>
+
+

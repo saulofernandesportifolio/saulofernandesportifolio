@@ -1,0 +1,50 @@
+
+<?php
+$id_usuario= (int) $_GET['id'];
+$sql_serv = "SELECT * FROM usuario WHERE id_usuario = $id_usuario";
+
+$acao_serv=mysql_query($sql_serv,$conecta);
+
+$linha = mysql_fetch_array($acao_serv);
+
+?>
+<div id="fieldset" class="bradius">
+	<form 
+		action="principal.php?&id=<?php echo $id_usuario ?>&t=controles/sql_formuploadbase.php" 
+		method="POST"	
+		enctype="multipart/form-data"
+	>
+		<legend align="center">
+			<h3 align="center">Importar base de dados</h3>
+		</legend>
+		<div class="divformservico">
+			<label>Arquivo:</label> 
+			<p>
+			<input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
+				<input 
+					type="file" 
+					id="base_xls"  
+					class="txt bradius" 
+					name="base_xls" 
+				/>
+				 <input 
+				 	name="bt_enviar" 
+				 	id="bt_enviar" 
+				 	type="submit" 
+				 	value="Importar" 
+				 	class="sb2 bradius" 
+			 	/>
+			 	<input 
+			 		name="cancelar" 
+			 		type="button" 
+			 		value="Cancelar" 
+			 		class="sb2 bradius" 
+			 		onClick="window.location='principal.php?t=forms/home.php'"
+		 		/>
+	 		</p>
+		 </div>
+	</form>
+</div>
+
+</body>
+</html>

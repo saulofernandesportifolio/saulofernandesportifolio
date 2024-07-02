@@ -1,0 +1,130 @@
+<?php
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+?>
+
+<script type="text/javascript">
+ 
+$(document).ready(function() {
+	$("#form_pretramitacao").on('click', function() {
+   		//$('#t_s_o').load('principal.php?t=views/v_redistribuir_solicitacoes.php #redistribuir_table');
+   		$( "#div_form_pretramitacao" ).css({"display": ""});
+   		$( "#t_m_d" ).css({"display":"none"})
+   		$( "#t_i_p" ).css({"display":"none"});
+   		$( "#t_i_t" ).css({"display":"none"});
+    });
+
+    $("#cancelar").on('click', function(){
+    	$( "#t_m_d" ).css({"display":""});
+    	$( "#div_form_pretramitacao" ).css({"display": "none"});
+    });
+
+    $("#qtd_itens_pt").on('click', function() {
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#t_i_p" ).css({"display":""});
+    });
+
+     $("#qtd_itens_t").on('click', function() {
+   		$( "#t_m_d" ).css({"display":"none"});
+   		$( "#t_i_t" ).css({"display":""});
+    });
+
+});
+
+</script>
+
+<div class="tela_principal_dasbboard">
+	<div id="menu_vertical_f">
+		<ul class="menu_vertical">
+	    	<li class="menu_vertical">
+	    		<a id="form_pretramitacao">Formulário Pré-Tramitação</a>
+    		</li>
+	    	<li class="menu_vertical">
+	    		<a href="">Solicitações Preenchidas</a>
+    		</li>
+		</ul>
+	</div>
+	<div id="t_m_d">
+		<table class="tabelas_dashboard">
+		<caption><h2 style="color: #3b5998;">Itens Pendentes</h2></caption>
+			<thead>
+                <tr>
+                    <th>Fase</th>
+                    <th>Status</th>
+                    <th>Quantidade</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query("SELECT 
+	     											count(id_pre_tramitacao) AS quantidade,
+	     											 'A preencher' AS status,
+		     										'Tramitação' AS fase 
+		     									FROM 
+		     										pre_tramitacao 
+	     										WHERE 
+	     											aprovado = 'Sim' AND 
+	     											status_solicitacao_equipe = 'Preenchido' AND 
+	     											id_usuario_pre = $id_usuario
+     											UNION
+     											SELECT 
+	     											count(id_pre_tramitacao) AS quantidade,
+	     											 status_solicitacao_equipe AS status,
+		     										'Pré-Tramitação' AS fase 
+		     									FROM 
+		     										pre_tramitacao 
+	     										WHERE 
+	     											aprovado = 'Sim' AND 
+	     											status_solicitacao_equipe = 'Em edição' AND 
+	     											id_usuario_pre = $id_usuario
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){                   
+				        ?>          
+				         <tr>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				               <?php echo $linha['fase']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linha['status']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				            	<?php if ($linha['fase'] ==  'Pré-Tramitação'){?>
+				              		<a id="qtd_itens_pt" href="#"> 
+				              			<?php if($linha['quantidade'] > 0) { ?>
+				              				<?php echo $linha['quantidade']; ?>
+				              			<?php } ?>
+			              			</a>
+				            	<?php }else if ($linha['fase'] ==  'Tramitação'){?>
+				              		<a id="qtd_itens_t" href="#"> 
+				              			<?php if($linha['quantidade'] > 0) { ?>
+				              				<?php echo $linha['quantidade']; ?>
+				              			<?php } ?>
+			              			</a>
+				            	<?php }?>
+				            </td>
+				          </tr>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>
+	<?php include("form_pretramitacao.php");?>
+	<?php include("v_tabela_itens_edicao.php");?>
+	<?php include("v_itens_tramitacao.php");?>
+</div>

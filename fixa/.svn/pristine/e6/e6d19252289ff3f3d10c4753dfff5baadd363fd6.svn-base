@@ -1,0 +1,197 @@
+<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_page.css" />
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_table.css" />
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    
+   $("#t_distribuir_solicitacoes").dataTable({  
+        
+  "oLanguage": {
+    
+    "sProcessing": "Aguarde enquanto os dados s&atilde;o carregados ...",
+    "sLengthMenu": "Mostrar _MENU_",
+    "sZeroRecords": "Nenhum registro encontrado",
+    "sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",
+    "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+    "sInfoFiltered": "",
+    "sSearch": "Procurar",
+    "oPaginate": {
+       "sFirst":    "Primeiro",
+       "sPrevious": "Anterior",
+       "sNext":     "Pr&oacute;ximo",
+       "sLast":     "&uacute;ltimo"
+    }
+ }                              
+}); 
+});
+
+</script>
+
+<script type="text/javascript">
+var oTable;
+ 
+$(document).ready(function() {
+
+    /* Add a click handler to the rows - this could be used as a callback */
+    $("#t_distribuir_solicitacoes tbody tr").click( function( e ) {
+        if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+    });
+     
+    /* Add a click handler for the delete row */
+    $('#delete').click( function() {
+        var anSelected = fnGetSelected( oTable );
+        if ( anSelected.length !== 0 ) {
+            oTable.fnDeleteRow( anSelected[0] );
+        }
+    } );
+     
+    /* Init the table */
+    oTable = $('#t_distribuir_solicitacoes').dataTable( );
+} );
+ 
+ 
+/* Get the rows which are currently selected */
+function fnGetSelected( oTableLocal )
+{
+    return oTableLocal.$('tr.row_selected');
+}
+
+</script>
+
+<div id="distribuir_table" style="display: none;">
+	<table border="0" id="t_distribuir_solicitacoes" class="tabelas_dashboard" width="auto" class="display">
+	<caption><h2>Distribuir Solicitações - Pré Tramitação</h2></caption>
+		<thead>
+            <tr>
+            	<th></th>
+                <th>Data</th>
+                <th>Solicitação</th>
+                <th>Status</th>
+                <th>Importação Data</th>
+                <th>Fonte</th>
+            </tr>
+        </thead>
+        <tbody>
+       	 <?php 
+ 
+		      include("../fixa/bd.php");
+		       
+		     	$buscarsolicitacao=mysql_query("SELECT
+													data,
+													hora,
+													id_solicitacao,
+													fonte,
+													status,
+													date_format(importacao_data,'%d/%m/%Y %H:%i:%s') AS importacao_data
+												FROM(
+													SELECT 
+														date_format(DATA,'%d/%m/%Y') AS DATA,
+														hora,
+														nro_solicitacao AS id_solicitacao,
+														'Siscom Servico' AS fonte,
+														status,
+														importacao_data
+													FROM siscom_servico
+												    UNION 
+													SELECT 
+														DATA,
+														hora,
+														pacote  AS id_solicitacao,
+														'Siscom Vendas' AS fonte,
+														status,
+														importacao_data
+													FROM siscom_vendas
+												) AS siscom_solicitacoes
+												WHERE id_solicitacao NOT IN(SELECT id_solicitacao FROM solicitacao_fases)
+												ORDER BY data, hora
+		     								");
+			if(mysql_affected_rows() > 0){
+					while($linhas=mysql_fetch_array($buscarsolicitacao)){                   
+		        ?>          
+		         <tr>
+		         	<td>
+		         		<input type="checkbox" style="width: 12px;" class="checkboxSiscom" name="cod_siscom[]" value="<?php echo $linhas['id_solicitacao']; ?>">
+		         	</td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['data'] . ' ' . $linhas['hora']; ?>
+		              </a>
+		            </td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['id_solicitacao']; ?>
+		              </a>
+		            </td>
+		             <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['status']; ?>
+		              </a>
+		            </td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['importacao_data']; ?>
+		              </a>
+		            </td>
+		            <td class="colunas-centralizados">
+		              <a id="td">
+		                <?php echo $linhas['fonte']; ?>
+		              </a>
+		            </td>
+		          </tr>
+		     <?php 
+		          }
+	          }
+		     ?>
+       </tbody>
+	</table>
+	<br/>
+	<br/>
+		<div class="div_forms">
+			<label>Escolha o operador:</label>
+			<select name="operadorDistribuir" id="operadorDistribuir" class="txt2comboboxpadrao bradius" required>
+					<?php 
+					$buscarOperador=mysql_query(
+			            "SELECT  
+							u.id_usuario, 
+							u.nome,
+							COUNT(sf.id_solicitacao) AS numero_solicitacoes
+						FROM usuario u
+							LEFT JOIN solicitacao_fases sf
+								ON u.id_usuario = sf.id_usuario_resp
+						WHERE
+							u.id_supervisor in  (
+								SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario
+								UNION 
+								-- allow analista lider and operador pre-tramitacao to do the redistribution 
+								SELECT id_supervisor FROM usuario WHERE id_usuario = $id_usuario AND id_perfil in(4,5) 
+							) 
+						AND u.id_perfil = 5
+						GROUP BY u.id_usuario
+			            " 
+		            );  
+
+					while($linha=mysql_fetch_array($buscarOperador)){ 
+					?>  
+				   		<option value="<?php echo $linha['id_usuario']; ?>">
+				   			<?php echo $linha['nome'] . ' - ' . $linha['numero_solicitacoes'] . ' (Pedidos)'; ?>
+			   			</option>
+		   			<?php 
+		          		}
+		     		?>
+		  	</select>
+		</div>
+		<br/>
+		<input name="bt_enviar" onclick="enviarSolicitacao(this, <?php echo  $id_usuario?>, 'dist');" id="bto_enviar" type="button" value="Salvar" class="sb2 bradius" />
+		<input type="button" id="bto_limpar" value="Limpar" class="sb2 bradius"/>
+		<input name="cancelar" type="button" value="Cancelar" class="sb2 bradius" onClick="document.location.href='principal.php?id=<?php echo $cripto->codificar($id_usuario)?>&t=views/v_area_supervisor.php'"/>
+</div>

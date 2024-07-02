@@ -1,0 +1,59 @@
+<?php
+
+require_once('../fixa/bd.php');
+
+$query = mysql_query("SELECT 
+						   data_hora,
+			               analista_pre,
+			               id_solicitacao,
+			               cat_produto,
+			               devolucao,
+			               canal_entrada,
+			               data_receb_solicitacao,
+			               produto,
+			               tipo_solicitacao,
+			               complemento_tipo_solicitacao,
+			               cnpj,              
+			               razao_social,
+			               qtd_acessos,
+			               n_gestao_servicos,
+			               data_abert_gestao,
+			               motivo_devolucao,
+			               area_devolucao,
+			               data_devolucao,
+			               status_solicitacao,
+			               obs,
+			               revisao
+					FROM v_geral_pre_tramitacao");
+
+while($fetch = mysql_fetch_array($query))
+{
+	$output[] = array (
+			$fetch[0], //data_hora
+			$fetch[1], //analista_pre
+			$fetch[2], //id_solicitacao
+			$fetch[3], //cat_produto
+			$fetch[4], //devolucao
+			$fetch[5], //canal_entrada
+			$fetch[6], //data_receb_solicitacao
+			$fetch[7], //produto
+			$fetch[8], //tipo_solicitacao
+			$fetch[9], //complemento_tipo_solicitacao
+			$fetch[10], //cnpj 
+			$fetch[11], //razao_social
+			$fetch[12], //qtd_acessos
+			$fetch[13], //n_gestao_servicos
+			$fetch[14], //data_abert_gestao
+			$fetch[15], //motivo_devolucao
+			$fetch[16], //area_devolucao
+			$fetch[17], //data_devolucao
+			$fetch[18], //status_solicitacao
+			$fetch[19], //obs
+			$fetch[20] //revisao
+	);
+}
+
+echo json_encode($output);
+
+?>
+

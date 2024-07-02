@@ -1,0 +1,154 @@
+<?php
+require_once '../fixa/site/classes/cripto.php';
+
+$cripto = new cripto();
+
+$id_usuario= $_GET['id'];
+
+$id_usuario = $cripto->decodificar($id_usuario);
+?>
+
+<script type="text/javascript">
+ 
+$(document).ready(function() {
+
+   $("#redistribuir").on('click', function() {
+   		$( "#redistribuir_table" ).css({"display": ""});
+   		$( "#t_s_o" ).css({"display": "none"});
+   		$( "#distribuir_table" ).css({"display": "none"});
+   		$( "#t_tram" ).css({"display": "none"});
+   		$( "#t_m_e" ).css({"display": "none"});
+      $( "#v_form_dados" ).css({"display": "none"});
+    });
+
+   $("#distribuir_pt").on('click', function() {
+   		$( "#distribuir_table" ).css({"display": ""});
+   		$( "#t_s_o" ).css({"display": "none"});
+   		$( "#redistribuir_table" ).css({"display": "none"});
+   		$( "#t_tram" ).css({"display": "none"});
+   		$( "#t_m_e" ).css({"display": "none"});
+      $( "#v_form_dados" ).css({"display": "none"});
+    });
+
+   $("#forms_preenchidos_pre_tramitacao").on('click', function(){	
+   		$( "#t_s_o" ).css({"display": ""});
+   		$( "#t_m_e" ).css({"display": "none"});
+   		$( "#distribuir_table" ).css({"display": "none"});
+   		$( "#redistribuir_table" ).css({"display": "none"});
+   		$( "#t_tram" ).css({"display": "none"});
+      $( "#v_form_dados" ).css({"display": "none"});
+   });
+
+    $("#forms_preenchidos_tramitacao").on('click', function(){
+    	$( "#t_tram" ).css({"display": ""});	
+   		$( "#t_s_o" ).css({"display": "none"});
+   		$( "#t_m_e" ).css({"display": "none"});
+   		$( "#distribuir_table" ).css({"display": "none"});
+   		$( "#redistribuir_table" ).css({"display": "none"});
+      $( "#v_form_dados" ).css({"display": "none"});
+   });
+
+   $("#minha_equipe").on('click', function(){	
+   		$( "#t_m_e" ).css({"display": ""});
+   		$( "#distribuir_table" ).css({"display": "none"});
+   		$( "#t_s_o" ).css({"display": "none"});
+   		$( "#redistribuir_table" ).css({"display": "none"});
+   		$( "#t_tram" ).css({"display": "none"});
+      $( "#v_form_dados" ).css({"display": "none"});
+   });
+
+   $("#bto_limpar").on('click', function(){
+   		$('.checkboxSiscom').prop('checked', false);
+   });
+ 
+});
+</script>
+
+<div class="tela_principal_dasbboard">
+	<div id="menu_vertical_f">
+		<ul class="menu_vertical">
+	    	<li class="menu_vertical">
+          <i class="fa fa-bars icones_style"></i>
+	    		<a id="distribuir_pt">Distribuir - Pré Tramitação</a>
+        </li>
+        <li class="menu_vertical">
+          <i class="fa fa-bars icones_style"></i>
+          <a id="distribuir">Distribuir - Tramitação</a>
+        </li>
+        <li class="menu_vertical">
+          <i class="fa fa-bars icones_style"></i>
+          <a id="distribuir">Distribuir - Pós Tramitação</a>
+        </li>
+	    	<li class="menu_vertical">
+          <i class="fa fa-list icones_style"></i>
+	    		<a id="redistribuir">Redistribuir</a>
+    		</li>
+    		<li class="menu_vertical">
+          <i class="fa fa-check-square-o icones_style"></i>
+	    		<a id="forms_preenchidos_pre_tramitacao">Formulários Preenchidos Pré-Tramitação</a>
+    		</li>
+    		<li class="menu_vertical icones_style">
+          <i class="fa fa-check-square-o"></i>
+	    		<a id="forms_preenchidos_tramitacao">Formulários Preenchidos Tramitação</a>
+    		</li>
+    		<li class="menu_vertical">
+        <i class="fa fa-users icones_style"></i>
+          <a id="minha_equipe">Minha Equipe</a>
+    		</li>
+		</ul>
+	</div>
+
+	<?php include("form_p_tramitacao.php");?>
+
+	<?php include("form_p_pretramitacao.php");?>
+
+	<?php include("v_distribuir_solicitacoes.php");?>
+
+	<?php include("v_redistribuir_solicitacoes.php");?>
+
+	<div id="t_m_e" style="display: none;">
+		<table class="tabelas_dashboard">
+		<caption><h2>Minha Equipe</h2></caption>
+			<thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>CPF</th>
+                    <th>Turno</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarEquipe=mysql_query("SELECT * FROM v_geral_usuario_info WHERE id_supervisor IN (SELECT id_supervisor FROM supervisor WHERE id_usuario = $id_usuario)");
+
+			     	if(mysql_affected_rows() > 0){
+
+						while($linhasbe=mysql_fetch_array($buscarEquipe)){                   
+			  ?>          
+				        <tr>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhasbe['nome']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhasbe['cpf']; ?>
+				              </a>
+				            </td>
+				            <td class="colunas-centralizados">
+				              <a id="td">
+				                <?php echo $linhasbe['turno']; ?>
+				              </a>
+				            </td>
+				        </tr>
+			     <?php 
+			          }
+		          }
+			     ?>
+           </tbody>
+		</table>
+	</div>
+</div>

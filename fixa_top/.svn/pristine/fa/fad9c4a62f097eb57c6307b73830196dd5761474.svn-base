@@ -1,0 +1,69 @@
+<div class="bradius wrapper">
+	<form 
+		action="principal.php?t=Controller/UploadBaseController.php" 
+		method="POST"	
+		enctype="multipart/form-data"
+		onsubmit="showLoader()"
+	>
+		<input type="hidden" name="id_usuario" value="<?php echo $cripto->codificar($id_usuario)?>">
+		<input type="hidden" name="opcao" value="importarBase">
+		<fieldset>
+			<h2>Importar base de dados</h2>
+			<br/>
+			<div> 
+				<select name="base" id="base" class="txt2comboboxpadraoOld bradius" required>
+					<option value="" disabled selected hidden>Escolha a base</option>
+			   		<option value="1">Siscom Vendas</option>
+			   		<option value="2">Siscom Serviços</option>
+			  	</select>
+			</div>
+			<div>
+				<input 
+					type="file" 
+					id="file"  
+					class="txt bradius" 
+					name="file"
+					size= "50"
+					placeholder = "Arquivo"
+					required 
+				/>
+			</div>
+			<div>
+				<p>Orientações de envio:</p>
+				<p>1. Utilize os templates disponibilizados abaixo.</p>
+				<p>2. O arquivo deve ter somente uma planilha.</p>
+				<p>3. Não apague o cabeçalho.</p>
+				<p>3. Não mude a ordem das colunas.</p>
+				<a href="../fixa_top/app/arq/template_siscom_servicos.xlsx" download>Template Siscom Serviço</a>
+				<br/>
+				<a href="../fixa_top/app/arq/template_siscom_vendas.xlsx" download>Template Siscom Vendas</a>
+				<br/>
+				<br/>
+			</div>
+			<div>
+				 <input 
+				 	name="submit" 
+				 	id="submitData" 
+				 	type="submit" 
+				 	value="Importar" 
+				 	class="sb2 bradius" 
+			 	/>
+			 	<input 
+			 		name="cancelar" 
+			 		type="button" 
+			 		value="Cancelar" 
+			 		class="sb2 bradius" 
+			 		onClick="history.back();"
+		 		/>
+		 		<br/>
+		 		<img id="loader" src="../fixa_top/images/loading.gif"/>
+			</div>
+	 	</fieldset>
+	</form>
+</div>
+
+</body>
+</html>
+
+  
+    

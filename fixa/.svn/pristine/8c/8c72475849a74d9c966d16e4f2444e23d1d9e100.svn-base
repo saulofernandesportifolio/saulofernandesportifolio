@@ -1,0 +1,54 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../fixa/bd.php");
+
+$data_cadastro=date("Y-m-d H:i:s");
+
+$sup = $_POST['sup'];
+$op = $_POST['op'];
+$solicitacoesArray = $_POST['sm'];
+$fase = $_POST['fase'];
+
+$nSolicitacoes = count($solicitacoesArray); 
+
+if($nSolicitacoes == 0)
+{
+	exit();
+}else{
+	//atualiza informaçoes na tabela de usuario x solicitacao
+	for($item = 0; $item < $nSolicitacoes; $item++) {
+
+
+			//distribui solicitacao para usuario
+			$sql_insere="INSERT INTO usuario_solicitacao(id_usuario, id_solicitacao, id_supervisor, reg_data) 
+						VALUES('$op', '$solicitacoesArray[$item]', '$sup', '$data_cadastro')";
+
+	
+			$acao_insere= mysql_query($sql_insere) or die (mysql_error());
+
+			//atualiza tabela solicitacao_fases 
+			if($fase == 'pre_tramitacao'){
+				$sql_atualiza_status_fase_edicao = "INSERT INTO solicitacao_fases(id_solicitacao, pre_tramitacao, id_usuario_resp) 
+													VALUES($solicitacoesArray[$item], 'Com operador', '$op')";
+			}else if($fase == 'tramitacao'){
+				$sql_atualiza_status_fase_edicao = "UPDATE solicitacao_fases
+													SET 
+														tramitacao 		= 'Com operador', 
+														id_usuario_resp = $op
+													WHERE id_solicitacao = $solicitacoesArray[$item]";	
+			}else if($fase == 'pos_tramitacao'){
+				$sql_atualiza_status_fase_edicao = "UPDATE solicitacao_fases
+													SET 
+														pos_tramitacao 		= 'Com operador', 
+														id_usuario_resp = $op
+													WHERE id_solicitacao = $solicitacoesArray[$item]";	
+			}
+
+  	  	 	$acao_atualiza_status_fase_edicao = mysql_query($sql_atualiza_status_fase_edicao) or die (mysql_error());
+
+	}
+						
+}
+
+?>

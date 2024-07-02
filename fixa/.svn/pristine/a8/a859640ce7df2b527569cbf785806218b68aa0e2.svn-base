@@ -1,0 +1,84 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../fixa/site/funcoes/f_inserir_dados.php");
+   
+
+    $id_usuario = (int) $_GET['id'];
+    $id_base = $_POST['base'];
+
+    try{
+    
+        if(isset($_POST["submit"]))
+        {
+            $file = $_FILES['file']['tmp_name'];
+            
+                require_once '../fixa/site/classes/PHPExcel/IOFactory.php';
+                $objPHPExcel = PHPExcel_IOFactory::load($file);
+                $objPHPExcel->setActiveSheetIndex(0);
+            
+                foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+
+                    $ultimaLinha        = $worksheet->getHighestRow(); 
+                    $ultimaColuna       = $worksheet->getHighestColumn(); // e.g 'F'
+                    $ultimaColunaIndex  = PHPExcel_Cell::columnIndexFromString($ultimaColuna);
+                   
+                    $getData = $objPHPExcel->getActiveSheet();
+
+                    // navegar na linha
+                    for($linha=1; $linha<=$ultimaLinha; $linha++){
+                       
+                       //armazenar dados de cada linha
+                       $dados = array();
+                       
+                        // navegar nas colunas da respectiva linha
+                        for($coluna=0; $coluna<=$ultimaColunaIndex; $coluna++){
+                            //todo:valida coluna em branco
+                                if($linha>1){
+                                    // escreve os dados da tabela
+                                    $dados[$coluna] = $objPHPExcel->getActiveSheet()->getCellByColumnAndRow($coluna, $linha)->getValue();
+                                }
+                        }
+                        
+                        if($linha>1){
+                            f_inserir_dados($dados,  $id_base, $id_usuario);
+                        }                       
+                    }   
+                }
+        }
+    }catch(Exception $e){
+        // pega excessao
+        //$e->getMessage();
+        echo 'Ocorreu um erro no processamento do arquivo \n';
+        echo 'Verifique as instruções de envio e tenta novamente \n';
+        echo 'Se o erro persistir informe o ocorrido ao Administrador do site'; 
+    }
+
+    /*
+    //teste para ver dados inseridos na tela de upload
+    foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
+
+                $ultimaLinha        = $worksheet->getHighestRow(); 
+                $ultimaColuna       = $worksheet->getHighestColumn(); // e.g 'F'
+                $ultimaColunaIndex  = PHPExcel_Cell::columnIndexFromString($ultimaColuna) - 1;
+                echo "<table border='1'>";
+                // navegar na linha
+                for($linha=1; $linha<=$ultimaLinha; $linha++){
+                    echo "<tr>";
+                    // navegar nas colunas da respectiva linha
+                    for($coluna=0; $coluna<=$ultimaColunaIndex; $coluna++){
+                        if($linha==1){
+                            // escreve o cabeçalho da tabela a bold
+                            echo "<th>".($objPHPExcel->getActiveSheet()->getCellByColumnAndRow($coluna, $linha)->getValue())."</th>";
+                        }else{
+                            // escreve os dados da tabela
+                            echo "<td>".($objPHPExcel->getActiveSheet()->getCellByColumnAndRow($coluna, $linha)->getValue())."</td>";
+                        }
+                    }
+                    echo "</tr>";
+                }
+                echo "</table>";
+            }
+    **/
+  
+?>

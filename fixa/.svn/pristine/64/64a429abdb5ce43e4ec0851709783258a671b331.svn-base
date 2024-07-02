@@ -1,0 +1,81 @@
+<?php
+echo "<table id='table_menu'>";
+?>
+
+
+<?php
+//home
+
+echo	"<tr ";
+echo	"id=";
+echo	'"tr_menu"';
+echo	"><td onclick=";
+echo	'"location.href=';
+echo	"'principal.php?t=forms/home.php'";
+echo	'"';
+echo	"id=";
+echo	'"td_menu"';
+echo    "><font id='tr_menu'>";
+echo    utf8_encode("Home");
+echo "</font></td>";
+?>
+
+
+<?php 
+//cadastro de usuários
+
+{
+echo "<td bgcolor='#FFFFFF'></td>";
+
+?>
+<?php
+echo    "<td onclick=";
+echo	'"location.href=';
+echo	"'principal.php?t=forms/formusuariospesquisa.php'";
+echo	'"';
+echo	"id=";
+echo	'"td_menu"';
+echo    "><font id='tr_menu'>";
+echo    utf8_encode("Usuários");
+echo "</font></td>";
+}
+?>
+
+<?php 
+
+echo "<td bgcolor='#FFFFFF'></td>";
+
+?>
+<?php
+//altera senha
+echo    "<td onclick=";
+echo	'"location.href=';
+echo	"'principal.php?id={$id_usuario}&t=forms/formalterasenha.php'";
+echo	'"';
+echo	"id=";
+echo	'"td_menu"';
+echo    "><font id='tr_menu'>";
+echo    utf8_encode("Alterar Senha");
+echo "</font></td>";
+?>
+
+<?php 
+
+echo "<td bgcolor='#FFFFFF'></td>";
+
+?>
+<?php
+//logout
+echo    "<td onclick=";
+echo	'"location.href=';
+echo	"'logout.php'";
+echo	'"';
+echo	"id=";
+echo	'"td_menu"';
+echo    "><font id='tr_menu'>";
+echo    utf8_encode("Logout");
+echo "</font></td></tr>";
+?>
+<?php
+echo "</table>";
+?>

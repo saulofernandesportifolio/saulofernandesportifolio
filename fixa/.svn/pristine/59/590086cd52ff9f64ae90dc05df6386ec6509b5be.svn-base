@@ -1,0 +1,137 @@
+
+
+<?php
+	$idarea = $_POST['area'];
+    $fase = $_POST['fase'];
+?>
+<div id="t_i_pen">
+		<table id="tabela_itens_pendentes" class="tabelas_dashboard">
+		<caption><h2 style="color: #7b682e;">Solicitações pendentes</h2></caption>
+			<thead>
+                <tr>
+                    <th>Solicitação</th>
+                    <th>Status</th>
+                    <?php if($fase != 'Tramitacao'){?>
+                    <th>Area</th>
+                    <th>Motivo</th>
+                    <th>Descrição Motivo</th>
+                    <?php }?>
+                    <?php if($idarea != 4 && $idarea != 5){?>
+                    <th>Data Recebimento</th>
+                    <?php }else{?>
+                    <th>Nro. GS</th>
+                    <th>Canal Entrada</th>
+                    <th>Qtde Acesso</th>
+                    <th>Chamado Remedy</th>
+                    <th>Data Recebimento</th>
+                    <?php }?>
+                    <th>Revisão</th>
+                </tr>
+            </thead>
+            <tbody>
+     			 <?php 
+     
+                    include("../fixa/bd.php");
+
+                        $buscarItens=mysql_query("SELECT
+                                                    sp.reg_usuario, 
+                                                    sp.nro_solicitacao,
+                                                    ss.descricao as descricao_status,
+                                                    sp.area,
+                                                    sp.fase,
+                                                    md.descricao as motivo,
+                                                    sp.motivo_descricao,
+                                                    date_format(sp.reg_data,'%d/%m/%Y %H:%i:%s') AS reg_dt_entrada,
+                                                    spc.nro_gs,
+                                                    ce.descricao as descricao_ce,
+                                                    spc.qtd_acesso,
+                                                    spc.chamado_remedy,
+                                                    sp.revisao  
+                                                FROM solicitacoes_pendentes sp
+                                                    INNER JOIN status_solicitacao ss
+                                                        ON sp.status = ss.id_status_solicitacao
+                                                    LEFT JOIN motivo_devolucao md
+                                                        ON sp.motivo = md.descricao
+                                                    LEFT JOIN solicitacoes_pendentes_chamados spc
+                                                        ON spc.nro_solicitacao = sp.nro_solicitacao
+                                                    LEFT JOIN canal_entrada ce
+                                                        ON ce.id_canal_entrada = spc.id_canal_entrada
+                                                 WHERE ss.id_status_solicitacao= $idarea 
+                                                    AND sp.reg_usuario = $id_usuario
+                                                    AND sp.nro_solicitacao NOT IN(
+                                                        SELECT id_solicitacao FROM solicitacao_fases WHERE $fase = 'Concluído'
+                                                    )   
+                                                ");
+                        while($linhas=mysql_fetch_array($buscarItens)){
+                                if($linhas['fase'] == 'pre_tramitacao')
+                                {
+                                    $form = 'pt';
+                                }
+                                else if($linhas['fase'] == 'tramitacao')
+                                {
+                                    $form = 't';
+                                }else if($linhas['fase'] == 'pos_tramitacao')
+                                {
+                                    $form = 'pos';
+                                }
+
+                        ?>          
+                        <tr>
+                            <td class="colunas-centralizados">
+                                <?php if($form == 'pt'){?>
+                                <a id="td" href="principal.php?&ids=<?php echo $linhas['nro_solicitacao']?>&r=<?php echo $linhas['revisao']?>&id=<?php echo $cripto->codificar($linhas['reg_usuario'])?>&t=views/v_form_dados_pretramitacao.php">
+                                    <?php echo $linhas['nro_solicitacao'];  ?>
+                                </a>
+                                 <?php }else if($form == 't'){?>
+                                <a id="td" href="principal.php?&ids=<?php echo $linhas['nro_solicitacao']?>&r=<?php echo $linhas['revisao']?>&id=<?php echo $cripto->codificar($linhas['reg_usuario'])?>&t=views/v_form_dados_tramitacao.php">
+                                    <?php echo $linhas['nro_solicitacao'];  ?>
+                                </a>
+                                <?php }else if($form == 'pos'){?>
+                                <a id="td" href="principal.php?&ids=<?php echo $linhas['nro_solicitacao']?>&r=<?php echo $linhas['revisao']?>&id=<?php echo $cripto->codificar($linhas['reg_usuario'])?>&t=views/v_form_dados_pretramitacao.php">
+                                    <?php echo $linhas['nro_solicitacao'];  ?>
+                                </a>
+                                <?php }?>
+                            </td>
+                            <td class="colunas-centralizados">
+                             <?php echo $linhas['descricao_status']; ?>
+                            </td>
+                            <?php if($form != 't'){?>
+                            <td class="colunas-centralizados">
+                             <?php echo $linhas['area']; ?>
+                            </td>
+                            <td class="colunas-centralizados">
+                             <?php echo $linhas['motivo']; ?>
+                            </td>
+                            <td class="colunas-centralizados">
+                             <?php echo $linhas['motivo_descricao']; ?>
+                            </td>
+                            <?php }?>
+                            <?php if($idarea != 4 && $idarea != 5){?>
+                            <td class="colunas-centralizados">
+                             <?php echo $linhas['reg_dt_entrada']; ?>
+                            </td>
+                            <?php }else{?>
+                            <td class="colunas-centralizados">
+                             <?php echo $linhas['nro_gs']; ?>
+                            </td>
+                             <td class="colunas-centralizados">
+                             <?php echo $linhas['descricao_ce']; ?>
+                            </td>
+                             <td class="colunas-centralizados">
+                             <?php echo $linhas['qtd_acesso']; ?>
+                            </td>
+                            <td class="colunas-centralizados">
+                             <?php echo $linhas['chamado_remedy']; ?>
+                            </td>
+                             <td class="colunas-centralizados">
+                             <?php echo $linhas['reg_dt_entrada']; ?>
+                            </td>
+                            <?php }?>
+                            <td class="colunas-centralizados">
+                             <?php echo $linhas['revisao']; ?>
+                            </td>
+                        </tr>
+                         <?php } ?>
+           </tbody>
+		</table>
+	</div>

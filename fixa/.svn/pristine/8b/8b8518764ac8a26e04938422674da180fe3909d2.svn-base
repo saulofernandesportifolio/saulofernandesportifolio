@@ -1,0 +1,205 @@
+<?php
+  
+criptografaId();
+
+?>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/jquery.dataTables.min.js"></script>
+
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_page.css" />
+<link rel="stylesheet" type="text/css" media="screen"  href="js/media/css/demo_table.css" />
+
+<script type="text/javascript">
+
+$(document).ready(function(){
+    
+   $("#tabela3").dataTable({  
+        
+  "oLanguage": {
+    
+    "sProcessing": "Aguarde enquanto os dados s&atilde;o carregados ...",
+    "sLengthMenu": "Mostrar _MENU_ registros por pagina",
+    "sZeroRecords": "Nenhum registro encontrado",
+    "sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",
+    "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+    "sInfoFiltered": "",
+    "sSearch": "Procurar",
+    "oPaginate": {
+       "sFirst":    "Primeiro",
+       "sPrevious": "Anterior",
+       "sNext":     "Próximo",
+       "sLast":     "Anterior"
+    }
+ }                              
+}); 
+});
+
+</script>
+
+<script type="text/javascript">
+var oTable;
+ 
+$(document).ready(function() {
+
+    /* Add a click handler to the rows - this could be used as a callback */
+    $("#tabela3 tbody tr").click( function( e ) {
+        if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+    });
+     
+    /* Add a click handler for the delete row */
+    $('#delete').click( function() {
+        var anSelected = fnGetSelected( oTable );
+        if ( anSelected.length !== 0 ) {
+            oTable.fnDeleteRow( anSelected[0] );
+        }
+    } );
+     
+    /* Init the table */
+    oTable = $('#tabela3').dataTable( );
+} );
+ 
+ 
+/* Get the rows which are currently selected */
+function fnGetSelected( oTableLocal )
+{
+    return oTableLocal.$('tr.row_selected');
+}
+
+</script>
+
+<br /><br />
+
+  <form action="principal.php?&id=<?php echo $cripto->codificar($id_usuario) ?>&t=views/form_distribuicao_operador.php" method="POST">    
+
+   <table border="0" id="tabela3"  width="auto" class="display">
+     <thead>
+       <tr>
+         <th width="2%"></th>
+         <th width="5%">Cód. Solicitação:</th>
+         <th width="10%">Canal de Entrada:</th>
+         <th width="10%">Status GS:</th>
+         <th width="10%">Cliente:</th>
+         <th width="10%">Responsável:</th>
+         <th width="10%">Produto:</th>
+         <th width="10%">Serviço:</th>
+         <th width="10%">Complemento:</th>
+         <th width="5%">Segmento:</th>
+         <th width="10%">Categoria:</th>
+         <th width="5%">Data Entrada:</th>
+       </tr>
+     </thead>
+     <tbody>
+     
+     <?php 
+
+     include("../fixa/bd.php");
+      
+     	$buscarsolicitacao=mysql_query(
+            "SELECT distinct 
+                cod_solicitacao, 
+                canal_entrada, 
+                status, cliente, 
+                responsavel, 
+                apelido, 
+                produto, 
+                servico,
+                complemento,
+                segmento,
+                categoria,
+                dt_entrada
+            FROM gestao_servicos ORDER BY dt_entrada LIMIT 2");
+      
+    			while($linha=mysql_fetch_array($buscarsolicitacao)){                 
+        ?>
+              
+         <tr>
+            <td>
+              <input 
+              type="checkbox" 
+              id="selecao" 
+              name="selecao[]"
+              class="chk"
+              value="<?php echo $linha['cod_solicitacao']; ?>">
+            </td>
+          
+            <td>
+              <a id="td">
+                <?php echo $linha['cod_solicitacao']; ?>
+              </a>
+            </td>
+            <td>
+              <a id="td">
+                <?php echo $linha['canal_entrada']; ?>
+              </a>
+            </td>
+             <td>
+              <a id="td">
+                <?php echo $linha['status']; ?>
+              </a>
+            </td>
+               <td>
+              <a id="td">
+                <?php echo $linha['cliente']; ?>
+              </a>
+            </td>
+               <td>
+              <a id="td">
+                <?php echo $linha['responsavel'] . '-' . $linha['apelido'] ; ?>
+              </a>
+            </td>
+            <td>
+              <a id="td">
+                <?php echo $linha['produto']; ?>
+              </a>
+            </td>
+               <td>
+              <a id="td">
+                <?php echo $linha['servico']; ?>
+              </a>
+            </td>
+               <td>
+              <a id="td">
+                <?php echo $linha['complemento']; ?>
+              </a>
+            </td>
+               <td>
+              <a id="td">
+                <?php echo $linha['segmento']; ?>
+              </a>
+            </td>
+            <td>
+              <a id="td">
+                <?php echo $linha['categoria']; ?>
+              </a>
+            </td>
+            <td>
+              <a id="td">
+              <?php echo date('d/m/y', strtotime($linha['dt_entrada']))?>
+              </a>
+            </td
+          </tr>
+     <?php 
+          }
+     ?>
+     </tbody>
+   </table>
+
+   <br/>
+   <br/>
+    <input 
+          name="avancar" 
+          id="avancar" 
+          type="submit" 
+          value="Avançar" 
+          class="sb2 bradius"
+      />
+  </form>
+

@@ -1,0 +1,37 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../FixaProjeto/bd.php");
+
+$id_usuario= (int) $_GET['id'];
+
+ 
+ $tempo = 0;
+
+set_time_limit($tempo);
+
+date_default_timezone_set("Brazil/East");
+$data_desativado=date("Y-m-d H:i:s");
+
+
+
+ $sql_insere="UPDATE usuario 
+              SET 
+              	id_status  = '1',
+              	data_desativado = '$data_desativado'
+              WHERE 
+              	id_usuario = '$id_usuario' ";
+                 
+                 
+                                                   
+ $acao_insere= mysql_query($sql_insere) or die (mysql_error());
+ 
+        
+echo" <script> 
+      alert('Usu\u00E1rio desativado com sucesso!');
+      document.location.replace('../FixaProjeto/principal.php?t=forms/home.php');
+      </script>
+      ";                                        
+    exit();
+    
+?>

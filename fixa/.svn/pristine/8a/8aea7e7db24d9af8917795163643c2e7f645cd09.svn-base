@@ -1,0 +1,99 @@
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<?php
+
+include("../FixaProjeto/bd.php");
+
+$tempo = 0;
+
+set_time_limit($tempo);
+date_default_timezone_set("Brazil/East");
+
+$data_cadastro=date("Y-m-d H:i:s");
+
+
+if(empty($_POST['nome']) || empty($_POST['cpf']) || empty($_POST['perfil']))
+{
+  echo" <script> 
+          alert('Por favor preencher todos os campos obrigatórios !');
+          history.back();
+        </script>
+        "; 
+        exit();   
+}
+
+
+if($_POST['perfil'] == 3)
+{
+  $perfil='3';
+  //$disc_perfil ='Supervisor';
+}
+else if($_POST['perfil'] == 4)
+{
+  $perfil= '4';
+  //$disc_perfil='Analista Lider';
+}
+else if($_POST['perfil'] == 5)
+{
+  $perfil= '5';
+  //$disc_perfil='Operador Normal';
+}
+else if($_POST['perfil'] == 5)
+{
+  $perfil= '6';
+  //$disc_perfil='Operador GNC';
+}
+else
+{
+  $perfil= '7';
+  //$disc_perfil='Operador Intragov';
+}
+
+
+if($_POST['turno'] == 1)
+{
+  $turno='1';
+  //$disc_perfil ='Diurno';
+}
+else if($_POST['turno'] == 2)
+{
+  $turno= '2';
+  //$disc_perfil='Noturno';
+}
+else
+{
+  $turno= '3';
+  //$disc_perfil='Intermediario';
+}
+
+
+      $sql_insere="INSERT INTO usuario(
+                                      nome,
+                                      senha,
+                                      cpf,
+                                      id_perfil,
+                                      data_cadastro,
+                                      id_status,
+                                      id_turno
+                                    )
+                                   VALUES('{$_POST['nome']}',
+                                         'empreza',
+                                         '{$_POST['cpf']}',
+                                         '$perfil',
+                                         '$data_cadastro',                                                                                                      
+                                         '2',
+                                         {$_POST['turno']}
+                                         )";
+
+
+                                                   
+     $acao_insere= mysql_query($sql_insere) or die (mysql_error());
+ 
+        
+echo" <script> 
+      alert('Cadastro efetuado com sucesso!');
+        document.location.replace('principal.php?t=forms/formusuariospesquisa.php');
+      </script>
+      ";                                        
+    exit();
+    
+?>

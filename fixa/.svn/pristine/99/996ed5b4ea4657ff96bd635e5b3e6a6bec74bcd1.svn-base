@@ -1,0 +1,130 @@
+<div id="t_i_pre">
+<script type="text/javascript">
+$(document).ready(function(){
+    
+   $("#tabela_itens_processo_pretramitacao").dataTable({  
+        
+		  "oLanguage": {
+		    
+		    "sProcessing": "Aguarde enquanto os dados s&atilde;o carregados ...",
+		    "sLengthMenu": "Mostrar _MENU_ ",
+		    "sZeroRecords": "Nenhum registro encontrado",
+		    "sInfoEmtpy": "Exibindo 0 a 0 de 0 registros",
+		    "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+		    "sInfoFiltered": "",
+		    "sSearch": "Procurar",
+		    "oPaginate": {
+		       "sFirst":    "Primeiro",
+		       "sPrevious": "Anterior",
+		       "sNext":     "Pr&oacute;ximo",
+		       "sLast":     "&uacute;ltimo"
+		    }
+		 }                              
+	}); 
+
+	var oTable;
+
+    /* Add a click handler to the rows - this could be used as a callback */
+    $("#tabela_itens_processo_pretramitacao tbody tr").click( function( e ) {
+        if ( $(this).hasClass('row_selected') ) {
+            $(this).removeClass('row_selected');
+        }
+        else {
+            oTable.$('tr.row_selected').removeClass('row_selected');
+            $(this).addClass('row_selected');
+        }
+    });
+     
+    /* Add a click handler for the delete row */
+    $('#delete').click( function() {
+        var anSelected = fnGetSelected( oTable );
+        if ( anSelected.length !== 0 ) {
+            oTable.fnDeleteRow( anSelected[0] );
+        }
+    });
+     
+    /* Init the table */
+    oTable = $('#tabela_itens_processo_pretramitacao').dataTable( );
+} );
+ 
+ 
+/* Get the rows which are currently selected */
+function fnGetSelected( oTableLocal )
+{
+    return oTableLocal.$('tr.row_selected');
+}
+
+</script>
+<?php
+	$form = "pt";
+?>
+		<table id="tabela_itens_processo_pretramitacao" class="tabelas_dashboard">
+		<caption class="textoParagrafo"><h2 style="color: #7b682e;">Itens a preencher</h2></caption>
+			<thead>
+                <tr>
+                    <th class="textoParagrafo">Solicitação</th>
+                    <th class="textoParagrafo">Status</th>
+                    <th class="textoParagrafo">Revisão</th>
+                    <th class="textoParagrafo">Data Recebimento</th>
+                </tr>
+            </thead>
+            <tbody>
+           	 <?php 
+     
+			      include("../fixa/bd.php");
+			       
+			     	$buscarItens=mysql_query(
+			     		" SELECT
+								sf.id_solicitacao,
+								IFNULL(solicitacao_info.status,'Entrada Manual Pre') AS status,
+								sf.revisao,
+								date_format(us.reg_data,'%d/%m/%Y %H:%i:%s') AS data_hora
+							FROM 
+								solicitacao_fases sf 
+								INNER JOIN usuario_solicitacao us
+									ON sf.revisao = us.revisao
+									AND sf.id_solicitacao =  us.id_solicitacao
+								LEFT JOIN(
+									SELECT id_sv AS id, pacote AS id_solicitacao, status, revisao FROM siscom_vendas 
+									UNION
+									SELECT id_ss AS id,nro_solicitacao AS id_solicitacao, status, revisao FROM siscom_servico 
+								)as solicitacao_info
+									ON sf.revisao = solicitacao_info.revisao
+									AND sf.id_solicitacao =  solicitacao_info.id_solicitacao
+							WHERE 
+								sf.pre_tramitacao = 'Com operador' AND sf.id_usuario_resp = $id_usuario 
+							ORDER BY 
+								sf.revisao, us.reg_data						
+					");
+
+			     	if(mysql_affected_rows() > 0){
+							while($linha=mysql_fetch_array($buscarItens)){
+								if($linha['status'] == 'Entrada Manual Pre')
+								{
+									$pagina = 'form_pretramitacao_manual';
+								}else{
+									$pagina = 'form_pretramitacao';
+								}                    
+				        ?>          
+			         <tr>
+			            <td class="colunas-centralizados">
+			              <a id="solicitacao_redistribuicao" href="principal.php?&r=<?php echo $linha['revisao']?>&id=<?php echo $cripto->codificar($id_usuario)?>&ids=<?php echo $linha['id_solicitacao']?>&t=views/<?php echo $pagina ?>.php">
+		              			<?php echo $linha['id_solicitacao']; ?>
+			              </a>
+			            </td>
+			            <td class="colunas-centralizados"><?php echo $linha['status']; ?></td>
+			            <td class="colunas-centralizados"><?php echo $linha['revisao']; ?></td>
+			            <td class="colunas-centralizados"><?php echo $linha['data_hora']; ?></td>
+			           <!-- <td class="colunas-centralizados">
+			              <a id="td" href="principal.php?&pedido=<?php// echo $linha['id_solicitacao'];?>&form=<?php //echo $form?>&t=views/form_solicitacao_fases_historico.php">
+			                <i class="fa fa-arrow-circle-right"></i>
+			              </a>
+			            </td>-->
+			          </tr>
+			     <?php 
+				          }
+			        }
+			     ?>
+           </tbody>
+		</table>
+	</div>

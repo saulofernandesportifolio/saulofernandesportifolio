@@ -1,0 +1,108 @@
+        <html xmlns:o="urn:schemas-microsoft-com:office:office"
+               xmlns:x="urn:schemas-microsoft-com:office:excel"
+                xmlns="http://www.w3.org/TR/REC-html40">
+
+                <head>
+                <meta http-equiv=Content-Type content="text/html; charset=utf-8">
+                <meta name=ProgId content=Excel.Sheet>
+                <!--[if gte mso 9]><xml>
+                 <o:DocumentProperties>
+                  <o:LastAuthor>Sriram</o:LastAuthor>
+                  <o:LastSaved>2005-01-02T07:46:23Z</o:LastSaved>
+                  <o:Version>10.2625</o:Version>
+                 </o:DocumentProperties>
+                 <o:OfficeDocumentSettings>
+                  <o:DownloadComponents/>
+                 </o:OfficeDocumentSettings>
+                </xml><![endif]-->
+                <style>
+                <!--table
+                    {mso-displayed-decimal-separator:"\.";
+                    mso-displayed-thousand-separator:"\,";}
+                @page
+                    {margin:1.0in .75in 1.0in .75in;
+                    mso-header-margin:.5in;
+                    mso-footer-margin:.5in;}
+                tr
+                    {mso-height-source:auto;}
+                col
+                    {mso-width-source:auto;}
+                br
+                    {mso-data-placement:same-cell;}
+                .style0
+                    {mso-number-format:General;
+                    text-align:general;
+                    vertical-align:bottom;
+                    white-space:nowrap;
+                    mso-rotate:0;
+                    mso-background-source:auto;
+                    mso-pattern:auto;
+                    color:windowtext;
+                    font-size:8pt;
+                    font-weight:400;
+                    font-style:normal;
+                    text-decoration:none;
+                    font-family:Calibri;
+                    mso-generic-font-family:auto;
+                    mso-font-charset:0;
+                    border:none;
+                    mso-protection:locked visible;
+                    mso-style-name:Normal;
+                    mso-style-id:0;}
+                td
+                    {mso-style-parent:style0;
+                    padding-top:1px;
+                    padding-right:1px;
+                    padding-left:1px;
+                    mso-ignore:padding;
+                    color:windowtext;
+                    font-size:8pt;
+                    font-weight:400;
+                    font-style:normal;
+                    text-decoration:none;
+                    font-family:Calibri;
+                    mso-generic-font-family:auto;
+                    mso-font-charset:0;
+                    mso-number-format:General;
+                    text-align:general;
+                    vertical-align:bottom;
+                    border:none;
+                    mso-background-source:auto;
+                    mso-pattern:auto;
+                    mso-protection:locked visible;
+                    white-space:nowrap;
+                    mso-rotate:0;}
+                .xl24
+                    {mso-style-parent:style0;
+                    white-space:normal;}
+                -->
+                </style>
+                <!--[if gte mso 9]><xml>
+                 <x:ExcelWorkbook>
+                  <x:ExcelWorksheets>
+                   <x:ExcelWorksheet>
+                    <x:Name>RELATORIO</x:Name>
+                    <x:WorksheetOptions>
+                     <x:Selected/>
+                     <x:ProtectContents>False</x:ProtectContents>
+                     <x:ProtectObjects>False</x:ProtectObjects>
+                     <x:ProtectScenarios>False</x:ProtectScenarios>
+                    </x:WorksheetOptions>
+                   </x:ExcelWorksheet>
+                  </x:ExcelWorksheets>
+                  <x:WindowHeight>10005</x:WindowHeight>
+                  <x:WindowWidth>10005</x:WindowWidth>
+                  <x:WindowTopX>120</x:WindowTopX>
+                  <x:WindowTopY>135</x:WindowTopY>
+                  <x:ProtectStructure>False</x:ProtectStructure>
+                  <x:ProtectWindows>False</x:ProtectWindows>
+                 </x:ExcelWorkbook>
+                </xml><![endif]-->
+                </head>
+
+                <body link=blue vlink=purple>
+                <table x:str border=0 cellpadding=0 cellspacing=0 style='border-collapse: collapse;table-layout:fixed;'><tr><td class=xl24 width=64 >cotacao_atividade</td><td class=xl24 width=64 >protocolo</td><td class=xl24 width=64 >regional</td><td class=xl24 width=64 >uf</td><td class=xl24 width=64 >criado_em</td><td class=xl24 width=64 >segmento</td><td class=xl24 width=64 >revisao</td><td class=xl24 width=64 >criado_por</td><td class=xl24 width=64 >responsavel</td><td class=xl24 width=64 >cliente</td><td class=xl24 width=64 >cpf_cnpj</td><td class=xl24 width=64 >altas</td><td class=xl24 width=64 >portabilidade</td><td class=xl24 width=64 >migracao</td><td class=xl24 width=64 >trocas</td><td class=xl24 width=64 >tt</td><td class=xl24 width=64 >backup</td><td class=xl24 width=64 >m2m</td><td class=xl24 width=64 >fixa</td><td class=xl24 width=64 >pre_pos</td><td class=xl24 width=64 >migracao_troca</td><td class=xl24 width=64 >total_linhas</td><td class=xl24 width=64 >data_de_recebimento</td><td class=xl24 width=64 >hora_de_recebimento</td><td class=xl24 width=64 >acao</td><td class=xl24 width=64 >solicitante_vivo_accenture</td><td class=xl24 width=64 >status_da_cotacao</td><td class=xl24 width=64 >ofensor</td><td class=xl24 width=64 >erro</td><td class=xl24 width=64 >motivo_erro</td><td class=xl24 width=64 >observacao</td><td class=xl24 width=64 >nome_ofensor_ilha</td><td class=xl24 width=64 >turno_ofensor_ilha</td><td class=xl24 width=64 >remetente</td><td class=xl24 width=64 >tmt</td><td class=xl24 width=64 >operador_diretoria</td><td class=xl24 width=64 >turno</td><td class=xl24 width=64 >data_tratamento</td><td class=xl24 width=64 >hora_tratamento</td><td class=xl24 width=64 >statusdiretoria</td><td class=xl24 width=64 >disc_statusdiretoria</td><td class=xl24 width=64 >data_de_finalizacao_da_tratativa</td><td class=xl24 width=64 >hora_de_finalizacao_da_tratativa</td></tr><tr><td class=xl24 width=64 >1-2RHBIZXY</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >MG</td><td class=xl24 width=64 >MG</td><td class=xl24 width=64 >11/01/2018  10:16:02</td><td class=xl24 width=64 >VIP</td><td class=xl24 width=64 >1</td><td class=xl24 width=64 >80157058</td><td class=xl24 width=64 >A5109040</td><td class=xl24 width=64 >MINERVA S.A.</td><td class=xl24 width=64 >67620377000114</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >110</td><td class=xl24 width=64 >110</td><td class=xl24 width=64 >06/03/2018</td><td class=xl24 width=64 >09:54:00</td><td class=xl24 width=64 >Prioridade</td><td class=xl24 width=64 >Leandro Zanuz</td><td class=xl24 width=64 >Ilha de Input</td><td class=xl24 width=64 >ILHA_DE_INPUT</td><td class=xl24 width=64 >Divergência entre VIVOCORP e PROCEDIMENTO</td><td class=xl24 width=64 >Documentação divergente da atividade</td><td class=xl24 width=64 >Solicitado por Gislaine Furquim De Freitas Spina
+
+COTAÇÃO 1-2RHBIZXY, REPROVADA (DOCUMENTAÇÃO EM TERMO BKO ILEGÍVEL ) - BRUNO RAMOS . CÓD. URA 0055 ILHA DE INPUT TOP (FSP).
+
+05/03 REPROVAÇÃO INDEVIDA. BKO CONSTA OK. FABIANA RAMOS</td><td class=xl24 width=64 >BRUNO ORCIRIO RAMOS DA SILVA</td><td class=xl24 width=64 >Intermediário</td><td class=xl24 width=64 > Gislaine Furquim De Freitas Spina</td><td class=xl24 width=64 >342:32:00</td><td class=xl24 width=64 >GIOVANNI ANAN</td><td class=xl24 width=64 >Diurno</td><td class=xl24 width=64 >20/03/2018</td><td class=xl24 width=64 >16:32:36</td><td class=xl24 width=64 >2</td><td class=xl24 width=64 >Tratado</td><td class=xl24 width=64 >07/03/2018</td><td class=xl24 width=64 >09:40:00</td></tr><tr><td class=xl24 width=64 >1-2T8Y9HEN</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >SP</td><td class=xl24 width=64 >SP</td><td class=xl24 width=64 >19/02/2018  09:09:04</td><td class=xl24 width=64 >VIP</td><td class=xl24 width=64 >1</td><td class=xl24 width=64 >80252945</td><td class=xl24 width=64 >A5109040</td><td class=xl24 width=64 >REAL E BENEMERITA ASSOC PORTUGUESA DE BENEFICENCIA</td><td class=xl24 width=64 >61599908000158</td><td class=xl24 width=64 >163</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >126</td><td class=xl24 width=64 >289</td><td class=xl24 width=64 >05/03/2018</td><td class=xl24 width=64 >09:49:00</td><td class=xl24 width=64 >Prioridade</td><td class=xl24 width=64 >Leandro Zanuz</td><td class=xl24 width=64 >Ilha de Input</td><td class=xl24 width=64 >PRIORIDADE</td><td class=xl24 width=64 >Não Houve</td><td class=xl24 width=64 >Não houve</td><td class=xl24 width=64 >Solicitado por Gislaine Furquim De Freitas Spina</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 >Lucas Lima Carneiro E Silva</td><td class=xl24 width=64 >366:13:00</td><td class=xl24 width=64 >GIOVANNI ANAN</td><td class=xl24 width=64 >Diurno</td><td class=xl24 width=64 >20/03/2018</td><td class=xl24 width=64 >16:13:41</td><td class=xl24 width=64 >2</td><td class=xl24 width=64 >Tratado</td><td class=xl24 width=64 >06/02/2018</td><td class=xl24 width=64 >08:39:00</td></tr><tr><td class=xl24 width=64 >1-2U1ZSJFX</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >MG</td><td class=xl24 width=64 >MG</td><td class=xl24 width=64 >28/02/2018  17:16:02</td><td class=xl24 width=64 >TOP</td><td class=xl24 width=64 >1</td><td class=xl24 width=64 >80252945</td><td class=xl24 width=64 >A5109040</td><td class=xl24 width=64 >SARAH OLIVEIRA MELO GUIMARAES BICALHO</td><td class=xl24 width=64 >12903394000177</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >500</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >0</td><td class=xl24 width=64 >500</td><td class=xl24 width=64 >06/03/2018</td><td class=xl24 width=64 >08:24:00</td><td class=xl24 width=64 >Prioridade</td><td class=xl24 width=64 >Leandro Zanuz</td><td class=xl24 width=64 >Ilha de Input</td><td class=xl24 width=64 >PRIORIDADE</td><td class=xl24 width=64 >Não Houve</td><td class=xl24 width=64 >Não houve</td><td class=xl24 width=64 >Solicitado por Gislaine Furquim De Freitas Spina</td><td class=xl24 width=64 ></td><td class=xl24 width=64 ></td><td class=xl24 width=64 >Marcello De Lima Tardivo</td><td class=xl24 width=64 >343:23:00</td><td class=xl24 width=64 >GIOVANNI ANAN</td><td class=xl24 width=64 >Diurno</td><td class=xl24 width=64 >20/03/2018</td><td class=xl24 width=64 >16:23:35</td><td class=xl24 width=64 >2</td><td class=xl24 width=64 >Tratado</td><td class=xl24 width=64 >09/03/2018</td><td class=xl24 width=64 >08:17:00</td></tr></table></body></html>
