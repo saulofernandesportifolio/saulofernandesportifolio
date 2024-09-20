@@ -24,6 +24,12 @@ try {
     $user->_data['notifications'] = $user->get_notifications();
     /* get recommendations */
     $user->_data['recommendations'] = $user->get_recommendations();
+    /* get followers */
+    $user->_data['followers'] = $user->get_friend();
+    /* get followerd */
+    $user->_data['followerd'] = $user->get_followerd();
+    /* get visited */
+    $user->_data['visited'] = $user->get_visited();
     /* get online & offline friends */
     $detect = new Mobile_Detect;
     if ($system['chat_enabled'] && $user->_data['user_chat_enabled'] && !($detect->isMobile() && !$detect->isTablet())) {

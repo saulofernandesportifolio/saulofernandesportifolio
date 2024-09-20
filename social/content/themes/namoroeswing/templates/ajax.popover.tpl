@@ -15,7 +15,7 @@
             {$profile['user_firstname']} {$profile['user_lastname']}
           {/if}
         </a>
-        {if $profile['user_verified']}
+        {if $profile['user_verified'] && $profile['package_name'] == "Plano 180"}
           <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified User")}'>
             {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
           </span>
@@ -131,7 +131,7 @@
       </div>
       <div class="user-card-info">
         <a class="name" href="{$system['system_url']}/pages/{$profile['page_name']}">{$profile['page_title']}</a>
-        {if $profile['page_verified']}
+        {if $profile['page_verified'] && $profile['package_name'] == "Plano 180"}
           <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified Page")}'>
             {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
           </span>

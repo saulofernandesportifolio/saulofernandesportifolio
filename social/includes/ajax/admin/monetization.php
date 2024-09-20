@@ -44,6 +44,9 @@ try {
       if (isset($_POST['method_paypal'])) {
         $monetization_payment_methods[] = "paypal";
       }
+      if (isset($_POST['method_mercadopago'])) {
+        $monetization_payment_methods[] = "mercadopago";
+      }
       if (isset($_POST['method_skrill'])) {
         $monetization_payment_methods[] = "skrill";
       }

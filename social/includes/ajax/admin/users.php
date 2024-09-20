@@ -185,6 +185,23 @@ try {
       } else {
          $_POST['user_birthdate_companions'] = 'null';
       } 
+      /* validate birthdate companions */
+      if (!empty($_POST["inlineCheckbox"])) {
+        $_POST["inlineCheckbox"] = $_POST["inlineCheckbox"];
+      } else {
+        $_POST["inlineCheckbox"] = 'null';
+      } 
+
+      /* validate birthdate companions */
+      if (empty($_POST["inlineCheckbox"])) {
+        $_POST["inlineCheckbox"] = 'null';
+      } else {  
+        foreach($_POST["inlineCheckbox"] as $pref){  
+          $_POST["inlineCheckbox1"].= $pref;          
+        }
+        $_POST["inlineCheckbox1"] = substr($_POST["inlineCheckbox1"], 0, -1);
+      } 
+
       /* validate relationship */
       if (!isset($_POST['user_relationship']) || $_POST['user_relationship'] == "none") {
         $_POST['user_relationship'] = 'null';
@@ -244,7 +261,8 @@ try {
                               user_gender = %s, 
                               user_birthdate = %s,
                               user_birthdate_companions = %s,
-                              user_relationship = %s, 
+                              user_relationship = %s,
+                              user_preference = %s, 
                               user_biography = %s, 
                               user_website = %s, 
                               user_work_title = %s, 
@@ -268,7 +286,8 @@ try {
                               secure($_POST['user_gender']), 
                               secure($_POST['user_birthdate']),
                               secure($_POST['user_birthdate_companions']), 
-                              secure($_POST['user_relationship']), 
+                              secure($_POST['user_relationship']),
+                              secure($_POST["inlineCheckbox1"]), 
                               secure($_POST['user_biography']), 
                               secure($_POST['user_website']), 
                               secure($_POST['user_work_title']), 

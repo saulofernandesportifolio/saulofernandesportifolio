@@ -265,14 +265,14 @@
       <span class="js_user-popover" data-type="{$_post['user_type']}" data-uid="{$_post['user_id']}">
         <a class="post-author" href="{$_post['post_author_url']}">{$_post['post_author_name']}</a>
       </span>
-      {if $_post['post_author_verified']}
-        <span class="verified-badge" data-bs-toggle="tooltip" title='{if $_post['user_type'] == "user"}{__($_post['package_name'])}{else}{__("Verified Page")}{/if}'>
-          {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
-        </span>
-      {/if}
       {if $_post['user_subscribed']}
         <span class="pro-badge" data-bs-toggle="tooltip" title='{__($_post['package_name'])} {__('Member')}'>
           {include file='__svg_icons.tpl' icon="pro_badge" width="20px" height="20px"}
+        </span>
+      {/if}
+      {if $_post['post_author_verified'] && $post['package_name'] == "Plano 180"}
+        <span class="verified-badge" data-bs-toggle="tooltip" title='{if $_post['user_type'] == "user"}{__($_post['package_name'])}{else}{__("Verified Page")}{/if}'>
+          {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
         </span>
       {/if}
     {/if}
@@ -900,8 +900,21 @@
       </div>
 
     {elseif $_post['post_type'] == "video" && $_post['video']}
+    
       <div class="overflow-hidden">
-        <video class="js_videojs video-js vjs-16-9 vjs-default-skin" id="video-{$_post['video']['video_id']}{if $pinned || $boosted}-{$_post['post_id']}{/if}" {if $user->_logged_in}onplay="update_media_views('video', {$_post['video']['video_id']})" {/if} {if $_post['video']['thumbnail']}poster="{$system['system_uploads']}/{$_post['video']['thumbnail']}" {/if} controls preload="auto" muted="muted" style="width:100%;height:100%;" width="100%" height="100%">
+        <video 
+            class="js_videojs video-js vjs-16-9 vjs-default-skin" 
+            id="video-{$_post['video']['video_id']}{if $pinned || $boosted}-{$_post['post_id']}{/if}" {if $user->_logged_in}onplay="update_media_views('video', {$_post['video']['video_id']})" {/if} {if $_post['video']['thumbnail']}poster="{$system['system_uploads']}/{$_post['video']['thumbnail']}" {/if} 
+            controls 
+            preload="auto" 
+            muted="muted" 
+            style="width:100%;height:100%;" 
+            width="100%" 
+            height="100%"
+            data-packages-enabled={$system['packages_enabled']}
+            data-user-packages={$user->_data['user_package']}
+            data-user-subscribed={$user->_data['user_subscribed']}
+        >
           {if empty($_post['video']['source_240p']) && empty($_post['video']['source_360p']) && empty($_post['video']['source_480p']) && empty($_post['video']['source_720p']) && empty($_post['video']['source_1080p']) && empty($_post['video']['source_1440p']) && empty($_post['video']['source_2160p'])}
             <source src="{$system['system_uploads']}/{$_post['video']['source']}" type="video/mp4">
           {/if}

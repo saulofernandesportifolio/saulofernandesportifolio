@@ -35,14 +35,14 @@
             <span class="js_user-popover" data-type="{$_comment['user_type']}" data-uid="{$_comment['user_id']}">
               <a href="{$_comment['author_url']}">{$_comment['author_name']}</a>
             </span>
-            {if $_comment['author_verified']}
-              <span class="verified-badge" data-bs-toggle="tooltip" title='{__('Verified User')}'>
-                {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
-              </span>
-            {/if}
             {if $_comment['user_subscribed']}
               <span class="pro-badge" data-bs-toggle="tooltip" title='{__($_comment['package_name'])} {__('Member')}'>
                 {include file='__svg_icons.tpl' icon="pro_badge" width="20px" height="20px"}
+              </span>
+            {/if}
+            {if $_comment['author_verified'] && $_comment['package_name'] == "Plano 180"}
+              <span class="verified-badge" data-bs-toggle="tooltip" title='{__('Verified User')}'>
+                {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
               </span>
             {/if}
           </div>

@@ -113,7 +113,7 @@
         <!-- profile-name -->
         <div class="profile-name-wrapper">
           <a href="{$system['system_url']}/pages/{$spage['page_name']}">{$spage['page_title']}</a>
-          {if $spage['page_verified']}
+          {if $spage['page_verified'] && $spage['package_name'] == "Plano 180"}
             <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified Page")}'>
               {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
             </span>

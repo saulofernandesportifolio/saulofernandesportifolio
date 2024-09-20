@@ -6,14 +6,14 @@
     <div class="data-content">
       <div>
         <span class="name">{$notification['name']}</span>
-        {if $notification['user_verified']}
-          <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified User")}'>
-            {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
-          </span>
-        {/if}
         {if $notification['user_subscribed'] || $notification['user_package']}
           <span class="pro-badge" data-bs-toggle="tooltip" title='{__("Pro User")}'>
             {include file='__svg_icons.tpl' icon="pro_badge" width="20px" height="20px"}
+          </span>
+        {/if}
+        {if $notification['user_verified'] && $notification['package_name'] == "Plano 180"}
+          <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified User")}'>
+            {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
           </span>
         {/if}
       </div>

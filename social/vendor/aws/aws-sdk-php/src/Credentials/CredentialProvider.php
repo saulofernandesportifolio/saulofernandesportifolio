@@ -667,7 +667,7 @@ class CredentialProvider
             ) {
                 return self::reject("Circular source_profile reference found.");
             }
-            $config['_profiles'] [] = $roleProfile['source_profile'];
+            $config['visited_profiles'] [] = $roleProfile['source_profile'];
         } else {
             if (empty($roleArn)) {
                 return self::reject(

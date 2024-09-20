@@ -3781,7 +3781,7 @@
               </div>
             </div>
 
-            <div class="row form-group">
+            <!--<div class="row form-group">
               <label class="col-md-3 form-label">
                 {__("Watermark Icon")}
               </label>
@@ -3817,14 +3817,14 @@
                   {__("Upload your watermark icon (PNG is recommended)")}
                 </div>
               </div>
-            </div>
+            </div>-->
 
             <div class="row form-group">
-              <label class="col-md-3 form-label">
+              <!--<label class="col-md-3 form-label">
                 {__("Watermark Position")}
               </label>
               <div class="col-md-9">
-                <select class="form-control" name="watermark_position">
+                <select class="form-control" name="watermark_position" disabled>
                   <option {if $system['watermark_position'] == "top left"}selected{/if} value="top left">{__("Top Left")}</option>
                   <option {if $system['watermark_position'] == "top right"}selected{/if} value="top right">{__("Top Right")}</option>
                   <option {if $system['watermark_position'] == "top"}selected{/if} value="top">{__("Top")}</option>
@@ -3833,11 +3833,12 @@
                   <option {if $system['watermark_position'] == "bottom"}selected{/if} value="bottom">{__("Bottom")}</option>
                   <option {if $system['watermark_position'] == "left"}selected{/if} value="left">{__("Left")}</option>
                   <option {if $system['watermark_position'] == "right"}selected{/if} value="right">{__("Right")}</option>
-                </select>
+                </select>                
                 <div class="form-text">
                   {__("Select the position (the anchor point) of your watermark icon")}
                 </div>
-              </div>
+              </div>-->
+              <input name="watermark_position" type="hidden" value="top left"/>
             </div>
 
             <div class="row form-group">
@@ -3845,14 +3846,14 @@
                 {__("Watermark Opacity")}
               </label>
               <div class="col-md-9">
-                <input type="text" class="form-control" name="watermark_opacity" value="{$system['watermark_opacity']}">
+                <input type="text" class="form-control" name="watermark_opacity" value="{if $system['watermark_opacity'] == ""}{$system['watermark_opacity']=0.5}{else}{$system['watermark_opacity']}{/if}">
                 <div class="form-text">
                   {__("The opacity level of the watermark icon (value between 0 - 1)")}
                 </div>
               </div>
             </div>
 
-            <div class="row form-group">
+           <!--<div class="row form-group">
               <label class="col-md-3 form-label">
                 {__("Watermark X Offset")}
               </label>
@@ -3874,7 +3875,7 @@
                   {__("Vertical offset in pixels")}
                 </div>
               </div>
-            </div>
+            </div>-->
 
             <div class="divider dashed"></div>
 
@@ -5060,7 +5061,7 @@
                   {include file='__svg_icons.tpl' icon="paypal" width="40px" height="40px"}
                 </div>
                 <div>
-                  <div class="form-label h6">{__("Paypal Enabled")}</div>
+                  <div class="form-label h6">{__(" Enabled")}</div>
                   <div class="form-text d-none d-sm-block">{__("Enable payments via Paypal")}</div>
                 </div>
                 <div class="text-end">
@@ -5112,8 +5113,126 @@
                   {/if}
                 </div>
               </div>
+
+              <div class="row form-group">
+                <label class="col-md-3 form-label">
+                  {__("PayPal Client ID Test")}
+                </label>
+                <div class="col-md-9">
+                  {if !$user->_data['user_demo']}
+                    <input type="text" class="form-control" name="paypal_id_test" value="{$system['paypal_id_test']}">
+                  {else}
+                    <input type="password" class="form-control" value="*********">
+                  {/if}
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <label class="col-md-3 form-label">
+                  {__("PayPal Secret Key Test")}
+                </label>
+                <div class="col-md-9">
+                  {if !$user->_data['user_demo']}
+                    <input type="text" class="form-control" name="paypal_secret_test" value="{$system['paypal_secret_test']}">
+                  {else}
+                    <input type="password" class="form-control" value="*********">
+                  {/if}
+                </div>
+              </div>
             </div>
             <!-- PayPal -->
+
+            <div class="divider"></div>
+
+
+            <!-- Mercado Pago -->
+            <div>
+              <div class="form-table-row">
+                <div class="avatar">
+                  {include file='__svg_icons.tpl' icon="mercado-pago" width="40px" height="40px"}
+                </div>
+                <div>
+                  <div class="form-label h6">{__("Market paid out Enabled")}</div>
+                  <div class="form-text d-none d-sm-block">{__("Enable payments via Market paid out")}</div>
+                </div>
+                <div class="text-end">
+                  <label class="switch" for="mercado_pago_enabled">
+                    <input type="checkbox" name="mercado_pago_enabled" id="mercado_pago_enabled" {if $system['mercado_pago_enabled']}checked{/if}>
+                    <span class="slider round"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <label class="col-md-3 form-label">
+                  {__("Market paid out Mode")}
+                </label>
+                <div class="col-md-9">
+                  <div class="form-check form-check-inline">
+                    <input type="radio" name="mercado_pago_mode" id="mercado_pago_live" value="live" class="form-check-input" {if $system['mercado_pago_mode'] == "live"}checked{/if}>
+                    <label class="form-check-label" for="mercado_pago_live">{__("Live")}</label>
+                  </div>
+                   <div class="form-check form-check-inline">
+                    <input type="radio" name="mercado_pago_mode" id="mercado_pago_sandbox" value="sandbox" class="form-check-input" {if $system['mercado_pago_mode'] == "sandbox"}checked{/if}>
+                    <label class="form-check-label" for="mercado_pago_sandbox">{__("Sandbox")}</label>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <label class="col-md-3 form-label">
+                  {__("Market paid out Client ID")}
+                </label>
+                <div class="col-md-9">
+                  {if !$user->_data['user_demo']}
+                    <input type="text" class="form-control" name="mercado_pago_id" value="{$system['mercado_pago_id']}">
+                  {else}
+                    <input type="password" class="form-control" value="*********">
+                  {/if}
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <label class="col-md-3 form-label">
+                  {__("Market paid out Secret Key")}
+                </label>
+                <div class="col-md-9">
+                  {if !$user->_data['user_demo']}
+                    <input type="text" class="form-control" name="mercado_pago_secret" value="{$system['mercado_pago_secret']}">
+                  {else}
+                    <input type="password" class="form-control" value="*********">
+                  {/if}
+                </div>
+              </div>
+
+              <div class="row form-group">
+                <label class="col-md-3 form-label">
+                  {__("Market paid out Access Token")}
+                </label>
+                <div class="col-md-9">
+                  {if !$user->_data['user_demo']}
+                    <input type="text" class="form-control" name="mercado_pago_access_token" value="{$system['mercado_pago_access_token']}">
+                  {else}
+                    <input type="password" class="form-control" value="*********">
+                  {/if}
+                </div>
+
+                <label class="col-md-3 form-label">
+                  {__("Market paid out Access Token Test")}
+                </label>
+                <div class="col-md-9">
+                  {if !$user->_data['user_demo']}
+                    <input type="text" class="form-control" name="mercado_pago_access_token_test" value="{$system['mercado_pago_access_token_test']}">
+                  {else}
+                    <input type="password" class="form-control" value="*********">
+                  {/if}
+                </div>
+
+
+              </div>
+            </div>
+
+            <!-- Mercado Pago -->
 
             <div class="divider"></div>
 

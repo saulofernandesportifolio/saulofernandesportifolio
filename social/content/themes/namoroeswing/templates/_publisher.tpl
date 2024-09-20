@@ -345,12 +345,21 @@
         {/if}
         {if $user->_data['can_upload_audios']}
           <li class="col-md-6">
+           {if $system['packages_enabled'] && !$user->_data['user_subscribed'] || $user->_data['user_package'] == 5 && $user->_data['user_subscribed']}
+            <div class="publisher-tools-tab attach js_publisher-tab" href="{$system['system_url']}/upgrade/posts" data-toggle="modal" data-url="core/upgradepost.php">
+              <span class="js_x-uploader" data-handle="publisher" data-type="audio">
+                {include file='__svg_icons.tpl' icon="audios" class="main-icon mr5" width="24px" height="24px"}
+              </span>
+              {__("Upload Audio")}
+            </div>
+           {else}
             <div class="publisher-tools-tab attach js_publisher-tab" data-tab="audio">
               <span class="js_x-uploader" data-handle="publisher" data-type="audio">
                 {include file='__svg_icons.tpl' icon="audios" class="main-icon mr5" width="24px" height="24px"}
               </span>
               {__("Upload Audio")}
             </div>
+           {/if}
           </li>
         {/if}
         {if $user->_data['can_upload_files']}
@@ -480,4 +489,4 @@
     <!-- publisher-footer -->
   </div>
   <!-- publisher-slider -->
-</div>
+</div>  

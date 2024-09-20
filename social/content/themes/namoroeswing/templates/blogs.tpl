@@ -216,14 +216,14 @@
                           <span class="js_user-popover" data-type="{$article['user_type']}" data-uid="{$article['user_id']}">
                             <a href="{$article['post_author_url']}">{$article['post_author_name']}</a>
                           </span>
-                          {if $article['post_author_verified']}
-                            <span class="verified-badge" data-bs-toggle="tooltip" title='{if $article['user_type'] == "user"}{__("Verified User")}{else}{__("Verified Page")}{/if}'>
-                              {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
-                            </span>
-                          {/if}
                           {if $article['user_subscribed']}
                             <span class="pro-badge" data-bs-toggle="tooltip" title='{__("Pro User")}'>
                               {include file='__svg_icons.tpl' icon="pro_badge" width="20px" height="20px"}
+                            </span>
+                          {/if}
+                          {if $article['post_author_verified'] && $article['package_name'] == "Plano 180"}
+                            <span class="verified-badge" data-bs-toggle="tooltip" title='{if $article['user_type'] == "user"}{__("Verified User")}{else}{__("Verified Page")}{/if}'>
+                              {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
                             </span>
                           {/if}
                           <!-- post author name -->

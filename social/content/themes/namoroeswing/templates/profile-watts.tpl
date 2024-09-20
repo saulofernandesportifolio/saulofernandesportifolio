@@ -113,15 +113,15 @@
         <!-- profile-name -->
         <div class="profile-name-wrapper">
           <a href="{$system['system_url']}/{$profile['user_name']}">{$profile['name']}</a>
-          {if $profile['user_verified']}
-            <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified User")}'>
-              {include file='__svg_icons.tpl' icon="verified_badge" width="45px" height="45px"}
-            </span>
-          {/if}
           {if $profile['user_subscribed']}
             <a href="{$system['system_url']}/packages" class="badge" data-bs-toggle="tooltip" title="{__($profile['package_name'])} {__('Member')}">
             {include file='__svg_icons.tpl' icon="pro_badge" width="45px" height="45px"}
             </a>
+          {/if}
+          {if $profile['user_verified'] && $profile['package_name'] == "Plano 180"}
+            <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified User")}'>
+              {include file='__svg_icons.tpl' icon="verified_badge" width="45px" height="45px"}
+            </span>
           {/if}
         </div>
         <!-- profile-name -->
@@ -262,15 +262,123 @@
               <div class="row justify-content-md-center">
                   <div class="col-sm-2">
                     <h6 align="center">{$profile['visited']}</h6>
-                    <h6 align="center">Visualizações</h6>
+                      <!-- Button trigger modal -->
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdropVisited" data-display="static"><div align="center">Visualizações <i class="fa fa-eye mr5"></i></div>
+                      </a>
+                      <!-- Modal -->
+                      <div class="modal fade" id="staticBackdropVisited" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelVisited" aria-hidden="true">
+                        <div class="modal-dialog modal-sm modal-dialog-rightred">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabelVisited"></h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">                                                    
+                              <span class="title"><h5>{__("visited")}</h5></span>  
+                            <div class="dropdown-widget-body">
+                              <div class="js_scroller">
+                                {if $user->_data['visited']}
+                                  <ul>
+                                    {foreach $user->_data['visited'] as $visitedion}
+                                      {include file='__feeds_visited.tpl'}
+                                    {/foreach}
+                                  </ul>
+                                {else}
+                                  <p class="text-center text-muted mt10">
+                                    {__("No visited")}
+                                  </p>
+                                {/if}
+                              </div>
+                            </div>
+                        </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary btn btn-block" data-bs-dismiss="modal">{__("Close")}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal -->
                   </div>
                   <div class="col-sm-2">
                     <h6 align="center">{$profile['followerd']}
-                    <h6 align="center">Seguindo</h6>
+
+                      <!-- Button trigger modal -->
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdropFollowerd" data-display="static"><div align="center">Seguindo <i class="fa fa-eye mr5"></i></div>
+                      </a>
+                      <!-- Modal -->
+                      <div class="modal fade" id="staticBackdropFollowerd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelFollowerd" aria-hidden="true">
+                        <div class="modal-dialog modal-sm modal-dialog-rightred">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabelFollowerd"></h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">                                                    
+                              <span class="title"><h5>{__("followerd")}</h5></span>  
+                            <div class="dropdown-widget-body">
+                              <div class="js_scroller">
+                                {if $user->_data['followerd']}
+                                  <ul>
+                                    {foreach $user->_data['followerd'] as $followerdion}
+                                      {include file='__feeds_followerd.tpl'}
+                                    {/foreach}
+                                  </ul>
+                                {else}
+                                  <p class="text-center text-muted mt10">
+                                    {__("No followerd")}
+                                  </p>
+                                {/if}
+                              </div>
+                            </div>
+                        </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary btn btn-block" data-bs-dismiss="modal">{__("Close")}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal -->
+
                   </div>
                   <div class="col-sm-2">
                     <h6 align="center">{$profile['follower']}</h6>
-                    <h6 align="center">Seguidores</h6>
+                      <!-- Button trigger modal -->
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdropFollower" data-display="static"><div align="center">Seguidores <i class="fa fa-eye mr5"></i></div>
+                      </a>
+                      <!-- Modal -->
+                      <div class="modal fade" id="staticBackdropFollower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelFollower" aria-hidden="true">
+                        <div class="modal-dialog modal-sm modal-dialog-rightred">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabelFollower"></h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">                                                    
+                              <span class="title"><h5>{__("followers")}</h5></span>  
+                            <div class="dropdown-widget-body">
+                              <div class="js_scroller">
+                                {if $user->_data['followers']}
+                                  <ul>
+                                    {foreach $user->_data['followers'] as $followerion}
+                                      {include file='__feeds_follower.tpl'}
+                                    {/foreach}
+                                  </ul>
+                                {else}
+                                  <p class="text-center text-muted mt10">
+                                    {__("No followers")}
+                                  </p>
+                                {/if}
+                              </div>
+                            </div>
+                        </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary btn btn-block" data-bs-dismiss="modal">{__("Close")}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal -->
+
                   </div>
                   <div class="col-sm-3">
                     <h6 align="center">{$profile['recommendation']}</h6>
@@ -650,6 +758,18 @@
                         <span style="text-decoration: line-through;">{__("Add your profile cover")}</span>
                       {/if}
                   </div>
+                  {if $profile['user_preference']}
+                    <div class="mb5">
+                      {if !$profile['user_preference']}
+                        <a href="{$system['system_url']}/settings/profile">
+                          <i class="fas fa-plus-circle mr5"></i>{__("Add your preference")}
+                        </a>
+                      {else}
+                        <i class="fas fa-check-circle green mr5"></i>
+                        <span style="text-decoration: line-through;">{__("Add your preference")}</span>
+                      {/if}
+                    </div>
+                  {/if} 
                   {if $system['biography_info_enabled']}
                     <div class="mb5">
                       {if !$profile['user_biography']}

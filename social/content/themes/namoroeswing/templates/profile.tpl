@@ -1,5 +1,5 @@
 {include file='_head.tpl'}
-{include file='_header.tpl'}
+{include file='_header_profile.tpl'}
 
 <!-- page content -->
 <div class="{if $system['fluid_design']}container-fluid{else}container{/if} sg-offcanvas">
@@ -16,15 +16,47 @@
       <!-- profile-header -->
       <div class="profile-header">
         <!-- profile-cover -->
-        <div class="profile-cover-wrapper">
+        <div class="profile-cover-wrapper">       
           {if $profile['user_cover_id']}
-            <!-- full-cover -->
-            <img class="js_position-cover-full x-hidden" src="{$profile['user_cover_full']}">
-            <!-- full-cover -->
+            {if $profile['countPhotos'] > 1}
+              <!-- full-cover -->
+              <img class="js_position-cover-full_a x-hidden" src="{$profile['user_cover_full_a']}">
+              <!-- full-cover -->
 
-            <!-- cropped-cover -->
-            <img class="js_position-cover-cropped {if $user->_logged_in && $profile['user_cover_lightbox']}js_lightbox{/if}" data-init-position="{$profile['user_cover_position']}" data-id="{$profile['user_cover_id']}" data-image="{$profile['user_cover_full']}" data-context="album" src="{$profile['user_cover']}" alt="{$profile['name']}">
-            <!-- cropped-cover -->
+              <!-- cropped-cover -->
+             <!--<img class="js_position-cover-cropped_a {if $user->_logged_in && $profile['user_cover_lightbox']}js_lightbox{/if}" data-init-position="{$profile['user_cover_position']}" data-id="{$profile['user_cover_id_a']}" data-image="{$profile['user_cover_full_a']}" data-context="album" src="{$profile['user_cover_a']}" alt="{$profile['name']}">-->
+              <!-- cropped-cover -->
+              
+              <!-- full-cover -->
+              <img class="js_position-cover-full_b x-hidden" src="{$profile['user_cover_full_b']}">
+              <!-- full-cover -->
+
+              <!-- cropped-cover -->
+              <!--<img class="js_position-cover-cropped_b {if $user->_logged_in && $profile['user_cover_lightbox']}js_lightbox{/if}" data-init-position="{$profile['user_cover_position']}" data-id="{$profile['user_cover_id_b']}" data-image="{$profile['user_cover_full_b']}" data-context="album" src="{$profile['user_cover_b']}" alt="{$profile['name']}">-->
+              <!-- cropped-cover -->
+
+              <div id="ladoalado">
+                <!--<img src="https://unsplash.it/100/100"><img src="https://unsplash.it/101/100">-->
+                <!-- cropped-cover -->
+                <img class="js_position-cover-cropped_a {if $user->_logged_in && $profile['user_cover_lightbox']}js_lightbox{/if}" data-init-position="{$profile['user_cover_position']}" data-id="{$profile['user_cover_id_a']}" data-image="{$profile['user_cover_full_a']}" data-context="album" src="{$profile['user_cover_a']}" alt="{$profile['name']}">
+                <!-- cropped-cover -->
+
+                <!-- cropped-cover -->
+                <img class="js_position-cover-cropped_b {if $user->_logged_in && $profile['user_cover_lightbox']}js_lightbox{/if}" data-init-position="{$profile['user_cover_position']}" data-id="{$profile['user_cover_id_b']}" data-image="{$profile['user_cover_full_b']}" data-context="album" src="{$profile['user_cover_b']}" alt="{$profile['name']}">
+                <!-- cropped-cover -->
+              </div> 
+
+
+            {elseif $profile['countPhotos'] == 1}
+              <!-- full-cover -->
+              <img class="js_position-cover-full x-hidden" src="{$profile['user_cover_full']}">
+              <!-- full-cover -->
+
+              <!-- cropped-cover -->
+              <img class="js_position-cover-cropped {if $user->_logged_in && $profile['user_cover_lightbox']}js_lightbox{/if}" data-init-position="{$profile['user_cover_position']}" data-id="{$profile['user_cover_id']}" data-image="{$profile['user_cover_full']}" data-context="album" src="{$profile['user_cover']}" alt="{$profile['name']}">
+              <!-- cropped-cover -->
+            {/if}
+
           {/if}
 
           {if $profile['user_id'] == $user->_data['user_id']}
@@ -33,31 +65,34 @@
               <div class="profile-cover-change">
                 <i class="fa fa-camera js_x-uploader" data-handle="cover-user"></i>
               </div>
-              <div class="profile-cover-position {if !$profile['user_cover']}x-hidden{/if}">
+             <!-- <div class="profile-cover-position {if !$profile['user_cover']}x-hidden{/if}">
                 <input class="js_position-picture-val" type="hidden" name="position-picture-val">
                 <i class="fa fa-crop-alt js_init-position-picture" data-handle="user" data-id="{$profile['user_id']}"></i>
-              </div>
-              <div class="profile-cover-position-buttons">
+              </div>-->
+             <!--<div class="profile-cover-position-buttons">
                 <i class="fa fa-check fa-fw js_save-position-picture"></i>
-              </div>
+              </div>-->
               <div class="profile-cover-position-buttons">
-                <i class="fa fa-times fa-fw js_cancel-position-picture"></i>
+                <i class="fa fa-check fa-fw js_cancel-position-picture"></i>
               </div>
+              <!--<div class="profile-cover-position-buttons">
+                <i class="fa fa-times fa-fw js_cancel-position-picture"></i>
+              </div>-->
               <div class="profile-cover-delete {if !$profile['user_cover']}x-hidden{/if}">
-                <i class="fa fa-trash js_delete-cover" data-handle="cover-user"></i>
+                <i class="fa fa-trash js_delete-cover" data-handle="cover-user" data-id={$profile['user_cover_id_a']} data-countphotos="{$profile['countPhotos']}"></i>
               </div>
             </div>
             <!-- buttons -->
 
             <!-- loaders -->
-            <div class="profile-cover-change-loader">
+            <!--<div class="profile-cover-change-loader">
               <div class="progress x-progress">
                 <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
               </div>
-            </div>
-            <div class="profile-cover-position-loader">
+            </div>-->
+            <!--<div class="profile-cover-position-loader">
               <i class="fa fa-arrows-alt mr5"></i>{__("Drag to reposition cover")}
-            </div>
+            </div>-->
             <!-- loaders -->
           {/if}
         </div>
@@ -113,16 +148,18 @@
         <!-- profile-name -->
         <div class="profile-name-wrapper">
           <a href="{$system['system_url']}/{$profile['user_name']}">{$profile['name']}</a>
-          {if $profile['user_verified']}
-            <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified User")}'>
-              {include file='__svg_icons.tpl' icon="verified_badge" width="45px" height="45px"}
-            </span>
-          {/if}
-          {if $profile['user_subscribed']}
-            <a href="{$system['system_url']}/packages" class="badge" data-bs-toggle="tooltip" title="{__($profile['package_name'])} {__('Member')}">
-            {include file='__svg_icons.tpl' icon="pro_badge" width="45px" height="45px"}
-            </a>
-          {/if}
+          <div id="ladoaladoselos">
+            {if $profile['user_subscribed']}
+              <a href="{$system['system_url']}/packages" class="badge" data-bs-toggle="tooltip" title="{__($profile['package_name'])} {__('Member')}">
+              {include file='__svg_icons.tpl' icon="pro_badge" width="50px" height="50px"}
+              </a>
+            {/if}          
+            {if $profile['user_verified'] && $profile['package_name'] == "Plano 180"}
+              <a href="{$system['system_url']}/packages" class="badge" data-bs-toggle="tooltip" title="{__("Verified User")} {__('Member')}">
+              {include file='__svg_icons.tpl' icon="verified_badge" width="50px" height="50px"}
+              </a>&nbsp            
+            {/if}
+          </div>          
         </div>
         <!-- profile-name -->
 
@@ -259,24 +296,132 @@
       <div class="card">
         <div class="card-body">
             <div class="container-fluid">
-              <div class="row justify-content-md-center">
-                  <div class="col-sm-2">
-                    <h6 align="center">{$profile['visited']}</h6>
-                    <h6 align="center">Visualizações</h6>
-                  </div>
-                  <div class="col-sm-2">
-                    <h6 align="center">{$profile['followerd']}
-                    <h6 align="center">Seguindo</h6>
-                  </div>
-                  <div class="col-sm-2">
-                    <h6 align="center">{$profile['follower']}</h6>
-                    <h6 align="center">Seguidores</h6>
-                  </div>
+              <div class="row justify-content-md-center resumo-size">
                   <div class="col-sm-3">
-                    <h6 align="center">{$profile['recommendation']}</h6>
+                    <div align="center">{$profile['visited']}</div>
+                      <!-- Button trigger modal -->
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdropVisited" data-display="static"><div align="center">Visualizações <i class="fa fa-eye mr5"></i></div>
+                      </a>
+                      <!-- Modal -->
+                      <div class="modal fade" id="staticBackdropVisited" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelVisited" aria-hidden="true">
+                        <div class="modal-dialog modal-sm modal-dialog-rightred">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabelVisited"></h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">                                                    
+                              <span class="title"><h5>{__("visited")}</h5></span>  
+                            <div class="dropdown-widget-body">
+                              <div class="js_scroller">
+                                {if $user->_data['visited']}
+                                  <ul>
+                                    {foreach $user->_data['visited'] as $visitedion}
+                                      {include file='__feeds_visited.tpl'}
+                                    {/foreach}
+                                  </ul>
+                                {else}
+                                  <p class="text-center text-muted mt10">
+                                    {__("No visited")}
+                                  </p>
+                                {/if}
+                              </div>
+                            </div>
+                        </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary btn btn-block" data-bs-dismiss="modal">{__("Close")}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal -->
+                  </div>
+
+                  <div class="col-sm-2">
+                    <div align="center">{$profile['followerd']}</div>
+                      <!-- Button trigger modal -->
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdropFollowerd" data-display="static"><div align="center">Seguindo <i class="fa fa-eye mr5"></i></div>
+                      </a>
+                      <!-- Modal -->
+                      <div class="modal fade" id="staticBackdropFollowerd" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelFollowerd" aria-hidden="true">
+                        <div class="modal-dialog modal-sm modal-dialog-rightred">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabelFollowerd"></h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">                                                    
+                              <span class="title"><h5>{__("followerd")}</h5></span>  
+                            <div class="dropdown-widget-body">
+                              <div class="js_scroller">
+                                {if $user->_data['followerd']}
+                                  <ul>
+                                    {foreach $user->_data['followerd'] as $followerdion}
+                                      {include file='__feeds_followerd.tpl'}
+                                    {/foreach}
+                                  </ul>
+                                {else}
+                                  <p class="text-center text-muted mt10">
+                                    {__("No followerd")}
+                                  </p>
+                                {/if}
+                              </div>
+                            </div>
+                        </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary btn btn-block" data-bs-dismiss="modal">{__("Close")}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal -->
+                  </div>
+
+                  <div class="col-sm-3">
+                    <div align="center">{$profile['follower']}</div>
+                      <!-- Button trigger modal -->
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdropFollower" data-display="static"><div align="center">Seguidores <i class="fa fa-eye mr5"></i></div>
+                      </a>
+                      <!-- Modal -->
+                      <div class="modal fade" id="staticBackdropFollower" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabelFollower" aria-hidden="true">
+                        <div class="modal-dialog modal-sm modal-dialog-rightred">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="staticBackdropLabelFollower"></h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">                                                    
+                              <span class="title"><h5>{__("followers")}</h5></span>  
+                            <div class="dropdown-widget-body">
+                              <div class="js_scroller">
+                                {if $user->_data['followers']}
+                                  <ul>
+                                    {foreach $user->_data['followers'] as $followerion}
+                                      {include file='__feeds_follower.tpl'}
+                                    {/foreach}
+                                  </ul>
+                                {else}
+                                  <p class="text-center text-muted mt10">
+                                    {__("No followers")}
+                                  </p>
+                                {/if}
+                              </div>
+                            </div>
+                        </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-primary btn btn-block" data-bs-dismiss="modal">{__("Close")}</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Modal -->
+                  </div>
+                  
+                  <div class="col-sm-3">
+                    <div align="center">{$profile['recommendation']}</div>
 
                       <!-- Button trigger modal -->
-                      <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-display="static"><h6 align="center">Recomendações <i class="fa fa-eye mr5"></i></h6>
+                      <a href="#" data-bs-toggle="modal" data-bs-target="#staticBackdrop" data-display="static"><div align="center">Recomendações <i class="fa fa-eye mr5"></i></div>
                       </a>
                       <!-- Modal -->
                       <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
@@ -310,7 +455,7 @@
                           </div>
                         </div>
                       </div>   
-
+                      <!-- Modal -->
                   </div>
               </div>
             </div>
@@ -466,8 +611,8 @@
                   <li>
                      <div class="about-list-item">
                         {include file='__svg_icons.tpl' icon="birthday" class="main-icon" width="24px" height="24px"}
-                        {$profile['user_birthdate']|date_format:$system['system_date_format']} (<span id="age1"></span> anos)
-                         {if $profile['user_birthdate_companions']} e {$profile['user_birthdate_companions']|date_format:$system['system_date_format']} (<span id="age2"></span> anos){else}{/if}
+                        <!--{$profile['user_birthdate']|date_format:$system['system_date_format']}--> <span id="age1"></span> anos
+                         {if $profile['user_birthdate_companions']} / <!--{$profile['user_birthdate_companions']|date_format:$system['system_date_format']}--><span id="age2"></span> anos{else}{/if}
                       </div>
                       <input type="hidden" class="form-control" id="age_a" name="age_a" value="{$profile['user_birthdate']}">
                       <input type="hidden" class="form-control" id="age_b" name="age_b" value="{$profile['user_birthdate_companions']}">
@@ -503,7 +648,28 @@
                   <a href=https://telegram.me/share/url?url={$system['system_url']}/{$profile['user_name']}&text=😈Olha%20esse%20link%20e%20te%20diverte%20com%20as%20fantasias%20do%20mundo%20liberal!😈/>{include file='__svg_icons.tpl' icon="telegram" class="main-icon" width="24px" height="24px"}Compartilhar no Telegram</a>
                 </div>
               </li>
+               <li>
+              <div class="about-list-item">
+               {include file='__svg_icons.tpl' icon="user_information" class="main-icon mr10" width="24px" height="24px"}
+                Membro Desde :
+                {$profile['user_registered']|date_format:$system['system_date_format']}
+              </div>
+              </li>
+
               <!-- info -->
+              
+              <li>
+                  {if !is_empty($profile['user_preference'])}
+                    {include file='__svg_icons.tpl' icon="coracao" class="main-icon" width="24px" height="24px"}
+                     &nbsp&nbsp&nbsp{__("Preference")} : 
+                        <div class="about-bio">
+                          <div class="js_readmore overflow-hidden">
+                            {$profile['user_preference']|nl2br}
+                          </div>
+                        </div>
+                  {/if}
+              </li>
+
               <li>
                   {if $system['biography_info_enabled']}
                     {if !is_empty($profile['user_biography'])}
@@ -658,6 +824,16 @@
                         <span style="text-decoration: line-through;">{__("Add your profile cover")}</span>
                       {/if}
                   </div>
+                    <div class="mb5">
+                      {if !$profile['user_preference']}
+                        <a href="{$system['system_url']}/settings/profile">
+                          <i class="fas fa-plus-circle mr5"></i>{__("Add your preference")}
+                        </a>
+                      {else}
+                        <i class="fas fa-check-circle green mr5"></i>
+                        <span style="text-decoration: line-through;">{__("Add your preference")}</span>
+                      {/if}
+                    </div>
                   {if $system['biography_info_enabled']}
                     <div class="mb5">
                       {if !$profile['user_biography']}

@@ -68,9 +68,6 @@ class WindowsLive extends OAuth2
         $userProfile->birthDay = $data->get('birth_day');
         $userProfile->birthMonth = $data->get('birth_month');
         $userProfile->birthYear = $data->get('birth_year');
-        $userProfile->birthDayCompanions = $data->get('birth_day_companions');
-        $userProfile->birthMonthCompanions = $data->get('birth_month_companions');
-        $userProfile->birthYearCompanions = $data->get('birth_year_companions');
         $userProfile->language = $data->get('locale');
 
         return $userProfile;

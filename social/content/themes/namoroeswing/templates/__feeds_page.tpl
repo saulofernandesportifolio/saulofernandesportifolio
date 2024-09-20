@@ -10,7 +10,7 @@
         <span class="js_user-popover" data-uid="{$_page['page_id']}" data-type="page">
           <a class="h6" href="{$system['system_url']}/pages/{$_page['page_name']}{if $_search}?ref=qs{/if}">{$_page['page_title']}</a>
         </span>
-        {if $_page['page_verified']}
+        {if $_page['page_verified'] && $_page['package_name'] == "Plano 180"}
           <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified Page")}'>
             {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
           </span>
@@ -52,7 +52,7 @@
           <span class="name js_user-popover" data-uid="{$_page['page_id']}" data-type="page">
             <a href="{$system['system_url']}/pages/{$_page['page_name']}{if $_search}?ref=qs{/if}">{$_page['page_title']}</a>
           </span>
-          {if $_page['page_verified']}
+          {if $_page['page_verified'] && $_page['package_name'] == "Plano 180"}
             <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified Page")}'>
               {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
             </span>

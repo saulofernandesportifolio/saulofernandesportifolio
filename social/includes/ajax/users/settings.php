@@ -34,6 +34,7 @@ try {
 
     case 'basic':
 
+
       if (is_null($_POST['birth_month_companions'])){
         $_POST['birth_month_companions'] = 'none';
         $_POST['birth_day_companions'] = 'none';
@@ -41,7 +42,7 @@ try {
       }
 
       // valid inputs
-      if (!isset($_POST['firstname']) || !isset($_POST['lastname'])  || !isset($_POST['user_relationship']) || !isset($_POST['gender']) || !isset($_POST['birth_month']) || !isset($_POST['birth_day']) || !isset($_POST['birth_year'])  || !isset($_POST['birth_month_companions']) || !isset($_POST['birth_day_companions']) || !isset($_POST['birth_year_companions'])) {
+      if (!isset($_POST['firstname']) || !isset($_POST['lastname'])  || !isset($_POST['user_relationship']) || !isset($_POST['gender']) || !isset($_POST['birth_month']) || !isset($_POST['birth_day']) || !isset($_POST['birth_year'])  || !isset($_POST['birth_month_companions']) || !isset($_POST['birth_day_companions']) || !isset($_POST['birth_year_companions']) || !isset($_POST["inlineCheckbox"])) {
         _error(400);
       }
 

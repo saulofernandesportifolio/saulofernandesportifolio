@@ -368,13 +368,6 @@ class User
     return $citys;
   }
 
-
-
-
-
-
-
-
   /* ------------------------------- */
   /* System Currencies ✅ */
   /* ------------------------------- */
@@ -398,8 +391,6 @@ class User
     }
     return $currencies;
   }
-
-
 
   /* ------------------------------- */
   /* System Genders ✅ */
@@ -1961,7 +1952,7 @@ class User
           }
         }
         /* add the friend request */
-        $db->query(sprintf("INSERT INTO friends (user_one_id, user_two_id, status) VALUES (%s, %s, '0')", secure($this->_data['user_id'], 'int'),  secure($id, 'int'))) or _error('SQL_ERROR_THROWEN');
+        $db->query(sprintf("INSERT INTO friends (user_one_id, user_two_id, `status`, `time`) VALUES (%s, %s, '0', %s)", secure($this->_data['user_id'], 'int'),  secure($id, 'int'), secure(date("Y-m-d H:i:s")))) or _error('SQL_ERROR_THROWEN');
         /* update requests counter +1 */
         $db->query(sprintf("UPDATE users SET user_live_requests_counter = user_live_requests_counter + 1 WHERE user_id = %s", secure($id, 'int'))) or _error('SQL_ERROR_THROWEN');
         /* post new notification */
@@ -3127,7 +3118,7 @@ class User
                                                        LEFT JOIN users ON recommendations.user_id = users.user_id  
                                                        LEFT JOIN pages ON recommendations.user_id = pages.page_id  
                                                        WHERE recommendations.recommendation_id IN (SELECT users.user_id FROM recommendations INNER JOIN users ON users.user_name = '{$_GET['username']}')
-                                                       ORDER BY recommendations.recommendation_id DESC LIMIT %s, %s",  secure($offset, 'int', false), secure($system['max_results'], 'int', false))) or _error('SQL_ERROR_THROWEN');
+                                                       ORDER BY recommendations.recommendation_id DESC"/* LIMIT %s, %s",  secure($offset, 'int', false), secure($system['max_results'], 'int', false)*/)) or _error('SQL_ERROR_THROWEN');
     if ($get_recommendations->num_rows > 0) {
       while ($recommendation = $get_recommendations->fetch_assoc()) {
 
@@ -3150,7 +3141,192 @@ class User
      }
    }
     return $recommendations;
-  }  
+  }
+  
+  
+  /* ------------------------------- */
+  /* followers                       */
+  /* ------------------------------- */
+  /**
+   * get_followers
+   * 
+   * @param integer $offset
+   * @param integer $last_notification_id
+   * @return array
+   */
+  public function get_friend($offset = 0, $last_friends_user_two_id  = null)
+  {
+
+    global $db, $system, $control_panel;
+    if (!isset($control_panel)) {
+      $control_panel['url'] = ($this->_is_admin) ? "admincp" : "modcp";
+    }
+    $offset *= $system['max_results'];
+    $followers = [];
+    $get_followers= $db->query(sprintf("SELECT friends.*, 
+                                                       users.user_name, 
+                                                       users.user_firstname, 
+                                                       users.user_lastname, 
+                                                       users.user_gender, 
+                                                       users.user_picture, 
+                                                       users.user_subscribed, 
+                                                       users.user_verified,
+                                                       users.user_package, 
+                                                       pages.page_id, 
+                                                       pages.page_title, 
+                                                       pages.page_picture                                 
+                                                       FROM friends 
+                                                       LEFT JOIN users ON friends.user_one_id = users.user_id  
+                                                       LEFT JOIN pages ON friends.user_one_id = pages.page_id 
+                                                       WHERE friends.user_two_id IN (SELECT users.user_id FROM friends INNER JOIN users ON users.user_name = '{$_GET['username']}')
+                                                       ORDER BY friends.user_two_id DESC" /*LIMIT %s, %s",  secure($offset, 'int', false), secure($system['max_results'], 'int', false)*/)) or _error('SQL_ERROR_THROWEN');
+    if ($get_followers->num_rows > 0) {
+      while ($follower = $get_followers->fetch_assoc()) {
+
+             $follower['from_user_type'] = 'user';
+            //  print_r($recommendation['from_user_type']);
+            //  echo '<br>';
+             $follower['user_picture'] = get_picture($follower['user_picture'], $follower['user_gender']);
+            //  print_r($recommendation['user_picture']);
+            //  echo '<br>';
+             $follower['name'] = $follower['user_name'];  
+             $follower['node_url'] =$follower['user_name'];           
+            //  print_r($recommendation['node_url']);  
+             $follower['icon'] = "fa fa-bell";
+             $follower['url'] = $follower['node_url'];
+             $follower['message'] = 'Seguidores de Você';
+             $follower['seen'] = 1;
+             $follower['reaction'] = null;
+
+         $followers[] = $follower;
+     }
+   }
+    return $followers;
+  }
+
+
+  /* ------------------------------- */
+  /* followerd */
+  /* ------------------------------- */
+  /**
+   * get_followerd
+   * 
+   * @param integer $offset
+   * @param integer $last_notification_id
+   * @return array
+   */
+  public function get_followerd($offset = 0, $last_followerd_id = null)
+  {
+
+    global $db, $system, $control_panel;
+    if (!isset($control_panel)) {
+      $control_panel['url'] = ($this->_is_admin) ? "admincp" : "modcp";
+    }
+    $offset *= $system['max_results'];
+    $followerds = [];
+    $get_followerds= $db->query(sprintf("SELECT followings.*, 
+                                                       users.user_name, 
+                                                       users.user_firstname, 
+                                                       users.user_lastname, 
+                                                       users.user_gender, 
+                                                       users.user_picture, 
+                                                       users.user_subscribed, 
+                                                       users.user_verified,
+                                                       users.user_package, 
+                                                       pages.page_id, 
+                                                       pages.page_title, 
+                                                       pages.page_picture 
+                                                       FROM followings
+                                                       LEFT JOIN users ON followings.user_id = users.user_id  
+                                                       LEFT JOIN pages ON followings.user_id = pages.page_id  
+                                                       WHERE followings.following_id IN (SELECT users.user_id FROM followings INNER JOIN users ON users.user_name = '{$_GET['username']}')
+                                                       ORDER BY followings.following_id DESC" /*LIMIT %s, %s",  secure($offset, 'int', false), secure($system['max_results'], 'int', false)*/)) or _error('SQL_ERROR_THROWEN');
+    if ($get_followerds->num_rows > 0) {
+      while ($followerd = $get_followerds->fetch_assoc()) {
+
+             $followerd['from_user_type'] = 'user';
+            //  print_r($recommendation['from_user_type']);
+            //  echo '<br>';
+             $followerd['user_picture'] = get_picture($followerd['user_picture'], $followerd['user_gender']);
+            //  print_r($recommendation['user_picture']);
+            //  echo '<br>';
+             $followerd['name'] = $followerd['user_name'];  
+             $followerd['node_url'] =$followerd['user_name'];           
+            //  print_r($recommendation['node_url']);  
+             $followerd['icon'] = "fa fa-bell";
+             $followerd['url'] = $followerd['node_url'];
+             $followerd['message'] = 'Seguem Você';
+             $followerd['seen'] = 1;
+             $followerd['reaction'] = null;
+
+             $followerds[] = $followerd;
+     }
+   }
+    return $followerds;
+  }
+
+
+  /* ------------------------------- */
+  /* visited */
+  /* ------------------------------- */
+  /**
+   * get_visited
+   * 
+   * @param integer $offset
+   * @param integer $last_notification_id
+   * @return array
+   */
+  public function get_visited($offset = 0, $last_visited_id = null)
+  {
+
+    global $db, $system, $control_panel;
+    if (!isset($control_panel)) {
+      $control_panel['url'] = ($this->_is_admin) ? "admincp" : "modcp";
+    }
+    
+    $offset *= $system['max_results'];
+    $visiteds = [];
+    $get_visiteds= $db->query(sprintf("SELECT notifications.*, 
+                                                       user_visit.user_name, 
+                                                       user_visit.user_firstname, 
+                                                       user_visit.user_lastname, 
+                                                       user_visit.user_gender, 
+                                                       user_visit.user_picture, 
+                                                       user_visit.user_subscribed, 
+                                                       user_visit.user_verified,
+                                                       user_visit.user_package, 
+                                                       pages.page_id, 
+                                                       pages.page_title, 
+                                                       pages.page_picture 
+                                                       FROM notifications
+                                                       LEFT JOIN users as user_visit ON notifications.from_user_id = user_visit.user_id AND notifications.action ='profile_visit' 
+                                                       LEFT JOIN pages ON notifications.to_user_id = pages.page_id AND notifications.action ='profile_visit'
+                                                       LEFT JOIN users ON notifications.to_user_id = users.user_id AND notifications.action ='profile_visit'
+                                                       WHERE notifications.action ='profile_visit' AND users.user_name = '{$_GET['username']}' AND user_visit.user_name IS NOT NULL 
+                                                       ORDER BY notifications.to_user_id DESC" /*LIMIT %s, %s",  secure($offset, 'int', false), secure($system['max_results'], 'int', false)*/)) or _error('SQL_ERROR_THROWEN');
+    if ($get_visiteds->num_rows > 0) {
+      while ($visited = $get_visiteds->fetch_assoc()) {
+
+             $visited['from_user_type'] = 'user';
+            //  print_r($recommendation['from_user_type']);
+            //  echo '<br>';
+             $visited['user_picture'] = get_picture($visited['user_picture'], $visited['user_gender']);
+            //  print_r($recommendation['user_picture']);
+            //  echo '<br>';
+             $visited['name'] = $visited['user_name'];  
+             $visited['node_url'] =$visited['user_name'];           
+            //  print_r($recommendation['node_url']);  
+             $visited['icon'] = "fa fa-bell";
+             $visited['url'] = $visited['node_url'];
+             $visited['message'] = 'Visualizou Você';
+             $visited['seen'] = 1;
+             $visited['reaction'] = null;
+
+             $visiteds[] = $visited;
+     }
+   }
+    return $visiteds;
+  }
 
 
 
@@ -16276,10 +16452,9 @@ class User
         /* check if the user is already friends with the target */
         $check_friendship = $db->query(sprintf("SELECT * FROM friends WHERE (user_one_id = %s AND user_two_id = %s) OR (user_one_id = %s AND user_two_id = %s)", secure($user_id, 'int'), secure($auto_friend['user_id'], 'int'), secure($auto_friend['user_id'], 'int'), secure($user_id, 'int')));
         if ($check_friendship->num_rows > 0) {
-          continue;
-        }
+          continue;        }
         /* add friend */
-        $db->query(sprintf("INSERT INTO friends (user_one_id, user_two_id, status) VALUES (%s, %s, '1')", secure($user_id, 'int'),  secure($auto_friend['user_id'], 'int')));
+        $db->query(sprintf("INSERT INTO friends (user_one_id, user_two_id, status,time) VALUES (%s, %s, '1', %s)", secure($user_id, 'int'),  secure($auto_friend['user_id'], 'int'), secure(date("Y-m-d H:i:s"))));
         /* check if the user is already following the target */
         $check_following = $db->query(sprintf("SELECT * FROM followings WHERE user_id = %s AND following_id = %s", secure($user_id, 'int'), secure($auto_friend['user_id'], 'int')));
         if ($check_following->num_rows == 0) {
@@ -17461,6 +17636,15 @@ class User
         //     throw new Exception(__("Please select a valid relationship"));
         //   }
         // }
+        /* validate birthdate companions */
+        if (!isset($args["inlineCheckbox"])) {
+          $args["inlineCheckbox"] = 'null';
+        } else {  
+          foreach($args["inlineCheckbox"] as $pref){  
+            $args["inlineCheckbox1"].= $pref;          
+          }
+          $args["inlineCheckbox1"] = substr($args["inlineCheckbox1"], 0, -1);
+        } 
               
         /* validate relationship */
         if (!isset($args['user_relationship']) || $args['user_relationship'] == "none") {
@@ -17491,7 +17675,8 @@ class User
                                 user_country = %s, 
                                 user_birthdate = %s,
                                 user_birthdate_companions = %s, 
-                                user_relationship = %s, 
+                                user_relationship = %s,
+                                user_preference = %s,
                                 user_biography = %s, 
                                 user_website = %s 
                                 WHERE user_id = %s", 
@@ -17502,6 +17687,7 @@ class User
                                 secure($args['birth_date']),
                                 secure($args['birth_date_companions']),
                                 secure($args['user_relationship']), 
+                                secure($args["inlineCheckbox1"]),
                                 secure($args['biography']), 
                                 secure($args['website']), 
                                 secure($this->_data['user_id'], 'int'))) or _error('SQL_ERROR_THROWEN');

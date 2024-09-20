@@ -2443,6 +2443,10 @@ try {
                 case 'paypal':
                   $row['method_color'] = "info";
                   break;
+             
+                case 'mercadopago':
+                    $row['method_color'] = "info";
+                  break;                  
 
                 case 'skrill':
                   $row['method_color'] = "primary";
@@ -2660,6 +2664,10 @@ try {
                 case 'paypal':
                   $row['method_color'] = "info";
                   break;
+                
+                case 'mercadopago':
+                    $row['method_color'] = "info";
+                  break;                   
 
                 case 'skrill':
                   $row['method_color'] = "primary";
@@ -2714,6 +2722,11 @@ try {
                 case 'paypal':
                   $row['method_color'] = "info";
                   break;
+                
+                case 'mercadopago':
+                    $row['method_color'] = "info";
+                  break; 
+
 
                 case 'skrill':
                   $row['method_color'] = "primary";
@@ -2768,6 +2781,10 @@ try {
                 case 'paypal':
                   $row['method_color'] = "info";
                   break;
+
+                case 'mercadopago':
+                    $row['method_color'] = "info";
+                  break;                   
 
                 case 'skrill':
                   $row['method_color'] = "primary";
@@ -2878,6 +2895,11 @@ try {
                 case 'paypal':
                   $row['method_color'] = "info";
                   break;
+
+                case 'mercadopago':
+                    $row['method_color'] = "info";
+                  break; 
+
 
                 case 'skrill':
                   $row['method_color'] = "primary";

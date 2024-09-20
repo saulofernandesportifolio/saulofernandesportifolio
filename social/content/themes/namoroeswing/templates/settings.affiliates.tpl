@@ -147,6 +147,12 @@
                 <label class="form-check-label" for="method_paypal">{__("PayPal")}</label>
               </div>
             {/if}
+            {if in_array("mercadopago", $system['affiliate_payment_method_array'])}
+              <div class="form-check form-check-inline">
+                <input ttype="radio" name="method" id="method_mercadopago" value="mercadopago" class="form-check-input>
+                <label class="form-check-label" for="method_mercadopago">{__("Market paid out")}</label>
+              </div>
+            {/if}
             {if in_array("skrill", $system['affiliate_payment_method_array'])}
               <div class="form-check form-check-inline">
                 <input type="radio" name="method" id="method_skrill" value="skrill" class="form-check-input">

@@ -26,36 +26,41 @@ try {
     "SELECT users.*, 
             picture_photo.source as user_picture_full, 
             picture_photo_post.privacy as user_picture_privacy, 
-            cover_photo.source as user_cover_full, 
+            cover_photo.source as user_cover_full,
             cover_photo_post.privacy as cover_photo_privacy, 
             packages.name as package_name, 
             packages.color as package_color,
             (SELECT count(*) as visited 
             FROM notifications 
-            LEFT JOIN users ON notifications.from_user_id = users.user_id
-            WHERE users.user_name = '{$_GET['username']}' AND notifications.action ='profile_visit'
-            GROUP BY notifications.from_user_id DESC)	as visited,
+            /*LEFT JOIN users ON notifications.to_user_id = users.user_id AND notifications.action ='profile_visit'
+            LEFT JOIN pages ON notifications.from_user_id = pages.page_id AND notifications.action ='profile_visit'
+            WHERE users.user_name = '{$_GET['username']}' AND notifications.action ='profile_visit'*/
+            LEFT JOIN users as user_visit ON notifications.from_user_id = user_visit.user_id AND notifications.action ='profile_visit' 
+            LEFT JOIN pages ON notifications.to_user_id = pages.page_id AND notifications.action ='profile_visit'
+            LEFT JOIN users ON notifications.to_user_id = users.user_id AND notifications.action ='profile_visit'
+            WHERE notifications.action ='profile_visit' AND users.user_name = '{$_GET['username']}' AND user_visit.user_name IS NOT NULL 
+            ORDER BY notifications.to_user_id DESC)	as visited,
             (SELECT count(*) as followerd 
             FROM followings 
             LEFT JOIN users ON followings.following_id = users.user_id
             WHERE users.user_name = '{$_GET['username']}'
-            GROUP BY followings.following_id DESC) as followerd,
+            ORDER BY followings.following_id DESC) as followerd,
             (SELECT count(*) as follower 
             FROM friends 
             LEFT JOIN users ON friends.user_two_id = users.user_id
             WHERE users.user_name = '{$_GET['username']}'
-            GROUP BY friends.user_two_id DESC) as follower,
+            ORDER BY friends.user_two_id DESC) as follower,
     			  (SELECT count(*) as recommendation 
             FROM recommendations 
             LEFT JOIN users ON recommendations.recommendation_id = users.user_id
             WHERE users.user_name = '{$_GET['username']}'
-            GROUP BY recommendations.recommendation_id DESC) as recommendation
+            ORDER BY recommendations.recommendation_id DESC) as recommendation           
         FROM users 
         LEFT JOIN posts_photos as picture_photo ON users.user_picture_id = picture_photo.photo_id 
         LEFT JOIN posts as picture_photo_post ON picture_photo.post_id = picture_photo_post.post_id 
         LEFT JOIN posts_photos as cover_photo ON users.user_cover_id = cover_photo.photo_id 
         LEFT JOIN posts as cover_photo_post ON cover_photo.post_id = cover_photo_post.post_id 
-        LEFT JOIN packages ON users.user_subscribed = '1' AND users.user_package = packages.package_id 
+        LEFT JOIN packages ON users.user_subscribed = '1' AND users.user_package = packages.package_id
         WHERE users.user_name = '{$_GET['username']}'"
   )) or _error('SQL_ERROR_THROWEN');
   
@@ -103,8 +108,54 @@ try {
   $profile['user_cover'] = ($profile['user_cover']) ? $system['system_uploads'] . '/' . $profile['user_cover'] : $profile['user_cover'];
   $profile['user_cover_full'] = ($profile['user_cover_full']) ? $system['system_uploads'] . '/' . $profile['user_cover_full'] : $profile['user_cover_full'];
   $profile['user_cover_lightbox'] = $user->check_privacy($profile['cover_photo_privacy'], $profile['user_id']);
+  //$profile['cover_photo_capas'] = ($profile['cover_photo_capas']) ? $system['system_uploads'] . '/' . $profile['cover_photo_capas'] : $profile['cover_photo_capas'];
 
-  /* get user gender */
+ //pegar fotos de capa conforme o upload
+  $get_profile2 = $db->query(sprintf(
+    "SELECT DISTINCT 
+          cover_photo_capa_teste.photo_id as photosCapaId,
+          cover_photo_capa_teste.source  as photosCapa,
+          (SELECT count(*) as qtdPhotosCapa 
+          FROM users 
+          LEFT JOIN posts_photos as cover_photo_capa_teste ON users.user_album_covers = cover_photo_capa_teste.album_id
+          WHERE users.user_name = '{$_GET['username']}' ) as countPhotos        
+        FROM users 
+        LEFT JOIN posts_photos as cover_photo_capa_teste ON users.user_album_covers = cover_photo_capa_teste.album_id 
+        WHERE users.user_name = '{$_GET['username']}'"
+  )) or _error('SQL_ERROR_THROWEN');
+
+  while($profile2 = $get_profile2->fetch_assoc()){
+
+    $profileTeste.= ";".$system['system_uploads'] . '/' .$profile2['photosCapa'];
+    $countPhotos= $profile2['countPhotos'];
+    $idcapa.= ";".$profile2['photosCapaId'];
+    
+  }
+  $profile['countPhotos'] = $countPhotos;
+  $profileTeste = substr($profileTeste, 1, strlen($profileTeste));
+  $profileSeparaCapas = explode(";", $profileTeste);
+
+
+  $userCoverId = substr($idcapa, 1, strlen($idcapa));
+  $userCoverId = explode(";", $userCoverId);
+
+  $profile['user_cover_id_a'] = $userCoverId[0] ? $userCoverId[0] : null;
+  $profile['user_cover_a'] = $profileSeparaCapas[0] ? $profileSeparaCapas[0] : null;
+  //$profile['user_cover_a'] = $profile['user_cover_full'] ? $profile['user_cover_full']: null;
+  $profile['user_cover_full_a'] = $profileSeparaCapas[0] ? $profileSeparaCapas[0] : null;
+  //$profile['user_cover_full_a'] = $profile['user_cover_full']? $profile['user_cover_full'] : null; 
+  $profile['user_cover_id_b'] = $userCoverId[1] ? $userCoverId[1] : null;
+  $profile['user_cover_b'] = $profileSeparaCapas[1] ? $profileSeparaCapas[1] : null;
+  $profile['user_cover_full_b'] = $profileSeparaCapas[1] ? $profileSeparaCapas[1] : null;
+  
+  //var_dump($profile['user_cover_full_a']);
+  //echo '<br>';
+  //var_dump($profile['user_cover_full_b']);
+  //echo '<br>';
+  //var_dump($profile['countPhotos']);
+
+
+ /* get user gender */
   $profile['user_gender'] = $user->get_gender($profile['user_gender']);
   /* get profile background */
   $profile['user_profile_background'] = ($profile['user_profile_background']) ? $system['system_uploads'] . '/' . $profile['user_profile_background'] : $profile['user_profile_background'];
@@ -126,6 +177,12 @@ try {
       $profile['mutual_friends'] = $user->get_mutual_friends($profile['user_id']);
     }
   }
+  /*profile prefence*/
+  $var = $user->_data['user_preference'];
+  $texto = str_replace(',', ', ', $var);
+  //echo $texto;
+  $profile['user_preference'] = $texto;
+
   /* get profile posts count */
   $profile['posts_count'] = $user->get_posts_count($profile['user_id'], 'user');
   /* get profile photos count */
@@ -162,6 +219,13 @@ try {
         /* [3] check birthdate */
         if (!$profile['user_birthdate']) {
           $steps_missed++;
+        }
+        /* [4] check biography */
+        if (empty($profile['user_preference'])) {
+          $steps_requried++;
+          if (!$profile['user_preference']) {
+            $steps_missed++;
+          }
         }
         /* [4] check biography */
         if ($system['biography_info_enabled']) {

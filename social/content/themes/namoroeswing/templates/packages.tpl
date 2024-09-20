@@ -92,7 +92,8 @@
 
                       <!-- Permissions -->
                       <li class="list-group-item">
-                        <strong class="text-link" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false">
+                        <!--<strong class="text-link" data-bs-toggle="collapse" data-bs-target=".multi-collapse" aria-expanded="false">-->
+                        <strong  aria-expanded="false">
                           {include file='__svg_icons.tpl' icon="permissions" class="mr10" width="24px" height="24px"}
                           {__("All Permissions")}
                         </strong>
@@ -318,10 +319,35 @@
                               {__("Try Now")}
                             </button>
                           {else}
-                            <button class="btn rounded-pill btn-danger" data-toggle="modal" data-url="#payment" data-options='{ "handle": "packages", "id": {$package["package_id"]}, "price": "{$package["price"]}", "name": "{$package["name"]}", "img": "{$package["icon"]}" }'>
+                            <!--<button class="btn rounded-pill btn-danger" data-toggle="modal" data-url="#payment" data-options='{ "handle": "packages", "id": {$package["package_id"]}, "price": "{$package["price"]}", "name": "{$package["name"]}", "img": "{$package["icon"]}" }'>-->
                               {if !$user->_data['user_subscribed']}
-                                {__("Buy Now")}
+                                <!--{__("Buy Now")}-->
+
+                                {if $system['paypal_enabled']}
+                                      <button class="js_payment-paypal btn rounded-pill btn-payment" 
+                                              data-handle="{"packages"}" 
+                                              data-id="{$package["package_id"]}" 
+                                              data-price="{$package["price"]}"
+                                      >
+                                      {__("Buy Now")} 
+                                      <i class="fab fa-paypal fa-lg fa-fw mr5" 
+                                          style="color: #00186A;"
+                                      ></i><!--{__("PayPal")}-->
+                                      </button><br>
+                                {/if}
+                                {if $system['mercado_pago_enabled']}
+                                      <button class="js_payment-mercado-pago btn rounded-pill btn-payment"
+                                              data-handle="{"packages"}" 
+                                              data-id="{$package["package_id"]}" 
+                                              data-price="{$package["price"]}"
+                                      >
+                                      {__("Buy Now")} {include file='__svg_icons.tpl' icon="mercado-pago" class="mr5" width="20px" height="20px"} <!--{__("Market paid out")}-->
+                                      </button>
+                                      <div>Aviso!: para utilizar o pix do mercado pago, caso esteja logado na conta em seu dispositivo, necessita que deslogue para ativar a opção pix.</div>
+                                {/if}  
+
                               {else}
+                              <button class="btn rounded-pill btn-danger" data-toggle="modal" data-url="#payment" data-options='{ "handle": "packages", "id": {$package["package_id"]}, "price": "{$package["price"]}", "name": "{$package["name"]}", "img": "{$package["icon"]}" }'>
                                 {__("Upgrade Now")}
                               {/if}
                             </button>
@@ -392,6 +418,10 @@
     </div>
   </div>
   <!-- page content -->
+
+{elseif $view == "erred"}
+
+  falha de pagamento
 
 {/if}
 

@@ -206,7 +206,7 @@ try {
   /* return */
   $return['post'] = $smarty->fetch("__feeds_post.tpl");
 
-  /* check if post is video && ffmpeg enabled */
+    /* check if post is video && ffmpeg enabled */
   if ($post['post_type'] == "video" && $system['ffmpeg_enabled']) {
     // [BACKGROUND PROCESS]
     /* return async */
@@ -216,8 +216,9 @@ try {
     // return & exit
     return_json(['processing' => true]);
   } else {
-    // return & exit
+
     return_json($return);
+    
   }
 } catch (Exception $e) {
   modal("ERROR", __("Error"), $e->getMessage());

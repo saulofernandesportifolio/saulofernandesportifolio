@@ -16,6 +16,7 @@ api['data/search'] = ajax_path + "data/search.php";
 api['posts/lightbox'] = ajax_path + "posts/lightbox.php";
 /* payments */
 api['payments/paypal'] = ajax_path + "payments/paypal.php";
+api['payments/mercadopago'] = ajax_path + "payments/mercadopago.php";
 api['payments/paystack'] = ajax_path + "payments/paystack.php";
 api['payments/stripe'] = ajax_path + "payments/stripe.php";
 api['payments/coinpayments'] = ajax_path + "payments/coinpayments.php";
@@ -30,7 +31,7 @@ api['payments/trial'] = ajax_path + "payments/trial.php";
 /* ads */
 api['ads/click'] = ajax_path + "ads/click.php";
 
-
+api['core/upgradepost'] = ajax_path + "core/upgradepost.php";
 // stop audio
 Audio.prototype.stop = function () {
   this.pause();
@@ -120,6 +121,10 @@ function initialize() {
   $("video.js_videojs").each(function () {
     if ($(this).parents('div.video-js').length == 0) {
       var _id = $(this).attr('id');
+      var data_packages_enabled = $(this).attr('data-packages-enabled');
+      var data_user_packages = $(this).attr('data-user-packages');
+      var data_user_subscribed = $(this).attr('data-user-subscribed');
+      
       videojs($(this)[0], {
         language: system_langauge_code,
         languages: {
@@ -140,8 +145,39 @@ function initialize() {
         this.on("play", function () {
           /* pause other video */
           $(".js_videojs").each(function () {
+            //var teste = $(this).attr('id');
+            //var status = $(this).attr('class');
+            //var video = $(this)[0];
+            //console.log(video);
+            //console.log(teste);
+            //console.log(status);
+            //console.log('caiu aqui');
+            if (_id === $(this).attr('id') && data_packages_enabled && !data_user_subscribed || _id === $(this).attr('id') && data_user_packages == 5 && data_user_subscribed) {
+
+              setTimeout(() => {
+              this.player.pause();
+
+              //console.log('caiu aqui dentro do contador'); 
+              
+              }, 10000);
+              
+                setTimeout(() => {
+                  this.player.load();
+                  var id = $(this).data('id');
+                  $.post(api['core/upgradepost'], { 'id': id }, function (response) {
+                    if (response.callback) {
+                      eval(response.callback);
+                    }
+                  }, "json")
+                    .fail(function () {
+                      modal('#modal-message', { title: __['Error'], message: __['There is something that went wrong!'] });
+                    });
+                }, 12000);
+                         
+            }
             if (_id !== $(this).attr('id')) {
               this.player.pause();
+
             }
           });
         });
@@ -240,7 +276,10 @@ function confirm(title, message, callback, password_check = false) {
   $('body').on('click', '#modal-confirm-ok', function () {
     button_status($(this), "loading");
     if (callback) callback();
+      
+    if (callback) window.location.reload();
   });
+  
 }
 
 
@@ -860,6 +899,7 @@ $(function () {
     button_status(_this, "loading");
     /* post the request */
     $.post(api['payments/paypal'], data, function (response) {
+
       /* button reset */
       button_status(_this, "reset");
       /* check the response */
@@ -876,6 +916,53 @@ $(function () {
         modal('#modal-message', { title: __['Error'], message: __['There is something that went wrong!'] });
       });
   });
+
+  // run payments
+  /* Mercado Pago*/
+  $('body').on('click', '.js_payment-mercado-pago', function () {
+    var _this = $(this);
+    var data = {};
+    
+    data['handle'] = _this.data('handle');
+    if (data['handle'] == "packages") {
+      data['package_id'] = _this.data('id');
+    }
+    if (data['handle'] == "wallet") {
+      data['price'] = _this.data('price');
+    }
+    if (data['handle'] == "donate") {
+      data['post_id'] = _this.data('id');
+      data['price'] = _this.data('price');
+    }
+    if (data['handle'] == "subscribe") {
+      data['plan_id'] = _this.data('id');
+    }
+    if (data['handle'] == "movies") {
+      data['movie_id'] = _this.data('id');
+    }
+    /* button loading */
+    button_status(_this, "loading");
+
+    /* post the request */
+   $.post(api['payments/mercadopago'], data, function (response) {
+
+    /* button reset */
+      button_status(_this, "reset");
+      /* check the response */
+      if (!response) return;
+      /* check if there is a callback */
+      if (response.callback) {
+        eval(response.callback);
+      }
+    }, "json")
+      .fail(function () {
+        /* button reset */
+        button_status(_this, "reset");
+        /* handle error */
+        modal('#modal-message', { title: __['Error'], message: __['There is something that went wrong!'] });
+      });
+  });
+
   /* Stripe */
   $('body').on('click', '.js_payment-stripe', function () {
     var _this = $(this);
@@ -1648,5 +1735,5 @@ $(function () {
     $('textarea').text(text);
     //$('textarea[name="biography"]').focus().setSelectionRange(0,0);
   });
-
+  
 });

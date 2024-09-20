@@ -8,6 +8,10 @@
 
     {include file='../images/svg/paypal.svg'}
 
+  {elseif $icon == "mercado-pago"}
+
+    {include file='../images/svg/icons8-mercado-pago-480.svg'}    
+
   {elseif $icon == "alipay"}
 
     {include file='../images/svg/alipay.svg'}
@@ -818,11 +822,11 @@
 
   {elseif $icon == "verified_badge"}
 
-    {include file='../images/svg/verified_badge.svg'}
+    {include file='../images/svg/verified_badge4444.svg'}
 
   {elseif $icon == "pro_badge"}
 
-    {include file='../images/svg/pro_badge.svg'}
+    {include file='../images/svg/pro_badge4444.svg'}
 
   {elseif $icon == "genders"}
 
@@ -891,6 +895,9 @@
   {elseif $icon == "telegram-circled"}
 
     {include file='../images/svg/telegram-circled.svg'}
+  {elseif $icon == "coracao"}
+
+    {include file='../images/svg/coracao.svg'}  
 
   {/if}
 </div>

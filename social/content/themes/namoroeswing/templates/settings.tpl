@@ -64,13 +64,13 @@
                       </a>
                     </li>
                   {/if}
-                  {if $system['system_profile_background_enabled']}
+                  <!--{if $system['system_profile_background_enabled']}
                     <li {if $view == "profile" && $sub_view == "design"}class="active" {/if}>
                       <a href="{$system['system_url']}/settings/profile/design">
                         {__("Design")}
                       </a>
                     </li>
-                  {/if}
+                  {/if}-->
                 </ul>
               </div>
             </li>
@@ -93,11 +93,11 @@
                     </a>
                   </li>
                   {if $system['two_factor_enabled']}
-                    <li {if $view == "security" && $sub_view == "two-factor"}class="active" {/if}>
+                  <!--<li {if $view == "security" && $sub_view == "two-factor"}class="active" {/if}>
                       <a href="{$system['system_url']}/settings/security/two-factor">
                         {__("Two-Factor Authentication")}
                       </a>
-                    </li>
+                    </li>-->
                   {/if}
                 </ul>
               </div>
@@ -113,12 +113,12 @@
             </li>
 
             {if $system['verification_requests']}
-              <li {if $view == "verification"}class="active" {/if}>
+            <!-- <li {if $view == "verification"}class="active" {/if}>
                 <a href="{$system['system_url']}/settings/verification">
                   {include file='__svg_icons.tpl' icon="verification" class="main-icon mr10" width="24px" height="24px"}
                   {__("Verification")}
                 </a>
-              </li>
+              </li>-->
             {/if}
 
             <div class="divider mtb5"></div>

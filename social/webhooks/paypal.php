@@ -123,7 +123,7 @@ try {
         break;
     }
   }
-  redirect();
+  redirect('/packages');
 } catch (Exception $e) {
   _error('System Message', $e->getMessage());
 }

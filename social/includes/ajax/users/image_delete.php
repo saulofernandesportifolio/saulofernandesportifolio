@@ -24,7 +24,7 @@ if ($user->_data['user_demo']) {
 try {
 
   // delete avatar/cover image
-  $response = delete_avatar_cover_image($_POST['hanlde']);
+  $response = delete_avatar_cover_image($_POST['hanlde'],$_POST['countphotos']);
 
   // return
   return_json(['file' => $response]);

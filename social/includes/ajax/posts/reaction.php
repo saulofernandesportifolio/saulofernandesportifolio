@@ -39,6 +39,7 @@ try {
         /* return */
         $return['refresh'] = true;
       }
+     
       break;
 
     case 'approve_post':

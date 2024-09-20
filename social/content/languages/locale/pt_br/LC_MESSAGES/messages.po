@@ -264,6 +264,16 @@ msgstr "Autenticação em duas etapas"
 msgid "Notifications"
 msgstr "Notificações"
 
+
+#: content/themes/default/templatese/profile.tpl:294
+msgid "followers"
+msgstr "Seguidores"
+
+#: content/themes/default/templatese/profile.tpl:304
+msgid "No followers"
+msgstr "Nenhum Seguidor"
+
+
 #: content/themes/default/templatese/profile.tpl:294
 msgid "Recommendations"
 msgstr "Recomedações"
@@ -271,6 +281,22 @@ msgstr "Recomedações"
 #: content/themes/default/templatese/profile.tpl:304
 msgid "No Recommendation"
 msgstr "Nenhuma Recomedação"
+
+#: content/themes/default/templatese/profile.tpl:294
+msgid "followerd"
+msgstr "Seguindo"
+
+#: content/themes/default/templatese/profile.tpl:304
+msgid "No followerd"
+msgstr "Nenhum seguindo"
+
+#: content/themes/default/templatese/profile.tpl:294
+msgid "visited"
+msgstr "Visualizações"
+
+#: content/themes/default/templatese/profile.tpl:304
+msgid "No visited"
+msgstr "Nenhuma visualização"
 
 #: content/themes/default/templatese/profile.tpl:287
 msgid "Close"
@@ -5953,6 +5979,23 @@ msgstr "Categoria"
 msgid "About"
 msgstr "Sobre"
 
+
+#: content/themes/default/templates/admin.events.tpl:271
+#: content/themes/default/templates/group.tpl:190
+#: content/themes/default/templates/group.tpl:933
+#: content/themes/default/templates/event.tpl:183
+#: content/themes/default/templates/event.tpl:735
+#: content/themes/default/templates/admin.pages.tpl:321
+#: content/themes/default/templates/admin.groups.tpl:245
+#: content/themes/default/templates/ajax.event.publisher.tpl:44
+#: content/themes/default/templates/ajax.group.publisher.tpl:42
+#: content/themes/default/templates/ajax.page.publisher.tpl:43
+#: content/themes/default/templates/page.tpl:943
+msgid "Preference"
+msgstr "Preferencias"
+
+
+
 #: content/themes/default/templates/admin.events.tpl:288
 #: content/themes/default/templates/group.tpl:946
 #: content/themes/default/templates/event.tpl:748
@@ -7679,6 +7722,22 @@ msgstr "Método de pagamento"
 #, fuzzy
 msgid "PayPal"
 msgstr "PayPal"
+
+
+#: content/themes/default/templates/settings.monetization.tpl:172
+#: content/themes/default/templates/settings.points.tpl:166
+#: content/themes/default/templates/wallet.tpl:305
+#: content/themes/default/templates/admin.monetization.tpl:76
+#: content/themes/default/templates/settings.funding.tpl:57
+#: content/themes/default/templates/admin.funding.tpl:61
+#: content/themes/default/templates/admin.affiliates.tpl:52
+#: content/themes/default/templates/admin.wallet.tpl:82
+#: content/themes/default/templates/admin.points.tpl:52
+#: content/themes/default/templates/_js_templates.tpl:1730
+#: content/themes/default/templates/settings.affiliates.tpl:147
+#, fuzzy
+msgid "Market paid out"
+msgstr "Mercado Pago"
 
 #: content/themes/default/templates/settings.monetization.tpl:178
 #: content/themes/default/templates/settings.points.tpl:172
@@ -10915,13 +10974,26 @@ msgstr "Status"
 msgid "Paypal Enabled"
 msgstr "Ativar PayPal"
 
+#: content/themes/default/templates/admin.settings.tpl:5057
+msgid "Market paid out Enabled"
+msgstr "Ativar Mercado Pago"
+
 #: content/themes/default/templates/admin.settings.tpl:5058
 msgid "Enable payments via Paypal"
 msgstr "Ativar pagamentos via Paypal"
 
+#: content/themes/default/templates/admin.settings.tpl:5058
+msgid "Enable payments via Market paid out"
+msgstr "Ativar pagamentos via Mercado Pago"
+
+
 #: content/themes/default/templates/admin.settings.tpl:5070
 msgid "Paypal Mode"
 msgstr "Modo PayPal"
+
+#: content/themes/default/templates/admin.settings.tpl:5070
+msgid "Market paid out Mode"
+msgstr "Modo Mercado Pago"
 
 #: content/themes/default/templates/admin.settings.tpl:5079
 #: content/themes/default/templates/admin.settings.tpl:5472
@@ -10932,9 +11004,34 @@ msgstr "Sandbox"
 msgid "PayPal Client ID"
 msgstr "ID do cliente PayPal"
 
+#: content/themes/default/templates/admin.settings.tpl:5086
+msgid "PayPal Client ID Test"
+msgstr "ID do cliente PayPal Teste"
+
+#: content/themes/default/templates/admin.settings.tpl:5086
+msgid "Market paid out Client ID"
+msgstr "ID do cliente Mercado Pago"
+
 #: content/themes/default/templates/admin.settings.tpl:5099
 msgid "PayPal Secret Key"
 msgstr "PayPal Secret Key"
+
+#: content/themes/default/templates/admin.settings.tpl:5099
+msgid "PayPal Secret Key Test"
+msgstr "PayPal Secret Key Teste"
+
+#: content/themes/default/templates/admin.settings.tpl:5099
+msgid "Market paid out Secret Key"
+msgstr "Mercado Pago Secret Key"
+
+#: content/themes/default/templates/admin.settings.tpl:5099
+msgid "Market paid out Access Token"
+msgstr "Mercado Pago Access Token"
+
+#: content/themes/default/templates/admin.settings.tpl:5099
+msgid "Market paid out Access Token Test"
+msgstr "Mercado Pago Access Token Test"
+
 
 #: content/themes/default/templates/admin.settings.tpl:5121
 #, fuzzy
@@ -16491,6 +16588,11 @@ msgstr "Adicione a capa do seu perfil"
 #: content/themes/default/templates/profile.tpl:369
 msgid "Add your biography"
 msgstr "Adicione sua biografia"
+
+#: content/themes/default/templates/profile.tpl:365
+#: content/themes/default/templates/profile.tpl:369
+msgid "Add your preference"
+msgstr "Adicione suas preferencias"
 
 #: content/themes/default/templates/profile.tpl:376
 #: content/themes/default/templates/profile.tpl:380

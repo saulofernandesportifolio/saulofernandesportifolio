@@ -291,6 +291,10 @@
 
   <script src="{$system['system_url']}/content/themes/namoroeswing/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
+
+    <!-- SDK MercadoPago.js -->
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+
   <!-- Dependencies Libs [jQuery|Bootstrap] -->
 
   <!-- Dependencies Plugins -->

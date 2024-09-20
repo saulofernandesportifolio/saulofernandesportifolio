@@ -89,6 +89,7 @@
             </div>
 
             <form class="js_ajax-forms" data-url="users/started.php?do=update" >
+
               <div class="heading-small mb20">
                 {__("Location")}
               </div>

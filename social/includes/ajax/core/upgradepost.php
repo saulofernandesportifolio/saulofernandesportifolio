@@ -29,6 +29,6 @@ try {
   modal('UPGRADEPOST');
 
 } catch (Exception $e) {
-  alert('caiu aqui');
+ 
   modal("ERROR", __("Error"), $e->getMessage());
 }

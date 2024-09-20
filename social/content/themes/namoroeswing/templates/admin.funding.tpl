@@ -61,6 +61,10 @@
               <label class="form-check-label" for="method_paypal">{__("PayPal")}</label>
             </div>
             <div class="form-check form-check-inline">
+              <input type="checkbox" class="form-check-input" name="method_mercadopago" id="method_mercadopago" {if in_array("mercadopago", $system['funding_payment_method_array'])}checked{/if}>
+              <label class="form-check-label" for="method_mercadopago">{__("Market paid out")}</label>
+            </div>           
+            <div class="form-check form-check-inline">
               <input type="checkbox" class="form-check-input" name="method_skrill" id="method_skrill" {if in_array("skrill", $system['funding_payment_method_array'])}checked{/if}>
               <label class="form-check-label" for="method_skrill">{__("Skrill")}</label>
             </div>

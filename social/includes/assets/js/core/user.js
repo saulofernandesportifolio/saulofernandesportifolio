@@ -34,7 +34,8 @@ api['monetization/controller'] = ajax_path + "monetization/controller.php";
 api['ads/campaign'] = ajax_path + "ads/campaign.php";
 /* developers */
 api['developers/app'] = ajax_path + "developers/app.php";
-
+/* albums */
+api['albums/action'] = ajax_path + "albums/action.php";
 
 // initialize the modal plugins
 function initialize_modal() {
@@ -82,6 +83,7 @@ function initialize_uploader() {
     } else if ($(this).data('type') == "file") {
       var accept = accpeted_file_extensions;
     } else {
+      //var accept = ".png, .gif, .jpeg, .jpg";
       var accept = ".png, .gif, .jpeg, .jpg, .webp";
     }
     $(this).before(render_template("#x-uploader", { 'url': api['data/upload'], 'secret': secret, 'multiple': multiple, 'accept': accept }));
@@ -918,7 +920,6 @@ $(function () {
         }
         /* disable publisher button */
         button_status(publisher_button, "loading");
-
       } else if (handle == "publisher-mini") {
         var publisher = $(this).parents('.publisher-mini');
         var publisher_button = publisher.find('.js_publisher-btn');
@@ -1121,6 +1122,7 @@ $(function () {
             publisher.find('.js_publisher-tab[data-tab="' + type + '"]').addClass('activated');
             /* enable publisher button */
             button_status(publisher_button, "reset");
+           
 
           } else if (handle == "publisher-mini") {
             /* remove upload loader */
@@ -1249,6 +1251,7 @@ $(function () {
 
         }
       }
+   
     }
     /* handle error */
     function _handle_error() {
@@ -1280,6 +1283,7 @@ $(function () {
     }
     /* submit the form */
     $(this).ajaxSubmit(options);
+   
     return false;
   });
   /* handle profile (cover|picture) trigger */
@@ -1294,6 +1298,8 @@ $(function () {
     e.stopPropagation();
     var id = $(this).data('id');
     var handle = $(this).data('handle');
+    var countphotos = $(this).data('countphotos');
+    
     var remove = ($(this).hasClass('js_delete-cover')) ? 'cover' : 'picture';
     if (remove == 'cover') {
       var wrapper = $('.profile-cover-wrapper');
@@ -1305,7 +1311,7 @@ $(function () {
       var _message = __['Are you sure you want to remove your profile picture?'];
     }
     confirm(_title, _message, function () {
-      $.post(api['users/image_delete'], { 'handle': handle, 'id': id }, function (response) {
+      $.post(api['users/image_delete'], { 'handle': handle, 'id': id , 'countphotos': countphotos}, function (response) {
         /* check the response */
         if (response.callback) {
           eval(response.callback);
@@ -1328,12 +1334,31 @@ $(function () {
             wrapper.find('img').attr("src", response.file);
           }
           $('#modal').modal('hide');
+          location.reload();
+        }
+      },
+       'json')
+        .fail(function () {
+          modal('#modal-message', { title: __['Error'], message: __['There is something that went wrong!'] });
+        });
+    });
+    confirm(__['Delete'], __['Are you sure you want to delete this?'], function () {
+      $.post(api['albums/action'], { 'do': 'delete_photo', 'id': id }, function (response) {
+        /* check the response */
+        if (response.callback) {
+          eval(response.callback);
+        } else {
+          /* remove photo */
+          _this.parents('.pg_photo').parent().fadeOut(300, function () { $(this).remove(); });
+          /* hide the confimation */
+          $('#modal').modal('hide');
         }
       }, 'json')
         .fail(function () {
           modal('#modal-message', { title: __['Error'], message: __['There is something that went wrong!'] });
         });
     });
+    
   });
   /* handle x-image remover */
   $('body').on('click', '.js_x-image-remover', function () {
@@ -1412,6 +1437,7 @@ $(function () {
     var handle = $('.js_init-position-picture').data('handle');
     var id = $('.js_init-position-picture').data('id');
     var position = $('.js_position-picture-val').val();
+
     $.post(api['users/image_position'], { 'handle': handle, 'id': id, 'position': position }, function (response) {
       /* check the response */
       if (response.callback) {
@@ -1439,6 +1465,7 @@ $(function () {
     /* hide profile cover position buttons */
     $('.profile-cover-position-loader').hide();
     $('.profile-cover-position-buttons').hide();
+    window.location.reload();
   });
 
 

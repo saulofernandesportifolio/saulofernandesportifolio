@@ -17,6 +17,7 @@
 
 namespace Google\Cloud\Storage\Connection;
 
+use Google\Auth\GetUniverseDomainInterface;
 use Google\Cloud\Core\RequestBuilder;
 use Google\Cloud\Core\RequestWrapper;
 use Google\Cloud\Core\RestTrait;
@@ -29,8 +30,6 @@ use Google\Cloud\Core\Upload\StreamableUploader;
 use Google\Cloud\Core\UriTrait;
 use Google\Cloud\Storage\Connection\ConnectionInterface;
 use Google\Cloud\Storage\StorageClient;
-use Google\CRC32\Builtin;
-use Google\CRC32\CRC32;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\MimeType;
 use GuzzleHttp\Psr7\Request;
@@ -43,6 +42,8 @@ use Ramsey\Uuid\Uuid;
 /**
  * Implementation of the
  * [Google Cloud Storage JSON API](https://cloud.google.com/storage/docs/json_api/).
+ *
+ * @internal
  */
 class Rest implements ConnectionInterface
 {
@@ -64,7 +65,12 @@ class Rest implements ConnectionInterface
      */
     const BASE_URI = 'https://storage.googleapis.com/storage/v1/';
 
+    /**
+     * @deprecated
+     */
     const DEFAULT_API_ENDPOINT = 'https://storage.googleapis.com';
+
+    const DEFAULT_API_ENDPOINT_TEMPLATE = 'https://storage.UNIVERSE_DOMAIN';
 
     /**
      * @deprecated
@@ -104,13 +110,17 @@ class Rest implements ConnectionInterface
         $config += [
             'serviceDefinitionPath' => __DIR__ . '/ServiceDefinition/storage-v1.json',
             'componentVersion' => StorageClient::VERSION,
-            'apiEndpoint' => self::DEFAULT_API_ENDPOINT,
+            'apiEndpoint' => null,
+            // If the user has not supplied a universe domain, use the environment variable if set.
+            // Otherwise, use the default ("googleapis.com").
+            'universeDomain' => getenv('GOOGLE_CLOUD_UNIVERSE_DOMAIN')
+                ?: GetUniverseDomainInterface::DEFAULT_UNIVERSE_DOMAIN,
             // Cloud Storage needs to provide a default scope because the Storage
             // API does not accept JWTs with "audience"
             'scopes' => StorageClient::FULL_CONTROL_SCOPE,
         ];
 
-        $this->apiEndpoint = $this->getApiEndpoint(self::DEFAULT_API_ENDPOINT, $config);
+        $this->apiEndpoint = $this->getApiEndpoint(null, $config, self::DEFAULT_API_ENDPOINT_TEMPLATE);
 
         $this->setRequestWrapper(new RequestWrapper($config));
         $this->setRequestBuilder(new RequestBuilder(
@@ -221,6 +231,14 @@ class Rest implements ConnectionInterface
     /**
      * @param array $args
      */
+    public function restoreObject(array $args = [])
+    {
+        return $this->send('objects', 'restore', $args);
+    }
+
+    /**
+     * @param array $args
+     */
     public function copyObject(array $args = [])
     {
         return $this->send('objects', 'copy', $args);
@@ -288,6 +306,7 @@ class Rest implements ConnectionInterface
                 $transcodedObj = true;
             }
         };
+        $attempt = null;
         $requestOptions['restRetryListener'] = function (
             \Exception $e,
             $retryAttempt,
@@ -295,7 +314,8 @@ class Rest implements ConnectionInterface
         ) use (
             $resultStream,
             $requestedBytes,
-            $invocationId
+            $invocationId,
+            &$attempt,
         ) {
             // if the exception has a response for us to use
             if ($e instanceof RequestException && $e->hasResponse()) {
@@ -313,6 +333,9 @@ class Rest implements ConnectionInterface
                 // modify the range headers to fetch the remaining data
                 $arguments[1]['headers']['Range'] = sprintf('bytes=%s-%s', $startByte, $endByte);
                 $arguments[0] = $this->modifyRequestForRetry($arguments[0], $retryAttempt, $invocationId);
+
+                // Copy the final result to the end of the stream
+                $attempt = $retryAttempt;
             }
         };
 
@@ -320,6 +343,13 @@ class Rest implements ConnectionInterface
             $request,
             $requestOptions
         )->getBody();
+
+        // If no retry attempt was made, then we can return the stream as is.
+        // This is important in the case where downloadObject is called to open
+        // the file but not to read from it yet.
+        if ($attempt === null) {
+            return $fetchedStream;
+        }
 
         // If our object is a transcoded object, then Range headers are not honoured.
         // That means even if we had a partial download available, the final obj
@@ -431,6 +461,12 @@ class Rest implements ConnectionInterface
         }
 
         $args['metadata']['name'] = $args['name'];
+        if (isset($args['retention'])) {
+            // during object creation retention properties go into metadata
+            // but not into request body
+            $args['metadata']['retention'] = $args['retention'];
+            unset($args['retention']);
+        }
         unset($args['name']);
         $args['contentType'] = $args['metadata']['contentType']
             ?? MimeType::fromFilename($args['metadata']['name']);
@@ -598,14 +634,22 @@ class Rest implements ConnectionInterface
             'restDelayFunction' => null
         ]);
 
+        $queryOptions = [
+            'generation' => $args['generation'],
+            'alt' => 'media',
+            'userProject' => $args['userProject'],
+        ];
+        if (isset($args['softDeleted'])) {
+            // alt param cannot be specified with softDeleted param. See:
+            // https://cloud.google.com/storage/docs/json_api/v1/objects/get
+            unset($args['alt']);
+            $queryOptions['softDeleted'] = $args['softDeleted'];
+        }
+
         $uri = $this->expandUri($this->apiEndpoint . self::DOWNLOAD_PATH, [
             'bucket' => $args['bucket'],
             'object' => $args['object'],
-            'query' => [
-                'generation' => $args['generation'],
-                'alt' => 'media',
-                'userProject' => $args['userProject']
-            ]
+            'query' => $queryOptions,
         ]);
 
         return [
@@ -660,21 +704,15 @@ class Rest implements ConnectionInterface
     private function crcFromStream(StreamInterface $data)
     {
         $pos = $data->tell();
-
-        if ($pos > 0) {
-            $data->rewind();
-        }
-
-        $crc32c = CRC32::create(CRC32::CASTAGNOLI);
-
         $data->rewind();
+        $crc32c = hash_init('crc32c');
         while (!$data->eof()) {
-            $crc32c->update($data->read(1048576));
+            $buffer = $data->read(1048576);
+            hash_update($crc32c, $buffer);
         }
-
         $data->seek($pos);
-
-        return base64_encode($crc32c->hash(true));
+        $hash = hash_final($crc32c, true);
+        return base64_encode($hash);
     }
 
     /**
@@ -692,13 +730,12 @@ class Rest implements ConnectionInterface
     /**
      * Check if hash() supports crc32c.
      *
-     * Protected access for unit testing.
-     *
+     * @deprecated
      * @return bool
      */
     protected function supportsBuiltinCrc32c()
     {
-        return Builtin::supports(CRC32::CASTAGNOLI);
+        return extension_loaded('hash') && in_array('crc32c', hash_algos());
     }
 
     /**

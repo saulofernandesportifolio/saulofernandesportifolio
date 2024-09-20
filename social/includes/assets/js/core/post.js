@@ -87,6 +87,7 @@ function publisher_tab(publisher, tab) {
         publisher.find('.js_publisher-tab[data-tab="audio"]').toggleClass('disabled');
         publisher.find('.js_publisher-tab[data-tab="file"]').toggleClass('disabled');
       }
+      //window.location.reload();
       break;
 
     case "album":
@@ -913,6 +914,10 @@ $(function () {
         button_status(_this, "reset");
         modal('#modal-message', { title: __['Error'], message: __['There is something that went wrong!'] });
       });
+
+       //alert('caiu aqui mesmo');
+       window.location.reload();
+
   });
   /* publisher anonymous toggle */
   $('body').on('click', '.js_publisher-anonymous-toggle', function () {
@@ -1161,7 +1166,9 @@ $(function () {
           error: function () {
             modal('#modal-message', { title: __['Error'], message: __['There is something that went wrong!'] });
           }
+          
         });
+        
       };
       /* set recorder options */
       voice_recording_object.setOptions({

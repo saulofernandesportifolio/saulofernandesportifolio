@@ -154,6 +154,180 @@
           </div>
         </div>
       </div>
+      <!-- preferencia -->
+      <label class="form-label">Preferencias</label>       
+       <div class="form-group">
+       {$preferenceSeparation = explode(",",$user->_data['user_preference'])}
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="inlineCheckbox1"
+            name="inlineCheckbox[]" 
+            value="Homem,"
+            { {if $preferenceSeparation[0] == 'Homem' 
+            || $preferenceSeparation[1] == 'Homem' 
+            || $preferenceSeparation[2] == 'Homem' 
+            || $preferenceSeparation[3] == 'Homem' 
+            || $preferenceSeparation[4] == 'Homem' 
+            || $preferenceSeparation[5] == 'Homem' 
+            || $preferenceSeparation[6] == 'Homem' 
+            || $preferenceSeparation[7] == 'Homem' } checked {/if} } 
+          >
+          <label 
+            class="form-check-label" 
+              for="inlineCheckbox1"
+            >Homem</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="inlineCheckbox2" 
+            name="inlineCheckbox[]"
+            value="Mulher,"
+            { {if $preferenceSeparation[0] == 'Mulher' 
+            || $preferenceSeparation[1] == 'Mulher' 
+            || $preferenceSeparation[2] == 'Mulher' 
+            || $preferenceSeparation[3] == 'Mulher' 
+            || $preferenceSeparation[4] == 'Mulher' 
+            || $preferenceSeparation[5] == 'Mulher' 
+            || $preferenceSeparation[6] == 'Mulher' 
+            || $preferenceSeparation[7] == 'Mulher' } checked {/if} } 
+          >
+          <label 
+            class="form-check-label" 
+            for="inlineCheckbox2"
+          >Mulher</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="inlineCheckbox3"
+            name="inlineCheckbox[]" 
+            value="Casal - Ele/Ela,"
+            { {if $preferenceSeparation[0] == 'Casal - Ele/Ela' 
+            || $preferenceSeparation[1] == 'Casal - Ele/Ela' 
+            || $preferenceSeparation[2] == 'Casal - Ele/Ela' 
+            || $preferenceSeparation[3] == 'Casal - Ele/Ela' 
+            || $preferenceSeparation[4] == 'Casal - Ele/Ela' 
+            || $preferenceSeparation[5] == 'Casal - Ele/Ela' 
+            || $preferenceSeparation[6] == 'Casal - Ele/Ela' 
+            || $preferenceSeparation[7] == 'Casal - Ele/Ela'} checked {/if} } 
+          >
+          <label 
+            class="form-check-label" 
+            for="inlineCheckbox3"
+          >Casal - Ele/Ela</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="inlineCheckbox4"
+            name="inlineCheckbox[]" 
+            value="Casal - Ela/Ela,"
+           { {if $preferenceSeparation[0] == 'Casal - Ela/Ela' 
+            || $preferenceSeparation[1] == 'Casal - Ela/Ela' 
+            || $preferenceSeparation[2] == 'Casal - Ela/Ela' 
+            || $preferenceSeparation[3] == 'Casal - Ela/Ela' 
+            || $preferenceSeparation[4] == 'Casal - Ela/Ela' 
+            || $preferenceSeparation[5] == 'Casal - Ela/Ela' 
+            || $preferenceSeparation[6] == 'Casal - Ela/Ela' 
+            || $preferenceSeparation[7] == 'Casal - Ela/Ela'} checked {/if} } 
+          >
+          <label 
+            class="form-check-label" 
+            for="inlineCheckbox4"
+          >Casal - Ela/Ela</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="inlineCheckbox5" 
+            name="inlineCheckbox[]"
+            value="Casal - Ele/Ele,"
+            { {if $preferenceSeparation[0] == 'Casal - Ele/Ele' 
+            || $preferenceSeparation[1] == 'Casal - Ele/Ele' 
+            || $preferenceSeparation[2] == 'Casal - Ele/Ele' 
+            || $preferenceSeparation[3] == 'Casal - Ele/Ele' 
+            || $preferenceSeparation[4] == 'Casal - Ele/Ele' 
+            || $preferenceSeparation[5] == 'Casal - Ele/Ele' 
+            || $preferenceSeparation[6] == 'Casal - Ele/Ele' 
+            || $preferenceSeparation[7] == 'Casal - Ele/Ele'} checked {/if} } 
+          >
+          <label 
+            class="form-check-label" 
+            for="inlineCheckbox5"
+           >Casal - Ele/Ele</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="inlineCheckbox6" 
+            name="inlineCheckbox[]"
+            value="Trans,"
+           { {if $preferenceSeparation[0] == 'Trans' 
+            || $preferenceSeparation[1] == 'Trans' 
+            || $preferenceSeparation[2] == 'Trans' 
+            || $preferenceSeparation[3] == 'Trans' 
+            || $preferenceSeparation[4] == 'Trans' 
+            || $preferenceSeparation[5] == 'Trans' 
+            || $preferenceSeparation[6] == 'Trans' 
+            || $preferenceSeparation[7] == 'Trans'} checked {/if} } 
+          >
+          <label 
+            class="form-check-label" 
+            for="inlineCheckbox6"
+          >Trans</label>
+        </div>  
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="inlineCheckbox7" 
+            name="inlineCheckbox[]"
+            value="Trisal,"
+            { {if $preferenceSeparation[0] == 'Trisal' 
+            || $preferenceSeparation[1] == 'Trisal' 
+            || $preferenceSeparation[2] == 'Trisal' 
+            || $preferenceSeparation[3] == 'Trisal' 
+            || $preferenceSeparation[4] == 'Trisal' 
+            || $preferenceSeparation[5] == 'Trisal' 
+            || $preferenceSeparation[6] == 'Trisal' 
+            || $preferenceSeparation[7] == 'Trisal'} checked {/if} } 
+            >
+          <label 
+            class="form-check-label" 
+            for="inlineCheckbox7"
+          >Trisal</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input 
+            class="form-check-input" 
+            type="checkbox" 
+            id="inlineCheckbox8" 
+            name="inlineCheckbox[]"
+            value="Outros,"
+            { {if $preferenceSeparation[0] == 'Outros' 
+            || $preferenceSeparation[1] == 'Outros' 
+            || $preferenceSeparation[2] == 'Outros' 
+            || $preferenceSeparation[3] == 'Outros' 
+            || $preferenceSeparation[4] == 'Outros' 
+            || $preferenceSeparation[5] == 'Outros' 
+            || $preferenceSeparation[6] == 'Outros' 
+            || $preferenceSeparation[7] == 'Outros'} checked {/if} } 
+          >
+          <label 
+            class="form-check-label" 
+            for="inlineCheckbox8"
+          >Outros</label>
+        </div>
+      </div>
+      <!---preferencia -->
 
       <!-- sobre -->
       {if $system['biography_info_enabled']}

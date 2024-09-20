@@ -7,6 +7,14 @@
  * @author Zamblek
  */
 
+// Importa as classes necessarias do SDK de MercadoPago
+use MercadoPago\Client\Preference\PreferenceClient;
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Common\RequestOptions;
+use MercadoPago\Client\Payment\PaymentClient;
+use MercadoPago\Exceptions\MPApiException;
+
+
 
 /* ------------------------------- */
 /* Core */
@@ -1735,7 +1743,8 @@ function upload_file($from_web = false)
 
           // init image & prepare image name & path
           try {
-            $image = new Image($file["tmp_name"]);
+          
+           $image = new Image($file["tmp_name"]);
           } catch (Exception $e) {
             if ($files_num > 1) {
               continue;
@@ -1766,7 +1775,7 @@ function upload_file($from_web = false)
           // watermark images
           $image_watermarked = false;
           if ($system['watermark_enabled']) {
-            if (($_POST['handle'] == "publisher" || $_POST['handle'] == "publisher-mini") && !in_array($image->_img_type, ["image/gif", "image/webp"])) {
+            if (($_POST['handle'] == "publisher" || $_POST['handle'] == "publisher-mini") /*&& !in_array($image->_img_type, ["image/gif", "image/webp"])*/) {
               watermark_image($file["tmp_name"], $image->_img_type);
               $image_watermarked = true;
             }
@@ -1810,9 +1819,9 @@ function upload_file($from_web = false)
               }
             } else {
               if ($image_watermarked) {
-                $image = new Image($file["tmp_name"]);
+                 $image = new Image($file["tmp_name"]);
               }
-              $image->save($path, $system['uploads_quality']);
+               $image->save($path, $system['uploads_quality']);
             }
           }
 
@@ -2503,13 +2512,20 @@ function upload_file($from_web = false)
  * @param string $handle
  * @return void
  */
-function delete_avatar_cover_image($handle)
+function delete_avatar_cover_image($handle,$countphotos)
 {
+
   global $db, $user, $system;
   switch ($_POST['handle']) {
     case 'cover-user':
       /* update user cover */
-      $db->query(sprintf("UPDATE users SET user_cover = null, user_cover_id = null, user_cover_position = null WHERE user_id = %s", secure($user->_data['user_id'], 'int'))) or _error('SQL_ERROR_THROWEN');
+      //var_dump($_POST['id']);
+      if ($_POST['countphotos'] == 1){
+          $db->query(sprintf("UPDATE users SET user_cover = null, user_cover_id = null, user_cover_position = null WHERE user_id = %s", secure($user->_data['user_id'], 'int'))) or _error('SQL_ERROR_THROWEN');
+      }
+      // delete photo
+      //$user->delete_photo($_POST['id']);
+
       break;
 
     case 'picture-user':
@@ -3401,8 +3417,8 @@ function paypal($handle, $price, $id = null)
   /* Paypal */
   $paypal = new \PayPal\Rest\ApiContext(
     new \PayPal\Auth\OAuthTokenCredential(
-      $system['paypal_id'],
-      $system['paypal_secret']
+      $system['paypal_mode'] == 'live' ? $system['paypal_id'] : $system['paypal_id_test'],
+      $system['paypal_mode'] == 'live' ? $system['paypal_secret'] : $system['paypal_secret_test'] 
     )
   );
   $paypal->setConfig(
@@ -3447,8 +3463,8 @@ function paypal_check($payment_id, $payer_id)
   global $system;
   $paypal = new \PayPal\Rest\ApiContext(
     new \PayPal\Auth\OAuthTokenCredential(
-      $system['paypal_id'],
-      $system['paypal_secret']
+      $system['paypal_mode'] == 'live' ? $system['paypal_id'] : $system['paypal_id_test'],
+      $system['paypal_mode'] == 'live' ? $system['paypal_secret'] : $system['paypal_secret_test'] 
     )
   );
   $paypal->setConfig(
@@ -3464,6 +3480,180 @@ function paypal_check($payment_id, $payer_id)
 }
 
 
+/* ------------------------------- */
+/* mercado pago */
+/* ------------------------------- */
+
+/**
+ * mercado pago 
+ * 
+ * @param string $handle
+ * @param string $price
+ * @param integer $id
+ * @return string
+ */
+function mercadopago($handle, $dpid, $title, $price, $clidp, $id = null)
+{
+  global $system;
+  /* prepare */
+  switch ($handle) {
+    case 'packages':
+      $product = __($system['system_title']) . " " . __('Pro Package');
+      $description = __('Pay For') . " " . __($system['system_title']);
+      $URL['success'] = $system['system_url'] . "/webhooks/mercadopago.php?status=success&handle=packages&package_id=$id";
+      $URL['cancel'] = $system['system_url'] . "/webhooks/mercadopago.php?status=failure";
+      break;
+
+    case 'wallet':
+      $product = __($system['system_title']) . " " . __('Wallet');
+      $description = __('Pay For') . " " . __($system['system_title']);
+      $URL['success'] = $system['system_url'] . "/webhooks/mercadopago.php?status=success&handle=wallet";
+      $URL['cancel'] = $system['system_url'] . "/webhooks/mercadopago.php?status=failure";
+      $_SESSION['wallet_replenish_amount'] = $price;
+      break;
+    
+    case 'donate':
+      $product = __($system['system_title']) . " " . __('Funding Donation');
+      $description = __('Pay For') . " " . __($system['system_title']);
+      $URL['success'] = $system['system_url'] . "/webhooks/mercadopago.php?status=success&handle=donate&post_id=$id";
+      $URL['cancel'] = $system['system_url'] . "/webhooks/mercadopago.php?status=failure";
+      $_SESSION['donation_amount'] = $price;
+      break;
+
+    case 'subscribe':
+      $product = __($system['system_title']) . " " . __('Subscribe');
+      $description = __('Pay For') . " " . __($system['system_title']);
+      $URL['success'] = $system['system_url'] . "/webhooks/mercadopago.php?status=success&handle=subscribe&plan_id=$id";
+      $URL['cancel'] = $system['system_url'] . "/webhooks/mercadopago.php?status=failure";
+      break;
+
+    case 'movies':
+      $product = __($system['system_title']) . " " . __('Movies');
+      $description = __('Pay For') . " " . __($system['system_title']);
+      $URL['success'] = $system['system_url'] . "/webhooks/mercadopago.php?status=success&handle=movies&movie_id=$id";
+      $URL['cancel'] = $system['system_url'] . "/webhooks/mercadopago.php?status=failure";
+      break;
+      
+    default:
+      _error(400);
+      break;
+  }
+  
+  //var_dump($handle, $dpid, $title, $price, $clidp, $id);
+
+  //die;
+
+
+  $access_token = $system['mercado_pago_mode'] == 'live' ? $system['mercado_pago_access_token'] : $system['mercado_pago_access_token_test'];
+
+  // Agrega credenciais ACCESS_TOKEN
+  MercadoPagoConfig::setAccessToken($access_token);
+
+  // Cria una instancia cliente de preferencias de MercadoPago
+  $client = new PreferenceClient();
+
+
+  // Define as URLs de retorno para os diferentes estados de pago
+  $backUrls = [
+      "success" => $system['system_url'].'/webhooks/mercadopago.php?status=success&handle='.$handle.'&package_id='.$id,
+      "pending" => $system['system_url'].'/webhooks/mercadopago.php?status=pending&handle='.$handle.'&package_id='.$id,
+      "failure" => $system['system_url'].'/webhooks/mercadopago.php?status=failure'
+  ];
+  
+  
+  // Cria una preferencia de pago conm os detalles do producto e outras configuracoes
+    $preference = $client->create([
+      "items" => [
+          [
+              "id" => $dpid,
+              "title" => $title,
+              "quantity" => 1,
+              "unit_price" =>(double)$price
+          ]
+      ],
+  
+
+      // Descrição que aparecerá no extrato do cartão do comprador
+      "statement_descriptor" => "LIBERTA NEGOCIOS DIGITAIS LTDA".$title,
+
+      // Referencia externa para identificar a transação no sistema do vendedor
+      "external_reference" => $clidp,
+    
+      // URLs de retorno configuradas anteriormente
+      "back_urls" => $backUrls,
+
+
+      // Configuración de métodos de pago
+      "payment_methods" => [
+          // Métodos de pago excluidos (por ejemplo, American Express)
+          //"excluded_payment_methods" => [
+          //    [
+          //        "id" => "amex"
+          //    ]
+          //],
+          // Tipos de pago excluidos (por ejemplo, transferencia bancaria)
+          "excluded_payment_types" => [
+              [
+                  "id" => "ticket",
+ 
+              ],
+              [
+                 "id" => "debit_card",
+              ],
+          ],
+      ],
+
+      // Configura a redirecao automática en caso de que pago seja aprovado
+      "auto_return" => "approved",
+      
+      // Modo binario de pago (true significa que só se aceita pagos completos e no se permite um estado pendente)
+      "binary_mode" => true,
+      
+    ]);
+
+
+    $link = $preference->init_point;
+
+
+
+  return $link;
+}
+
+
+/**
+ * mercadopago_check
+ * 
+ * @param string $payment_id
+ * @param string $payer_id
+ * @return boolean
+ */
+function mercadopago_check($payment_id)
+{
+  global $system;
+
+  $access_token = $system['mercado_pago_mode'] == 'live' ? $system['mercado_pago_access_token'] : $system['mercado_pago_access_token_test'];
+
+  MercadoPagoConfig::setAccessToken($access_token);
+
+  
+
+  $client = new PaymentClient();
+  $id = $payment_id;
+  $payment = $client->get($id);
+
+
+  $status             = $payment->status;
+  $external_reference = $payment->external_reference;
+  
+  //echo '<pre>';
+  //var_dump($payment->status);
+
+  if($payment->status === 'approved'){
+     return true;
+  }else{
+    return false;
+  }   
+}
 
 /* ------------------------------- */
 /* Stripe */
@@ -4641,13 +4831,27 @@ function save_picture_from_url($file, $cropped = false, $resize = false)
   $image = new Image($file);
   $prefix = $system['uploads_prefix'] . '_' . get_hash_token();
   if ($cropped) {
-    $image_name = $directory . $prefix . "_cropped" . $image->_img_ext;
+     $image_name = $directory . $prefix . "_cropped" . $image->_img_ext;
+    //$image_name = $directory . $prefix . $image->_img_ext;
     if ($resize) {
       $image->resizeWidth($_POST['resize_width']);
     }
     $_POST['width'] = (isset($_POST['width'])) ? $_POST['width'] : $image->getWidth();
     $_POST['height'] = (isset($_POST['height'])) ? $_POST['height'] : $image->getHeight();
     $image->crop($_POST['width'], $_POST['height'], $_POST['x'], $_POST['y']);
+
+
+    /*$file = glob($directory . $prefix . "_cropped" . $image->_img_ext);
+
+    if(file_exists(string($file))){
+      if(!is_dir(string($file))){mkdir(string($file), 0777);}
+
+      if (file_exists(string($file))){
+          //Apaga o arquivo
+        unlink(string($file));
+      }
+    }*/
+
   } else {
     $image_name = $directory . $prefix . $image->_img_ext;
   }
@@ -4680,21 +4884,69 @@ function save_picture_from_url($file, $cropped = false, $resize = false)
 function watermark_image($image_path, $image_type)
 {
   global $system;
-  if (!is_empty($system['watermark_icon'])) {
+
+  //if (!is_empty($system['watermark_icon'])) {
+  if (!is_empty($system['watermark_enabled'])) {
+
     try {
-      $image = new claviska\SimpleImage();
-      $image
-        ->fromFile($image_path)
-        ->autoOrient()
-        ->overlay($system['system_uploads'] . "/" . $system['watermark_icon'], $system['watermark_position'], $system['watermark_opacity'], $system['watermark_xoffset'], $system['watermark_yoffset'])
-        ->toFile($image_path, $image_type);
+
+        list($imageWidth,$imageHeight) = getimagesize($image_path);
+
+        $imageWidthX =  $imageWidth-20;
+        $imageHeigthY = $imageHeight;
+
+        $water = $system['system_uploads'].'/marca_da_agua/ns_marca_da_agua.png';
+
+        $file = $water;
+        $size = getimagesize($file);
+        $im = imagecreatefrompng($file);
+        
+        $w = (int)$imageWidthX;
+        //$h = (int)$imageHeigthY;
+        $h = $w * $size[1] / $size[0];
+
+        //echo $w;
+        
+        $imf = imagecreatetruecolor($w, $h);
+        imagealphablending($imf, false);
+        imagesavealpha($imf, true);
+        imagecopyresampled($imf, $im, 0,0,0,0, $w,$h,$size[0],$size[1]);
+        //header("Content-type: image/png");
+        //imagepng($imf);
+
+        $destino = ABSPATH .'content/uploads/marca_da_agua/marcaAgua.png';
+        imagepng($imf, $destino);
+        
+        $new_watermark = $system['system_uploads'].'/marca_da_agua/marcaAgua.png';
+
+        // buffer da image
+        $watermark = imagecreatefrompng($new_watermark);
+
+        // tamanho da marca d'agua
+        $watermarkWidth = imagesx($watermark);
+        $watermarkHeight = imagesy($watermark);   
+        
+        $positionX = ($imageWidth / 2) - ($watermarkWidth / 2);
+        $positionY = ($imageHeight / 2) - ($watermarkHeight / 2);
+
+        $system['watermark_xoffset'] = (int)$positionX;
+        $system['watermark_yoffset'] = (int)$positionY;
+
+        $system['watermark_icon'] = 'marca_da_agua/marcaAgua.png';
+
+        $image = new claviska\SimpleImage();
+        $image
+          ->fromFile($image_path)
+          //->resize((int)imagesx($imageFile),(int)imagesy($imageFile))
+          ->autoOrient()
+          ->overlay($system['system_uploads'] . "/" . $system['watermark_icon'], $system['watermark_position'], $system['watermark_opacity'], $system['watermark_xoffset'], $system['watermark_yoffset'])
+          ->toFile($image_path, $image_type);  
+      
     } catch (Exception $e) {
       return $e->getMessage();
     }
   }
 }
-
-
 
 /* ------------------------------- */
 /* Utilities */

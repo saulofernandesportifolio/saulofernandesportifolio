@@ -666,6 +666,7 @@ try {
     case 'payments':
       /* prepare */
       $_POST['paypal_enabled'] = (isset($_POST['paypal_enabled'])) ? '1' : '0';
+      $_POST['mercado_pago_enabled'] = (isset($_POST['mercado_pago_enabled'])) ? '1' : '0';
       $_POST['creditcard_enabled'] = (isset($_POST['creditcard_enabled'])) ? '1' : '0';
       $_POST['alipay_enabled'] = (isset($_POST['alipay_enabled'])) ? '1' : '0';
       $_POST['paystack_enabled'] = (isset($_POST['paystack_enabled'])) ? '1' : '0';
@@ -682,6 +683,16 @@ try {
         'paypal_mode' => secure($_POST['paypal_mode']),
         'paypal_id' => secure($_POST['paypal_id']),
         'paypal_secret' => secure($_POST['paypal_secret']),
+        'paypal_id_test' => secure($_POST['paypal_id_test']),
+        'paypal_secret_test' => secure($_POST['paypal_secret_test']),
+
+        'mercado_pago_enabled' => secure($_POST['mercado_pago_enabled']),
+        'mercado_pago_mode' => secure($_POST['mercado_pago_mode']),
+        'mercado_pago_id' => secure($_POST['mercado_pago_id']),
+        'mercado_pago_secret' => secure($_POST['mercado_pago_secret']), 
+        'mercado_pago_access_token' => secure($_POST['mercado_pago_access_token']),
+        'mercado_pago_access_token_test' => secure($_POST['mercado_pago_access_token_test']),
+
         'creditcard_enabled' => secure($_POST['creditcard_enabled']),
         'alipay_enabled' => secure($_POST['alipay_enabled']),
         'stripe_mode' => secure($_POST['stripe_mode']),
@@ -773,6 +784,9 @@ try {
       if (isset($_POST['method_paypal'])) {
         $wallet_payment_methods[] = "paypal";
       }
+      if (isset($_POST['method_mercadopago'])) {
+        $wallet_payment_methods[] = "mercadopago";
+      }
       if (isset($_POST['method_skrill'])) {
         $wallet_payment_methods[] = "skrill";
       }
@@ -811,6 +825,9 @@ try {
       $affiliate_payment_methods = [];
       if (isset($_POST['method_paypal'])) {
         $affiliate_payment_methods[] = "paypal";
+      }
+      if (isset($_POST['method_mercadopago'])) {
+        $affiliate_payment_methods[] = "mercadopago";
       }
       if (isset($_POST['method_skrill'])) {
         $affiliate_payment_methods[] = "skrill";
@@ -858,6 +875,9 @@ try {
       $points_payment_methods = [];
       if (isset($_POST['method_paypal'])) {
         $points_payment_methods[] = "paypal";
+      }
+      if (isset($_POST['method_mercadopago'])) {
+        $points_payment_methods[] = "mercadopago";
       }
       if (isset($_POST['method_skrill'])) {
         $points_payment_methods[] = "skrill";
@@ -910,6 +930,9 @@ try {
       $funding_payment_methods = [];
       if (isset($_POST['method_paypal'])) {
         $funding_payment_methods[] = "paypal";
+      }
+      if (isset($_POST['method_mercadopago'])) {
+        $funding_payment_methods[] = "mercadopago";
       }
       if (isset($_POST['method_skrill'])) {
         $funding_payment_methods[] = "skrill";

@@ -368,14 +368,14 @@
                         {$connected_account['user_firstname']} {$connected_account['user_lastname']}
                       {/if}
                     </span>
-                    {if $connected_account['user_verified'] && $connected_account['user_package'] === 5}
-                      <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified User")}'>
-                        {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
-                      </span>
-                    {/if}
                     {if $connected_account['user_subscribed'] && $connected_account['user_package'] != 5}
                       <span class="pro-badge" data-bs-toggle="tooltip" title='{__("Pro User")}'>
                         {include file='__svg_icons.tpl' icon="pro_badge" width="20px" height="20px"}
+                      </span>
+                    {/if}
+                    {if $connected_account['user_verified'] && $connected_account['user_package'] === 5 || $connected_account['user_verified'] && $connected_account['package_name'] == "Plano 180"}
+                      <span class="verified-badge" data-bs-toggle="tooltip" title='{__("Verified User")}'>
+                        {include file='__svg_icons.tpl' icon="verified_badge" width="20px" height="20px"}
                       </span>
                     {/if}
                   </div>
@@ -1839,6 +1839,15 @@
                 </div>
               </div>
             {/if}
+            {if $system['mercado_pago_enabled']}
+              <div class="col-12 col-sm-6 mb10">
+                <div class="d-grid">
+                  <button class="js_payment-mercado-pago btn btn-md btn-payment" data-handle="{literal}{{handle}}{/literal}" {literal}{{#id}}{/literal} data-id="{literal}{{id}}{/literal}" {literal}{{/id}}{/literal} {literal}{{#price}}{/literal} data-price="{literal}{{price}}{/literal}" {literal}{{/price}}{/literal}>
+                    {include file='__svg_icons.tpl' icon="mercado-pago" class="mr5" width="20px" height="20px"} {__("Market paid out")}
+                  </button>
+                </div>
+              </div>
+            {/if}            
             {if $system['creditcard_enabled']}
               <div class="col-12 col-sm-6 mb10">
                 <div class="d-grid">
@@ -2277,3 +2286,5 @@
   {/if}
 
 {/strip}
+
+
